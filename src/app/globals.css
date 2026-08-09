@@ -1,0 +1,177 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  KRISHNABOOKSTORES - MASTER VIBRANT DESIGN SYSTEM
+  Refined Luxury + High-Saturation Neon
+*/
+
+:root {
+  /* High-Saturation Palette (Space-separated for Tailwind opacity support) */
+  --primary: 99 102 241;    /* Indigo 500 */
+  --accent: 168 85 247;     /* Purple 500 */
+  --vibrant-pink: 244 114 182;
+  --vibrant-cyan: 34 211 238;
+  --background: 3 3 3;
+  --foreground: 255 255 255;
+}
+
+@layer base {
+  * { @apply border-white/10; }
+
+  body {
+    @apply bg-[#030303] text-white selection:bg-indigo-500/30 antialiased overflow-x-hidden font-sans;
+    background: radial-gradient(circle at 50% 50%, #0a0a0a 0%, #030303 100%);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-tight font-black;
+  }
+}
+
+@layer components {
+  /* --- VIBRANT DYNAMIC BACKGROUNDS --- */
+
+  .bg-mesh {
+    @apply fixed inset-0 -z-20 overflow-hidden bg-[#030303];
+    background-image:
+      radial-gradient(at 0% 0%, rgb(99 102 241 / 0.25) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgb(168 85 247 / 0.25) 0px, transparent 50%),
+      radial-gradient(at 50% 100%, rgb(244 114 182 / 0.15) 0px, transparent 50%),
+      radial-gradient(at 80% 50%, rgb(34 211 238 / 0.1) 0px, transparent 40%);
+    filter: blur(60px);
+  }
+
+  .grid-background {
+    @apply absolute inset-0 pointer-events-none opacity-30;
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 95%);
+  }
+
+  /* --- LUXURY DYNAMIC TEXT --- */
+
+  .hero-title {
+    @apply font-display font-black tracking-tighter leading-[0.9] md:leading-[1];
+    background: linear-gradient(to bottom, #fff 60%, rgba(255, 255, 255, 0.4) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+  }
+
+  .color-gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 animate-gradient-x;
+    background-size: 200% auto;
+  }
+
+  /* --- INTERACTIVE GLASS COMPONENTS --- */
+
+  .glass-card {
+    @apply relative overflow-hidden bg-white/[0.03] backdrop-blur-3xl border border-white/10 rounded-[2.5rem] transition-all duration-700;
+    transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .glass-card:hover {
+    @apply -translate-y-4 border-white/20 bg-white/[0.06];
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.1),
+      0 40px 80px -20px rgba(0, 0, 0, 0.9),
+      0 20px 40px -15px rgb(99 102 241 / 0.3);
+  }
+
+  .luxury-shine {
+    @apply relative overflow-hidden;
+  }
+
+  .luxury-shine::after {
+    content: "";
+    @apply absolute -inset-[100%] pointer-events-none transition-opacity duration-1000;
+    background: linear-gradient(
+      45deg,
+      transparent 45%,
+      rgba(255, 255, 255, 0.3) 50%,
+      transparent 55%
+    );
+    animation: shine-sweep 3s infinite;
+    opacity: 0;
+  }
+
+  /* Desktop Hover State */
+  @media (hover: hover) {
+    .group:hover .luxury-shine::after,
+    .luxury-shine:hover::after {
+      opacity: 1;
+    }
+  }
+
+  /* Mobile/Tablet Touch State - Subtle Automated Shine */
+  @media (hover: none) {
+    .luxury-shine::after {
+      opacity: 0.4;
+      animation-duration: 6s; /* Slower, more elegant sweep for mobile */
+    }
+  }
+
+  .btn-premium {
+    @apply relative overflow-hidden bg-indigo-600 px-10 py-5 rounded-full font-bold text-white transition-all duration-500 hover:scale-[1.05] active:scale-[0.95] shadow-[0_0_30px_rgba(99,102,241,0.4)] hover:shadow-[0_20px_60px_rgba(99,102,241,0.6)] border border-white/20 flex items-center justify-center gap-3;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 animate-gradient-x;
+    background-size: 200% auto;
+  }
+
+  .bg-mesh-light {
+    background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.05), transparent 40%),
+                radial-gradient(circle at bottom left, rgba(168, 85, 247, 0.05), transparent 40%);
+  }
+
+  .bg-premium-gradient {
+    @apply bg-gradient-to-br from-indigo-600 to-purple-600;
+  }
+
+  .premium-gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400;
+  }
+
+  /* --- ANIMATIONS --- */
+
+  @keyframes gradient-x {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  @keyframes shine-sweep {
+    0% { transform: translateX(-100%) translateY(-100%); }
+    100% { transform: translateX(100%) translateY(100%); }
+  }
+
+  .animate-gradient-x { animation: gradient-x 8s ease infinite; }
+  .animate-pulse-slow { animation: pulse 10s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+
+  /* --- 3D UTILITIES --- */
+  .perspective-2000 {
+    perspective: 2000px;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .rotate-y-12 { transform: rotateY(12deg); }
+  .rotate-y-minus-25 { transform: rotateY(-25deg); }
+  .rotate-x-6 { transform: rotateX(6deg); }
+  .rotate-x-10 { transform: rotateX(10deg); }
+
+  .hover\:rotate-0:hover { transform: rotateX(0deg) rotateY(0deg); }
+}
+
+/* Global Grain Texture Overlay */
+body::after {
+  content: "";
+  @apply fixed inset-0 pointer-events-none opacity-[0.05] z-[9999];
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}

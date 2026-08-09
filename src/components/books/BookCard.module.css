@@ -1,0 +1,165 @@
+.card {
+  --primary: 99, 102, 241;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 2rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative;
+}
+
+.card:hover {
+  transform: translateY(-12px);
+  border-color: rgba(99, 102, 241, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.7);
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  inset: -100%;
+  opacity: 0;
+  transition: opacity 1s;
+  pointer-events: none;
+  background: linear-gradient(
+    45deg,
+    transparent 45%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 55%
+  );
+  z-index: 5;
+}
+
+.card:hover::after {
+  opacity: 1;
+  animation: shineSweep 3s infinite;
+}
+
+@keyframes shineSweep {
+  0% { transform: translateX(-100%) translateY(-100%); }
+  100% { transform: translateX(100%) translateY(100%); }
+}
+
+.imageContainer {
+  position: relative;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1e293b, #020617);
+}
+
+.bookIcon {
+  width: 5rem;
+  height: 5rem;
+  opacity: 0.1;
+  transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.card:hover .bookIcon {
+  transform: scale(1.1);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  transition: all 0.5s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  z-index: 10;
+}
+
+.card:hover .overlay {
+  opacity: 1;
+}
+
+.actionBtn {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  transform: scale(0.8);
+}
+
+.card:hover .actionBtn {
+  transform: scale(1);
+}
+
+.viewBtn {
+  background: white;
+  color: black;
+}
+
+.viewBtn:hover {
+  background: #6366f1;
+  color: white;
+}
+
+.cartBtn {
+  background: #6366f1;
+  color: white;
+  transition-delay: 0.05s;
+}
+
+.cartBtn:hover {
+  background: white;
+  color: black;
+}
+
+.content {
+  padding: 2rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.badge {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  font-size: 0.625rem;
+  font-weight: 900;
+  padding: 0.4rem 0.8rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  z-index: 20;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+  transition: color 0.3s;
+}
+
+.card:hover .title {
+  color: #818cf8;
+}
+
+.priceContainer {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.price {
+  font-size: 1.5rem;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+}
