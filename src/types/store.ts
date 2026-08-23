@@ -45,6 +45,29 @@ export interface Product {
   hoursSaved?: string;
   estimatedValue?: string;
   whyBuyNow?: string;
+  coverImage?: string;
+  buyLink?: string;
+  demoLink?: string;
+  images?: string[];
+  developer?: string;
+  platform?: string;
+  genre?: string;
+  publisher?: string;
+  price?: number;
+  discountPrice?: number;
+  rating?: number;
+  reviewsCount?: number;
+  pages?: string | number;
+  language?: string;
+  format?: string[];
+  isBestseller?: boolean;
+  isNew?: boolean;
+  publishedDate?: string;
+  learnings?: string[];
+  features?: string[];
+  contents?: any[];
+  whatsIncluded?: string[];
+  requirements?: string[];
 }
 
 export type CategoryFilter = 'all' | 'about' | ProductCategory;
