@@ -3,10 +3,10 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import fs from 'fs';
 
-// Ensure public/important/KrishnaStores logo.png exists
+// Ensure public/important/KrishnaStoreslogo.png exists
 const srcLogo = path.resolve(__dirname, 'assets/KrishnaStoreslogo.png');
 const destDir = path.resolve(__dirname, 'public/important');
-const destLogo = path.resolve(destDir, 'KrishnaStores logo.png');
+const destLogo = path.resolve(destDir, 'KrishnaStoreslogo.png');
 
 if (fs.existsSync(srcLogo)) {
   if (!fs.existsSync(destDir)) {

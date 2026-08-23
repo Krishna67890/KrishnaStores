@@ -57,7 +57,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}
         >
           <img
-            src="/important/KrishnaStores%20logo.png"
+            src="/important/KrishnaStoreslogo.png"
             alt="KrishnaStores"
             className="krishna-logo"
           />

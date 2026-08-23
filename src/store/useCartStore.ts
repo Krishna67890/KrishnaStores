@@ -19,13 +19,13 @@ interface CartState {
 
 export const useCartStore = create<CartState>()(
   persist(
-    (set, get) => ({
+    (set: any, get: any) => ({
       items: [],
       isSidebarOpen: false,
-      setSidebarOpen: (isOpen) => set({ isSidebarOpen: isOpen }),
-      addItem: (product) => {
+      setSidebarOpen: (isOpen: boolean) => set({ isSidebarOpen: isOpen }),
+      addItem: (product: Product) => {
         const currentItems = get().items;
-        const existingItem = currentItems.find((item) => item.id === product.id);
+        const existingItem = currentItems.find((item: CartItem) => item.id === product.id);
 
         if (existingItem) {
           return;
@@ -33,12 +33,12 @@ export const useCartStore = create<CartState>()(
 
         set({ items: [...currentItems, { ...product, quantity: 1 }] });
       },
-      removeItem: (productId) => {
-        set({ items: get().items.filter((item) => item.id !== productId) });
+      removeItem: (productId: string) => {
+        set({ items: get().items.filter((item: CartItem) => item.id !== productId) });
       },
       clearCart: () => set({ items: [] }),
       totalItems: () => get().items.length,
-      totalPrice: () => get().items.reduce((total, item) => total + (item.discountPrice || item.price), 0),
+      totalPrice: () => get().items.reduce((total: number, item: CartItem) => total + (item.price || 0), 0),
     }),
     {
       name: 'cart-storage',

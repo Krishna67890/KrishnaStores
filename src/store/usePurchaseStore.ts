@@ -19,10 +19,10 @@ interface PurchaseState {
 
 export const usePurchaseStore = create<PurchaseState>()(
   persist(
-    (set, get) => ({
+    (set: any, get: any) => ({
       purchasedBooks: [],
-      addPurchase: (book) => {
-        const alreadyPurchased = get().purchasedBooks.some(b => b.id === book.id);
+      addPurchase: (book: any) => {
+        const alreadyPurchased = get().purchasedBooks.some((b: PurchasedBook) => b.id === book.id);
         if (alreadyPurchased) return;
 
         const newPurchase: PurchasedBook = {
@@ -37,8 +37,8 @@ export const usePurchaseStore = create<PurchaseState>()(
 
         set({ purchasedBooks: [...get().purchasedBooks, newPurchase] });
       },
-      hasPurchased: (bookId) => {
-        return get().purchasedBooks.some(book => book.id === bookId);
+      hasPurchased: (bookId: string) => {
+        return get().purchasedBooks.some((book: PurchasedBook) => book.id === bookId);
       },
     }),
     {

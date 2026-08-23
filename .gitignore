@@ -46,9 +46,9 @@ desktop.ini
 # Vite
 .vite/
 
-# Important folder specific rules (ensure KrishnaStores logo.png is ALWAYS tracked by Git)
+# Important folder specific rules (ensure KrishnaStoreslogo.png is ALWAYS tracked by Git)
 public/important/temp/
 public/important/cache/
 public/important/generated/
 public/important/*.tmp
-!public/important/KrishnaStores logo.png
+!public/important/KrishnaStoreslogo.png

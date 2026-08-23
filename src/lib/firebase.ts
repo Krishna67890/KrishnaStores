@@ -1,8 +1,8 @@
-import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
-import { getAnalytics, isSupported } from "firebase/analytics";
+import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
+import { Auth, getAuth } from "firebase/auth";
+import { Firestore, getFirestore } from "firebase/firestore";
+import { FirebaseStorage, getStorage } from "firebase/storage";
+import { getAnalytics, isSupported, Analytics } from "firebase/analytics";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "mock-key",
@@ -14,28 +14,27 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || "mock-measurement"
 };
 
-// Initialize Firebase only if API key is provided, otherwise export mocks to prevent crashes
-let app;
-let auth: any;
-let db: any;
-let storage: any;
+// Initialize Firebase only if API key is provided
+let app: FirebaseApp;
+let auth: Auth;
+let db: Firestore;
+let storage: FirebaseStorage;
 
-if (process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+if (process.env.NEXT_PUBLIC_FIREBASE_API_KEY && process.env.NEXT_PUBLIC_FIREBASE_API_KEY !== "mock-key") {
   app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
   auth = getAuth(app);
   db = getFirestore(app);
   storage = getStorage(app);
 } else {
-  // Mock implementations for development without keys
-  app = {} as any;
-  auth = { onAuthStateChanged: (cb: any) => cb(null) } as any;
-  db = {} as any;
-  storage = {} as any;
+  // Mock implementations to satisfy TypeScript during build
+  app = {} as FirebaseApp;
+  auth = { onAuthStateChanged: (cb: any) => cb(null) } as Auth;
+  db = {} as Firestore;
+  storage = {} as FirebaseStorage;
 }
 
-// Initialize Analytics conditionally
-export const initAnalytics = async () => {
-  if (typeof window !== "undefined" && await isSupported()) {
+export const initAnalytics = async (): Promise<Analytics | null> => {
+  if (typeof window !== "undefined" && await isSupported() && app.options?.apiKey !== "mock-key") {
     return getAnalytics(app);
   }
   return null;

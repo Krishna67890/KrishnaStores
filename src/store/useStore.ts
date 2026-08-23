@@ -16,23 +16,23 @@ interface StoreState {
 
 export const useStore = create<StoreState>()(
   persist(
-    (set, get) => ({
+    (set: any, get: any) => ({
       wishlist: [],
       recentlyViewed: [],
 
-      addToWishlist: (productId) =>
-        set((state) => ({
+      addToWishlist: (productId: string) =>
+        set((state: StoreState) => ({
           wishlist: state.wishlist.includes(productId)
             ? state.wishlist
             : [...state.wishlist, productId]
         })),
 
-      removeFromWishlist: (productId) =>
-        set((state) => ({
-          wishlist: state.wishlist.filter(id => id !== productId)
+      removeFromWishlist: (productId: string) =>
+        set((state: StoreState) => ({
+          wishlist: state.wishlist.filter((id: string) => id !== productId)
         })),
 
-      toggleWishlist: (productId) => {
+      toggleWishlist: (productId: string) => {
         const { wishlist } = get();
         if (wishlist.includes(productId)) {
           get().removeFromWishlist(productId);
@@ -41,11 +41,11 @@ export const useStore = create<StoreState>()(
         }
       },
 
-      isInWishlist: (productId) => get().wishlist.includes(productId),
+      isInWishlist: (productId: string) => get().wishlist.includes(productId),
 
-      addToRecentlyViewed: (productId) =>
-        set((state) => {
-          const filtered = state.recentlyViewed.filter(id => id !== productId);
+      addToRecentlyViewed: (productId: string) =>
+        set((state: StoreState) => {
+          const filtered = state.recentlyViewed.filter((id: string) => id !== productId);
           return {
             recentlyViewed: [productId, ...filtered].slice(0, 10) // Keep last 10
           };

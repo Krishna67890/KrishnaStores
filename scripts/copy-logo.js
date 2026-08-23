@@ -12,7 +12,7 @@ const srcLogos = [
   path.resolve(rootDir, 'assets/KrishnaStores logo.png')
 ];
 const destDir = path.resolve(rootDir, 'public/important');
-const destLogo = path.resolve(destDir, 'KrishnaStores logo.png');
+const destLogo = path.resolve(destDir, 'KrishnaStoreslogo.png');
 
 try {
   if (!fs.existsSync(destDir)) {
