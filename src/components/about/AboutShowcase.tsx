@@ -90,10 +90,10 @@ export const AboutShowcase: React.FC<AboutShowcaseProps> = ({ onSelectProduct, o
             </div>
             <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '0.05em' }}>FLAGSHIP COLLECTION</span>
             <h3 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)', margin: '0.25rem 0' }}>
-              03 ELITE MASTERY BOOKS
+              08 DIGITAL PRODUCTS
             </h3>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-              Developer roadmaps & strategic mastery guides anchored at ₹2,096 total value.
+              Developer roadmaps, games & full-stack web application source code.
             </p>
           </div>
         </div>
@@ -113,7 +113,7 @@ export const AboutShowcase: React.FC<AboutShowcaseProps> = ({ onSelectProduct, o
           }}
         >
           <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-            THE KRISHNAELITE MOTTO — 03 FLAGSHIP ROADMAPS
+            THE KRISHNAELITE MOTTO — 08 DIGITAL PRODUCTS
           </span>
 
           <div

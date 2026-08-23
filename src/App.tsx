@@ -246,38 +246,30 @@ export const App: React.FC = () => {
 
                   {/* Filter Pills */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                    <button
-                      onClick={() => handleCategorySelect('all')}
-                      style={{
-                        padding: '0.5rem 1rem',
-                        borderRadius: '9999px',
-                        fontSize: '0.85rem',
-                        fontWeight: 700,
-                        backgroundColor: activeCategory === 'all' ? 'var(--primary)' : 'var(--bg-secondary)',
-                        color: activeCategory === 'all' ? '#FFFFFF' : 'var(--text-muted)',
-                        border: '1px solid',
-                        borderColor: activeCategory === 'all' ? 'var(--primary)' : 'var(--border-color)',
-                        transition: 'all 0.2s'
-                      }}
-                    >
-                      ALL PRODUCTS (03)
-                    </button>
-                    <button
-                      onClick={() => handleCategorySelect('book')}
-                      style={{
-                        padding: '0.5rem 1rem',
-                        borderRadius: '9999px',
-                        fontSize: '0.85rem',
-                        fontWeight: 700,
-                        backgroundColor: activeCategory === 'book' ? 'var(--primary)' : 'var(--bg-secondary)',
-                        color: activeCategory === 'book' ? '#FFFFFF' : 'var(--text-muted)',
-                        border: '1px solid',
-                        borderColor: activeCategory === 'book' ? 'var(--primary)' : 'var(--border-color)',
-                        transition: 'all 0.2s'
-                      }}
-                    >
-                      ELITE MASTERY (03)
-                    </button>
+                    {[
+                      { key: 'all', label: 'ALL PRODUCTS', count: PRODUCTS.length },
+                      { key: 'book', label: 'BOOKSTORE', count: PRODUCTS.filter((p) => p.category === 'book').length },
+                      { key: 'game', label: 'GAMESTORE', count: PRODUCTS.filter((p) => p.category === 'game').length },
+                      { key: 'web', label: 'WEBSTORE', count: PRODUCTS.filter((p) => p.category === 'web').length },
+                    ].map((pill) => (
+                      <button
+                        key={pill.key}
+                        onClick={() => handleCategorySelect(pill.key as CategoryFilter)}
+                        style={{
+                          padding: '0.5rem 1rem',
+                          borderRadius: '9999px',
+                          fontSize: '0.85rem',
+                          fontWeight: 700,
+                          backgroundColor: activeCategory === pill.key ? 'var(--primary)' : 'var(--bg-secondary)',
+                          color: activeCategory === pill.key ? '#FFFFFF' : 'var(--text-muted)',
+                          border: '1px solid',
+                          borderColor: activeCategory === pill.key ? 'var(--primary)' : 'var(--border-color)',
+                          transition: 'all 0.2s'
+                        }}
+                      >
+                        {pill.label} ({pill.count < 10 ? `0${pill.count}` : pill.count})
+                      </button>
+                    ))}
                   </div>
                 </div>
 

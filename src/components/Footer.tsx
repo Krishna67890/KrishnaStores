@@ -50,12 +50,12 @@ export const Footer: React.FC = () => {
           {/* Department Breakdown */}
           <div>
             <h4 style={{ fontSize: '0.9rem', fontWeight: 800, color: '#F8FAFC', letterSpacing: '0.05em', marginBottom: '1rem' }}>
-              DEPARTMENTS (03 FLAGSHIP BOOKS)
+              DEPARTMENTS (08 TOTAL PRODUCTS)
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.85rem', color: '#94A3B8' }}>
-              <span>• WEB DEVELOPMENT — 2026 Edition</span>
-              <span>• ANDROID DEVELOPMENT — 2026 Edition</span>
-              <span>• SELF-HELP & HEALING — Personal Growth</span>
+              <span>• BOOKSTORE — 4 Digital Books</span>
+              <span>• GAMESTORE — 2 HTML5 / 3D Games</span>
+              <span>• WEBSTORE — 2 Full-Stack Web Projects</span>
             </div>
           </div>
         </div>

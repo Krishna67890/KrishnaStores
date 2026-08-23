@@ -1,95 +1,51 @@
 import { Book, Game } from "@/types";
 
 export const books: Book[] = [
+  // 1. Digital Survival Guide
   {
-    id: "web-dev-2026",
-    slug: "web-development-roadmap-2026",
-    title: "Web Development Fundamentals & Advanced Concepts (2026 Edition)",
-    subtitle: "Become a Modern Full-Stack Web Developer",
+    id: "digital-survival-guide",
+    slug: "digital-survival-guide",
+    title: "The Digital Survival Guide",
+    subtitle: "Essential Digital Security, Privacy & Tech Survival Handbook",
     author: "Krishna Patil Rajput",
     publisher: "Krishna Patil Rajput",
-    price: 2096,
-    discountPrice: 94.27,
-    buyLink: "https://krishnapatilrajput.gumroad.com/l/web-development-roadmap-2026",
-    description: "Instead of spending months watching disconnected tutorials and reading outdated blogs, this book provides a complete learning roadmap in one well-organized resource.\n\nCovering everything from web fundamentals to modern development workflows, it helps readers build strong programming foundations while creating practical projects that prepare them for internships, freelance work, and software development careers.",
-    aiVoice: "Become a Modern Full-Stack Web Developer. Master HTML, CSS, JavaScript, React, Node.js, MongoDB, APIs, Authentication, Deployment, and modern web technologies through a structured roadmap designed for beginners and aspiring professionals.",
-    whyWritten: "In an era where technology evolves every week, I saw many students getting lost in a 'tutorial hell' of scattered resources. I wrote this roadmap to provide a clear, concise, and structured path through the chaos.",
-    coverImage: "/assets/web-dev-roadmap-2026.png",
+    price: 75,
+    discountPrice: 75,
+    buyLink: "https://krishnapatilrajput.gumroad.com/l/digital-survival-guide",
+    description: "The Digital Survival Guide breaks down essential digital privacy, security practices, password protection, and online survival strategies in simple, actionable terms.",
+    coverImage: "/assets/web-roadmap-1.png",
     images: [
-      "/assets/Web devlopment roadmap 1.png",
-      "/assets/Web Devlopment Roadmap 2.png",
-      "/assets/web-dev-roadmap-2026.png",
       "/assets/web-roadmap-1.png",
       "/assets/web-roadmap-2.png"
     ],
     category: "Programming",
-    tags: ["Web Dev", "Full Stack", "Roadmap", "2026"],
-    rating: 4.9,
-    reviewsCount: 184,
-    pages: "Complete Guide",
+    tags: ["books", "Security", "Privacy", "Guide", "Digital"],
+    rating: 4.8,
+    reviewsCount: 120,
+    pages: "45",
     language: "English",
     format: ["PDF"],
-    isBestseller: true,
+    isBestseller: false,
     isNew: true,
     publishedDate: "2026",
     learnings: [
-      "HTML5 & CSS3 Advanced Layouts",
-      "Responsive Design with Tailwind CSS",
-      "JavaScript ES6+ & TypeScript",
-      "DOM Manipulation & Web APIs",
-      "Git & GitHub Workflow",
-      "React.js & Next.js 15+ (App Router)",
-      "Node.js & Express.js Backend",
-      "MongoDB & PostgreSQL Databases",
-      "RESTful & GraphQL APIs",
-      "JWT Authentication & OAuth",
-      "Vercel & Docker Deployment",
-      "Performance Optimization",
-      "AI Tools for Developers",
-      "Real-world Portfolio Projects"
+      "Digital Privacy & Security",
+      "Password & Identity Protection",
+      "Data Encryption Fundamentals",
+      "Online Safety Protocols"
     ],
     whyBuy: [
-      { title: "Complete Roadmap", description: "Learn from beginner concepts to advanced development without switching between multiple resources." },
-      { title: "Save Hundreds of Hours", description: "Everything is organized into an efficient learning path." },
-      { title: "Real Projects", description: "Build practical applications while learning." },
-      { title: "Career Ready Skills", description: "Prepare yourself for internships, freelancing, college projects, and software engineering interviews." },
-      { title: "Modern Technologies", description: "Learn technologies currently used by startups and software companies." },
-      { title: "Premium Reading Experience", description: "Beautiful formatting with beginner-friendly explanations." }
+      { title: "Essential Protection", description: "Learn key privacy and security skills to safeguard your digital footprint." }
     ],
-    features: [
-      "Students",
-      "Beginners",
-      "Self Learners",
-      "College Projects",
-      "Future Full Stack Developers",
-      "Freelancers",
-      "Software Engineers"
-    ],
+    features: ["Beginners", "Developers", "Students"],
     contents: [
-      {
-        title: "Foundation of the Web",
-        duration: "Week 1-2",
-        subChapters: ["How the Internet Works", "HTML5 Semantic Tags", "CSS3 Mastery", "Flexbox & Grid"]
-      },
-      {
-        title: "Programming with JavaScript",
-        duration: "Week 3-5",
-        subChapters: ["Basics to ES6+", "Asynchronous JS", "API Integration", "State Management"]
-      },
-      {
-        title: "Modern Frontend Mastery",
-        duration: "Week 6-9",
-        subChapters: ["React Fundamentals", "Next.js App Router", "Server Components", "Tailwind CSS"]
-      },
-      {
-        title: "Backend & Database",
-        duration: "Week 10-12",
-        subChapters: ["Node.js Runtime", "Express Framework", "NoSQL with MongoDB", "SQL Fundamentals"]
-      }
+      { title: "Digital Privacy Basics", duration: "Chapter 1" }
     ]
   },
+
+  // 2. Android App Development with React Native
   {
-    id: "android-react-native-2026",
+    id: "android-app-development-react-native-2026",
     slug: "android-app-development-react-native-2026",
     title: "Android App Development with React Native (2026 Edition)",
     subtitle: "Build Professional Android Apps with Modern React Native",
@@ -110,7 +66,7 @@ export const books: Book[] = [
       "/assets/android-react-2.png"
     ],
     category: "Programming",
-    tags: ["Android", "React Native", "Mobile Dev", "2026", "Programming"],
+    tags: ["books", "Android", "React Native", "Mobile Dev", "2026"],
     rating: 4.9,
     reviewsCount: 156,
     pages: "50",
@@ -128,37 +84,23 @@ export const books: Book[] = [
       "REST APIs & Firebase",
       "Push Notifications",
       "Performance Optimization",
-      "Google Play Publishing",
-      "AI Mobile Apps",
-      "SOLID Principles"
+      "Google Play Publishing"
     ],
     whyBuy: [
       { title: "Learn Modern React Native", description: "Master the latest React Native development practices for 2026." },
-      { title: "Practical Code Examples", description: "Understand concepts through real coding examples." },
-      { title: "Beginner to Advanced", description: "Perfect learning path regardless of experience." },
-      { title: "Portfolio Projects", description: "Create impressive Android applications for your portfolio." },
-      { title: "Career Focused", description: "Excellent for internships, freelancing, startups, and job preparation." },
-      { title: "AI Ready", description: "Learn how AI concepts integrate into modern mobile applications." }
+      { title: "Practical Code Examples", description: "Understand concepts through real coding examples." }
     ],
     features: [
       "Computer Science Students",
-      "Engineering Students",
       "React Native Beginners",
-      "Android Developers",
-      "JavaScript Developers",
-      "TypeScript Developers",
-      "Freelancers",
-      "Software Engineers",
-      "Mobile App Enthusiasts"
+      "Android Developers"
     ],
     contents: [
-      { title: "Environment & Architecture", duration: "Module 1" },
-      { title: "UI Mastery & Layout", duration: "Module 2" },
-      { title: "Data & State", duration: "Module 3" },
-      { title: "Cloud & Native Features", duration: "Module 4" },
-      { title: "Production & Launch", duration: "Module 5" }
+      { title: "Environment & Architecture", duration: "Module 1" }
     ]
   },
+
+  // 3. Why Was I Only an Option?
   {
     id: "why-was-i-only-an-option",
     slug: "why-was-i-only-an-option",
@@ -167,7 +109,7 @@ export const books: Book[] = [
     author: "Aniket S. Kardile",
     publisher: "Krishna Patil Rajput",
     price: 2096,
-    discountPrice: 475.13,
+    discountPrice: 477,
     buyLink: "https://krishnapatilrajput.gumroad.com/l/why-was-i-only-an-option",
     description: "Some experiences change us forever. This heartfelt book explores the emotional journey of love, heartbreak, healing, and rediscovering self-worth.\n\nThrough thoughtful reflections and relatable life lessons, readers are encouraged to let go of unhealthy attachments, rebuild confidence, and embrace personal growth.",
     aiVoice: "A Journey Through Love, Heartbreak, Healing & Self-Worth. This book offers compassionate guidance and encouragement to help you move forward with strength and hope.",
@@ -183,7 +125,7 @@ export const books: Book[] = [
       "/assets/why-option-3.png"
     ],
     category: "Self-Help",
-    tags: ["Love", "Heartbreak", "Healing", "Self-Worth"],
+    tags: ["books", "Love", "Heartbreak", "Healing", "Self-Worth"],
     rating: 5.0,
     reviewsCount: 240,
     pages: 97,
@@ -196,40 +138,195 @@ export const books: Book[] = [
       "Understanding Heartbreak",
       "Emotional Healing",
       "Letting Go",
-      "Self Worth",
-      "Confidence",
-      "Personal Growth",
-      "Healthy Relationships",
-      "Reflection Exercises",
-      "Building Resilience",
-      "Moving Forward"
+      "Self Worth"
     ],
     whyBuy: [
-      { title: "Emotional Healing", description: "Gain practical insights for navigating heartbreak and emotional recovery." },
-      { title: "Build Self-Worth", description: "Develop confidence and learn to value yourself." },
-      { title: "Relatable Reflections", description: "Explore meaningful lessons inspired by real emotions and experiences." },
-      { title: "Positive Growth", description: "Encourages healthier thinking and personal development." },
-      { title: "Easy to Read", description: "Written in a clear, engaging, and thoughtful style." },
-      { title: "A Meaningful Gift", description: "An excellent choice for anyone seeking encouragement during difficult times." }
+      { title: "Emotional Healing", description: "Gain practical insights for navigating heartbreak and emotional recovery." }
     ],
     features: [
       "Young Adults",
-      "Relationship Readers",
-      "Personal Growth Readers",
-      "Self Reflection Enthusiasts",
-      "Anyone Recovering from Heartbreak"
+      "Personal Growth Readers"
     ],
     contents: [
-      { title: "The Silent Awakening", duration: "Chapter 1-5" },
-      { title: "The Anatomy of an Option", duration: "Chapter 6-10" },
-      { title: "Shattered Mirrors", duration: "Chapter 11-15" },
-      { title: "The Healing Alchemy", duration: "Chapter 16-20" },
-      { title: "Rising from the Ashes", duration: "Chapter 21-25" }
+      { title: "The Silent Awakening", duration: "Chapter 1-5" }
+    ]
+  },
+
+  // 4. Web Development Fundamentals & Advanced Concepts
+  {
+    id: "web-dev-2026",
+    slug: "web-development-roadmap-2026",
+    title: "Web Development Fundamentals & Advanced Concepts (2026 Edition)",
+    subtitle: "Become a Modern Full-Stack Web Developer",
+    author: "Krishna Patil Rajput",
+    publisher: "Krishna Patil Rajput",
+    price: 2096,
+    discountPrice: 94,
+    buyLink: "https://krishnapatilrajput.gumroad.com/l/web-development-roadmap-2026",
+    description: "Instead of spending months watching disconnected tutorials and reading outdated blogs, this book provides a complete learning roadmap in one well-organized resource.\n\nCovering everything from web fundamentals to modern development workflows, it helps readers build strong programming foundations while creating practical projects that prepare them for internships, freelance work, and software development careers.",
+    aiVoice: "Become a Modern Full-Stack Web Developer. Master HTML, CSS, JavaScript, React, Node.js, MongoDB, APIs, Authentication, Deployment, and modern web technologies through a structured roadmap designed for beginners and aspiring professionals.",
+    whyWritten: "In an era where technology evolves every week, I saw many students getting lost in a 'tutorial hell' of scattered resources. I wrote this roadmap to provide a clear, concise, and structured path through the chaos.",
+    coverImage: "/assets/web-dev-roadmap-2026.png",
+    images: [
+      "/assets/Web devlopment roadmap 1.png",
+      "/assets/Web Devlopment Roadmap 2.png",
+      "/assets/web-dev-roadmap-2026.png",
+      "/assets/web-roadmap-1.png",
+      "/assets/web-roadmap-2.png"
+    ],
+    category: "Programming",
+    tags: ["books", "Web Dev", "Full Stack", "Roadmap", "2026"],
+    rating: 4.9,
+    reviewsCount: 184,
+    pages: "Complete Guide",
+    language: "English",
+    format: ["PDF"],
+    isBestseller: true,
+    isNew: true,
+    publishedDate: "2026",
+    learnings: [
+      "HTML5 & CSS3 Advanced Layouts",
+      "Responsive Design with Tailwind CSS",
+      "JavaScript ES6+ & TypeScript",
+      "DOM Manipulation & Web APIs"
+    ],
+    whyBuy: [
+      { title: "Complete Roadmap", description: "Learn from beginner concepts to advanced development." }
+    ],
+    features: [
+      "Students",
+      "Beginners",
+      "Self Learners"
+    ],
+    contents: [
+      {
+        title: "Foundation of the Web",
+        duration: "Week 1-2",
+        subChapters: ["How the Internet Works", "HTML5 Semantic Tags"]
+      }
     ]
   }
 ];
 
-export const games: Game[] = []; // Removed games as requested (only 3 books)
+export const games: Game[] = [
+  // 5. Candy Match Game
+  {
+    id: "candy-match-game",
+    slug: "candy-match-game",
+    title: "Candy Match Game",
+    subtitle: "Interactive HTML5 Match-3 Game Source Code",
+    developer: "Krishna Patil Rajput",
+    platform: "HTML5 / Web Browser",
+    genre: "Puzzle / Arcade",
+    price: 100,
+    discountPrice: 100,
+    buyLink: "https://krishnapatilrajput.gumroad.com/l/candy-match-game",
+    itchUrl: "https://krishnapatilrajput.itch.io/candy-match-game",
+    description: "A vibrant, fully responsive HTML5 Match-3 puzzle game with smooth animations, custom sound effects, and clean JavaScript architecture.",
+    coverImage: "/assets/Candy-Match 1.png",
+    images: [
+      "/assets/Candy-Match 1.png",
+      "/assets/Candy-Match 2.png",
+      "/assets/Candy-Match 3.png"
+    ],
+    category: "game",
+    tags: ["games", "html5", "javascript", "match-3", "source-code"],
+    features: [
+      "Responsive Canvas/HTML",
+      "Sound Effects & SFX",
+      "Score & Combo System"
+    ],
+    whatsIncluded: [
+      "Full Source Code (ZIP)",
+      "Asset Pack (Images & Audio)"
+    ],
+    requirements: [
+      "Any Web Browser"
+    ]
+  },
+
+  // 6. BlockCraft Builder
+  {
+    id: "blockcraft-builder-dream-house-edition",
+    slug: "blockcraft-builder-dream-house-edition",
+    title: "🏡 BlockCraft Builder: Dream House Edition",
+    subtitle: "Creative 3D Block Building Game Engine",
+    developer: "Krishna Patil Rajput",
+    platform: "WebGL / Browser",
+    genre: "Sandbox / Building",
+    price: 100,
+    discountPrice: 100,
+    buyLink: "https://krishnapatilrajput.gumroad.com/l/BlockCraft-Builder-Dream-House-Edition",
+    itchUrl: "https://krishnapatilrajput.itch.io/blockcraft-builder-dream-house-edition",
+    description: "A voxel-style 3D block building game engine allowing players to design and construct dream houses directly in the browser.",
+    coverImage: "/assets/BlockCraft-Builder-Dream-House-Edition.png",
+    images: [
+      "/assets/BlockCraft-Builder-Dream-House-Edition.png",
+      "/assets/Blockcraft 1.png",
+      "/assets/Blockcraft 2.png",
+      "/assets/Blockcraft 3.png",
+      "/assets/Blockcraft 4.png"
+    ],
+    category: "game",
+    tags: ["games", "3d", "webgl", "voxel", "minecraft-style", "source-code"],
+    features: [
+      "3D Voxel Engine",
+      "Multiple Block Types",
+      "Pointer Lock Controls"
+    ],
+    whatsIncluded: [
+      "Complete 3D Source Code",
+      "Texture Atlas & Assets"
+    ],
+    requirements: [
+      "Modern Browser with WebGL"
+    ]
+  }
+];
+
+export const webProducts = [
+  // 7. Little Learners Hub
+  {
+    id: "little-learners-hub",
+    slug: "little-learners-hub",
+    title: "Little Learners Hub",
+    subtitle: "Educational Web App Source Code for Early Childhood Learning",
+    description: "An engaging, interactive web application featuring educational quizzes, phonics soundboards, and learning modules for early childhood education.",
+    price: 382,
+    discountPrice: 382,
+    coverImage: "/assets/Little learners Hub Gumroad.png",
+    images: [
+      "/assets/Little learners Hub Gumroad.png",
+      "/assets/Little-Learners-Hub 1.png",
+      "/assets/Little-Learners-Hub 2.png"
+    ],
+    category: "Website Store",
+    tags: ["web", "react", "edtech", "source-code"],
+    buyLink: "https://krishnapatilrajput.gumroad.com/l/littlelearnershub"
+  },
+
+  // 8. LinkedIn Clone
+  {
+    id: "linkedin-clone-react",
+    slug: "linkedin-clone-react",
+    title: "🔥 LinkedIn Clone — Full Stack React Social Network (Source Code)",
+    subtitle: "Production-Ready Full-Stack Social Network Platform",
+    description: "A complete full-stack LinkedIn social media network clone with authentication, post creation, image uploads, real-time messaging, and profile management.",
+    price: 957,
+    discountPrice: 957,
+    coverImage: "/assets/Linked in 1.png",
+    images: [
+      "/assets/Linked in 1.png",
+      "/assets/Linked in 2.png",
+      "/assets/Linked in 3.png",
+      "/assets/Linked in 4.png",
+      "/assets/Linked in 5.png"
+    ],
+    category: "Website Store",
+    tags: ["web", "react", "full-stack", "social-network", "source-code"],
+    buyLink: "https://krishnapatilrajput.gumroad.com/l/linkedin-clone-react"
+  }
+];
 
 export const bundles = [
   {
