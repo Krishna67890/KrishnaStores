@@ -11,11 +11,10 @@ export const PRODUCTS: Product[] = [
     categoryLabel: 'BOOK',
     priceINR: 75,
     priceDisplay: '₹75',
-    image: '/assets/web-dev-roadmap-2026.png',
+    image: '/assets/Web devlopment roadmap 1.png',
     gallery: [
-      '/assets/web-dev-roadmap-2026.png',
-      '/assets/web-roadmap-1.png',
-      '/assets/web-roadmap-2.png'
+      '/assets/Web devlopment roadmap 1.png',
+      '/assets/Web Devlopment Roadmap 2.png',
     ],
     shortDescription: 'Your essential handbook for navigating the digital age with clarity, privacy awareness, and modern digital security habits.',
     valueProp: 'A practical guide for navigating the digital world with more confidence.',

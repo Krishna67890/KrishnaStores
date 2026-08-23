@@ -119,7 +119,7 @@ const Hero = () => {
               {/* Main Card */}
               <div className="hero-card absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] aspect-[3/4] rounded-[2.5rem] bg-dark-card p-3 rgb-border shadow-2xl z-20">
                 <div className="relative w-full h-full rounded-[2rem] overflow-hidden">
-                   <Image src="/assets/android-react-native-2026.png" alt="Featured" fill className="object-cover" />
+                   <Image src="/assets/Android Native 2026 Thumbnail.png" alt="Featured" fill className="object-cover" />
                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                    <div className="absolute bottom-6 left-6 right-6">
                       <div className="px-3 py-1 bg-blue-600 rounded-full text-[8px] font-black uppercase tracking-widest inline-block mb-2">Bestseller</div>

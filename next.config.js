@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Ensure public/important/KrishnaStores logo.png exists
-const srcLogo = path.resolve(__dirname, 'assets/KrishnaStores logo.png');
+const srcLogo = path.resolve(__dirname, 'assets/KrishnaStoreslogo.png');
 const destDir = path.resolve(__dirname, 'public/important');
 const destLogo = path.resolve(destDir, 'KrishnaStores logo.png');
 

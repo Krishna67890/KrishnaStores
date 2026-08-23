@@ -8,7 +8,7 @@ dist/
 build/
 .next/
 out/
-/assets/
+# /assets/ <-- Removed this to allow logo/images to be uploaded
 
 # Environment files
 .env

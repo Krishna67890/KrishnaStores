@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import ProductCard from "@/components/product/ProductCard";
+import ProductCard from "../ProductCard";
 import { ArrowRight, BookOpen } from "lucide-react";
 import Link from "next/link";
 import gsap from "gsap";

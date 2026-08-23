@@ -4,7 +4,7 @@ import path from 'path';
 import fs from 'fs';
 
 // Ensure public/important/KrishnaStores logo.png exists
-const srcLogo = path.resolve(__dirname, 'assets/KrishnaStores logo.png');
+const srcLogo = path.resolve(__dirname, 'assets/KrishnaStoreslogo.png');
 const destDir = path.resolve(__dirname, 'public/important');
 const destLogo = path.resolve(destDir, 'KrishnaStores logo.png');
 

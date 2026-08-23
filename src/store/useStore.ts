@@ -2,7 +2,7 @@
 
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { Product } from '@/data/products';
+import { Product } from '@/types/store';
 
 interface StoreState {
   wishlist: string[]; // array of product IDs

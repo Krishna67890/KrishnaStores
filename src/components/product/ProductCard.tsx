@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowUpRight, Heart, ExternalLink } from "lucide-react";
 import gsap from "gsap";
-import { Product } from "@/data/products";
+import { Product } from "@/types/store";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/store/useStore";
 

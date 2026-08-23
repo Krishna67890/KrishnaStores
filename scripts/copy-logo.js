@@ -6,18 +6,32 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const rootDir = path.resolve(__dirname, '..');
-const srcLogo = path.resolve(rootDir, 'assets/KrishnaStoreslogo.png');
+// Try both possible names for the logo to be safe
+const srcLogos = [
+  path.resolve(rootDir, 'assets/KrishnaStoreslogo.png'),
+  path.resolve(rootDir, 'assets/KrishnaStores logo.png')
+];
 const destDir = path.resolve(rootDir, 'public/important');
 const destLogo = path.resolve(destDir, 'KrishnaStores logo.png');
 
-if (fs.existsSync(srcLogo)) {
+try {
   if (!fs.existsSync(destDir)) {
     fs.mkdirSync(destDir, { recursive: true });
   }
-  fs.copyFileSync(srcLogo, destLogo);
-  console.log('✓ Copied KrishnaStores logo.png to public/important/KrishnaStores logo.png');
-} else if (fs.existsSync(destLogo)) {
-  console.log('✓ Verified KrishnaStores logo.png at public/important/KrishnaStores logo.png');
-} else {
-  console.warn('Warning: KrishnaStores logo.png not found');
+
+  let found = false;
+  for (const src of srcLogos) {
+    if (fs.existsSync(src)) {
+      fs.copyFileSync(src, destLogo);
+      console.log(`✓ Copied ${path.basename(src)} to public/important/`);
+      found = true;
+      break;
+    }
+  }
+
+  if (!found) {
+    console.warn('⚠️ Warning: Logo not found in assets/ folder.');
+  }
+} catch (error) {
+  console.error('❌ Error in copy-logo script:', error.message);
 }
