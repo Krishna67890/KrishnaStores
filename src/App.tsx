@@ -97,8 +97,6 @@ export const App: React.FC = () => {
         }
       }
       if (hash === 'books') setActiveCategory('book');
-      else if (hash === 'games') setActiveCategory('game');
-      else if (hash === 'web') setActiveCategory('web');
       else if (hash === 'all') setActiveCategory('all');
     };
 
@@ -262,7 +260,7 @@ export const App: React.FC = () => {
                         transition: 'all 0.2s'
                       }}
                     >
-                      ALL PRODUCTS (08)
+                      ALL PRODUCTS (03)
                     </button>
                     <button
                       onClick={() => handleCategorySelect('book')}
@@ -278,39 +276,7 @@ export const App: React.FC = () => {
                         transition: 'all 0.2s'
                       }}
                     >
-                      BOOKSTORE (04)
-                    </button>
-                    <button
-                      onClick={() => handleCategorySelect('game')}
-                      style={{
-                        padding: '0.5rem 1rem',
-                        borderRadius: '9999px',
-                        fontSize: '0.85rem',
-                        fontWeight: 700,
-                        backgroundColor: activeCategory === 'game' ? 'var(--primary)' : 'var(--bg-secondary)',
-                        color: activeCategory === 'game' ? '#FFFFFF' : 'var(--text-muted)',
-                        border: '1px solid',
-                        borderColor: activeCategory === 'game' ? 'var(--primary)' : 'var(--border-color)',
-                        transition: 'all 0.2s'
-                      }}
-                    >
-                      GAMESTORE (02)
-                    </button>
-                    <button
-                      onClick={() => handleCategorySelect('web')}
-                      style={{
-                        padding: '0.5rem 1rem',
-                        borderRadius: '9999px',
-                        fontSize: '0.85rem',
-                        fontWeight: 700,
-                        backgroundColor: activeCategory === 'web' ? 'var(--primary)' : 'var(--bg-secondary)',
-                        color: activeCategory === 'web' ? '#FFFFFF' : 'var(--text-muted)',
-                        border: '1px solid',
-                        borderColor: activeCategory === 'web' ? 'var(--primary)' : 'var(--border-color)',
-                        transition: 'all 0.2s'
-                      }}
-                    >
-                      WEBSTORE (02)
+                      ELITE MASTERY (03)
                     </button>
                   </div>
                 </div>

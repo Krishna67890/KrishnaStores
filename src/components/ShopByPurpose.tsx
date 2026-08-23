@@ -41,7 +41,9 @@ export const ShopByPurpose: React.FC<ShopByPurposeProps> = ({ onSelectCategory }
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gridTemplateColumns: '1fr',
+            maxWidth: '600px',
+            margin: '0 auto',
             gap: '1.5rem'
           }}
         >
@@ -53,160 +55,51 @@ export const ShopByPurpose: React.FC<ShopByPurposeProps> = ({ onSelectCategory }
               padding: '1.75rem',
               borderRadius: '16px',
               backgroundColor: 'var(--bg-secondary)',
-              border: '1px solid var(--border-color)',
+              border: '2px solid var(--primary)',
               cursor: 'pointer',
               transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
-              height: '190px'
+              height: '190px',
+              textAlign: 'center',
+              alignItems: 'center'
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'translateY(-6px)';
-              e.currentTarget.style.borderColor = 'var(--primary)';
               e.currentTarget.style.boxShadow = 'var(--shadow-hover)';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.borderColor = 'var(--border-color)';
               e.currentTarget.style.boxShadow = 'none';
             }}
           >
             <div>
               <div
                 style={{
-                  width: '42px',
-                  height: '42px',
-                  borderRadius: '10px',
+                  width: '50px',
+                  height: '50px',
+                  borderRadius: '12px',
                   backgroundColor: 'var(--primary-light)',
                   color: 'var(--primary)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  marginBottom: '1rem'
+                  marginBottom: '1rem',
+                  marginInline: 'auto'
                 }}
               >
-                <BookOpen size={22} />
+                <BookOpen size={28} />
               </div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)' }}>
-                📚 I WANT TO LEARN
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--text-main)' }}>
+                ELITE MASTERY ROADMAPS
               </h3>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
-                Books, developer guides & personal growth titles (4 Titles)
+              <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
+                Access the 3 Flagship Books for Digital Transformation (₹2,096 Value Anchored)
               </p>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', fontWeight: 700, color: 'var(--primary)' }}>
-              Explore Bookstore <ArrowRight size={14} />
-            </div>
-          </div>
-
-          {/* Play Card */}
-          <div
-            className="gsap-purpose-card"
-            onClick={() => onSelectCategory('game')}
-            style={{
-              padding: '1.75rem',
-              borderRadius: '16px',
-              backgroundColor: 'var(--bg-secondary)',
-              border: '1px solid var(--border-color)',
-              cursor: 'pointer',
-              transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              height: '190px'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-6px)';
-              e.currentTarget.style.borderColor = 'var(--primary)';
-              e.currentTarget.style.boxShadow = 'var(--shadow-hover)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.borderColor = 'var(--border-color)';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
-          >
-            <div>
-              <div
-                style={{
-                  width: '42px',
-                  height: '42px',
-                  borderRadius: '10px',
-                  backgroundColor: '#FCE7F3',
-                  color: '#EC4899',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: '1rem'
-                }}
-              >
-                <Gamepad2 size={22} />
-              </div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)' }}>
-                🎮 I WANT TO PLAY
-              </h3>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
-                Casual web puzzle games & voxel sandbox builders (2 Games)
-              </p>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', fontWeight: 700, color: 'var(--primary)' }}>
-              Explore Gamestore <ArrowRight size={14} />
-            </div>
-          </div>
-
-          {/* Build Card */}
-          <div
-            className="gsap-purpose-card"
-            onClick={() => onSelectCategory('web')}
-            style={{
-              padding: '1.75rem',
-              borderRadius: '16px',
-              backgroundColor: 'var(--bg-secondary)',
-              border: '1px solid var(--border-color)',
-              cursor: 'pointer',
-              transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              height: '190px'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-6px)';
-              e.currentTarget.style.borderColor = 'var(--primary)';
-              e.currentTarget.style.boxShadow = 'var(--shadow-hover)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.borderColor = 'var(--border-color)';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
-          >
-            <div>
-              <div
-                style={{
-                  width: '42px',
-                  height: '42px',
-                  borderRadius: '10px',
-                  backgroundColor: '#E0E7FF',
-                  color: '#4F46E5',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: '1rem'
-                }}
-              >
-                <Code2 size={22} />
-              </div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)' }}>
-                💻 I WANT TO BUILD
-              </h3>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
-                React source code projects & EdTech web apps (2 Projects)
-              </p>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', fontWeight: 700, color: 'var(--primary)' }}>
-              Explore Webstore <ArrowRight size={14} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '1rem', fontWeight: 800, color: 'var(--primary)' }}>
+              Explore Flagship Bookstore <ArrowRight size={18} />
             </div>
           </div>
         </div>

@@ -593,6 +593,13 @@ export default function BookDetailClient({ book }: BookDetailClientProps) {
                   Krishna Ajaysing Rajput | Krishna Patil Rajput
                 </h2>
                 <p className="text-white/40 font-medium">© 2026 KrishnaBookStores • All Rights Reserved</p>
+                <div className="mt-8 flex justify-center items-center gap-4 text-[10px] font-black uppercase tracking-widest text-primary">
+                  <span>Elite Mastery Roadmaps</span>
+                  <div className="w-1 h-1 rounded-full bg-white/20" />
+                  <span>2026 Digital Editions</span>
+                  <div className="w-1 h-1 rounded-full bg-white/20" />
+                  <span>Verified Original</span>
+                </div>
               </div>
 
             </motion.div>

@@ -5,14 +5,7 @@ import { motion } from 'framer-motion';
 import { BookOpen, ArrowLeft, Filter } from 'lucide-react';
 import Link from 'next/link';
 import BookCard from '@/components/books/BookCard';
-
-interface Book {
-  id: string;
-  title: string;
-  category: string;
-  // Add other properties as needed based on your BookCard or data structure
-  [key: string]: any;
-}
+import { Book } from '@/types';
 
 interface CategoryClientProps {
   category: string;

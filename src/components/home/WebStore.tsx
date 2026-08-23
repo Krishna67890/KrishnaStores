@@ -6,7 +6,7 @@ import { ArrowRight, Code, Terminal } from "lucide-react";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Product } from "@/data/products";
+import { Product } from "@/types";
 
 interface WebStoreProps {
   products: Product[];

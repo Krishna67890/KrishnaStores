@@ -87,20 +87,20 @@ const Hero = () => {
           <div className="relative z-10">
             <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/5 border border-white/10 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-10 backdrop-blur-xl">
               <Sparkles className="w-3.5 h-3.5 text-[#05ffa3]" />
-              Elite Asset Protocol: Active
+              Elite Mastery Roadmaps: ₹2,096 Bundle Value
             </div>
 
             <h1 ref={headingRef} className="text-[clamp(3.5rem,9vw,7.5rem)] font-black text-white leading-[0.85] tracking-tighter mb-10 uppercase">
-              REDEFINE YOUR <br />
+              ELITE MASTERY <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-[#05ffa3] animate-gradient-x">
-                DIGITAL EDGE.
+                03 FLAGSHIP BOOKS.
               </span>
             </h1>
 
             <div ref={textRef} className="max-w-xl mb-14">
               <p className="text-xl md:text-2xl text-slate-400 font-medium leading-relaxed">
-                Premium eBooks for architects, AAA-tier source code, and high-performance web engineering.
-                <span className="text-white"> Engineered for the elite.</span>
+                Premium roadmaps for developers and high-performance individuals.
+                <span className="text-white"> By Krishna Ajaysing Rajput | Krishna Patil Rajput.</span>
               </p>
             </div>
 
@@ -109,7 +109,7 @@ const Hero = () => {
                 href="/books"
                 className="group relative flex items-center gap-3 px-12 py-6 bg-white text-black text-[10px] font-black uppercase tracking-[0.3em] rounded-2xl hover:bg-[#05ffa3] hover:text-black transition-all duration-500 shadow-[0_0_40px_rgba(5,255,163,0.2)] active:scale-95"
               >
-                <ShoppingBag className="w-4 h-4" /> Initialize Vault
+                <ShoppingBag className="w-4 h-4" /> The 03 Roadmaps
               </Link>
 
               <div className="flex items-center gap-4 text-slate-500">
@@ -141,18 +141,18 @@ const Hero = () => {
               </div>
 
               {/* Floating Element: Web */}
-              <div className="hero-card absolute top-[10%] right-[-5%] w-[200px] aspect-square rounded-[2rem] bg-dark-card p-2 border-emerald-500/30 border shadow-2xl z-30 backdrop-blur-xl">
-                 <div className="w-full h-full rounded-[1.5rem] bg-emerald-500/10 flex flex-col items-center justify-center gap-3">
-                    <Terminal className="w-8 h-8 text-emerald-400" />
-                    <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Web Projects</span>
+              <div className="hero-card absolute top-[10%] right-[-5%] w-[200px] aspect-square rounded-[2rem] bg-dark-card p-2 border-blue-500/30 border shadow-2xl z-30 backdrop-blur-xl">
+                 <div className="w-full h-full rounded-[1.5rem] bg-blue-500/10 flex flex-col items-center justify-center gap-3">
+                    <Terminal className="w-8 h-8 text-blue-400" />
+                    <span className="text-[10px] font-black text-blue-400 uppercase tracking-widest">Web Dev Roadmap</span>
                  </div>
               </div>
 
-              {/* Floating Element: Game */}
-              <div className="hero-card absolute bottom-[10%] left-[-5%] w-[180px] aspect-square rounded-[2rem] bg-dark-card p-2 border-purple-500/30 border shadow-2xl z-10 backdrop-blur-xl">
-                 <div className="w-full h-full rounded-[1.5rem] bg-purple-500/10 flex flex-col items-center justify-center gap-3">
-                    <Gamepad2 className="w-8 h-8 text-purple-400" />
-                    <span className="text-[10px] font-black text-purple-400 uppercase tracking-widest">Game Source</span>
+              {/* Floating Element: Relationship */}
+              <div className="hero-card absolute bottom-[10%] left-[-5%] w-[180px] aspect-square rounded-[2rem] bg-dark-card p-2 border-pink-500/30 border shadow-2xl z-10 backdrop-blur-xl">
+                 <div className="w-full h-full rounded-[1.5rem] bg-pink-500/10 flex flex-col items-center justify-center gap-3 text-center px-4">
+                    <Sparkles className="w-8 h-8 text-pink-400" />
+                    <span className="text-[10px] font-black text-pink-400 uppercase tracking-widest leading-tight">Why Was I Only An Option?</span>
                  </div>
               </div>
             </div>

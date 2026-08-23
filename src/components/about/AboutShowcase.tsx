@@ -31,17 +31,15 @@ export const AboutShowcase: React.FC<AboutShowcaseProps> = ({ onSelectProduct, o
   }, []);
 
   // Dynamically calculate catalog counts from source data
-  const bookCount = PRODUCTS.filter((p) => p.category === 'book').length;
-  const gameCount = PRODUCTS.filter((p) => p.category === 'game').length;
-  const webCount = PRODUCTS.filter((p) => p.category === 'web').length;
+  const bookCount = PRODUCTS.length;
 
-  const showcaseProducts = PRODUCTS.slice(0, 4);
+  const showcaseProducts = PRODUCTS.slice(0, 3);
 
   // Artwork for signature Learn/Play/Build typography hover
   const wordImages = {
-    learn: PRODUCTS.find((p) => p.category === 'book')?.image || '/assets/Android Native 2026 Thumbnail.png',
-    play: PRODUCTS.find((p) => p.category === 'game')?.image || '/assets/Candy-Match 2.png',
-    build: PRODUCTS.find((p) => p.category === 'web')?.image || '/assets/web-dev-roadmap-2026.png'
+    learn: PRODUCTS[0]?.image || '/assets/Android Native 2026 Thumbnail.png',
+    play: PRODUCTS[2]?.image || '/assets/Why Was I Only An Option.png',
+    build: PRODUCTS[1]?.image || '/assets/web-dev-roadmap-2026.png'
   };
 
   return (
@@ -60,7 +58,9 @@ export const AboutShowcase: React.FC<AboutShowcaseProps> = ({ onSelectProduct, o
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+            gridTemplateColumns: '1fr',
+            maxWidth: '600px',
+            margin: '0 auto',
             gap: '1.5rem',
             marginBottom: '4.5rem'
           }}
@@ -70,97 +70,30 @@ export const AboutShowcase: React.FC<AboutShowcaseProps> = ({ onSelectProduct, o
             className="gsap-showcase-item"
             style={{
               backgroundColor: 'var(--bg-card)',
-              border: '1px solid var(--border-color)',
+              border: '2px solid var(--primary)',
               borderRadius: '20px',
               padding: '2rem',
               cursor: 'pointer',
               boxShadow: 'var(--shadow-card)',
-              transition: 'all 0.25s ease'
+              transition: 'all 0.25s ease',
+              textAlign: 'center'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = 'var(--primary)';
               e.currentTarget.style.transform = 'translateY(-4px)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'var(--border-color)';
               e.currentTarget.style.transform = 'translateY(0)';
             }}
           >
-            <div style={{ width: '44px', height: '44px', borderRadius: '12px', backgroundColor: 'var(--primary-light)', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
+            <div style={{ width: '44px', height: '44px', borderRadius: '12px', backgroundColor: 'var(--primary-light)', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem', marginInline: 'auto' }}>
               <BookOpen size={22} />
             </div>
-            <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '0.05em' }}>BOOKSTORE</span>
+            <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '0.05em' }}>FLAGSHIP COLLECTION</span>
             <h3 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)', margin: '0.25rem 0' }}>
-              {bookCount} DIGITAL BOOKS
+              03 ELITE MASTERY BOOKS
             </h3>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-              Developer guides, technology titles & practical learning books.
-            </p>
-          </div>
-
-          <div
-            onClick={() => onSelectCategory('game')}
-            className="gsap-showcase-item"
-            style={{
-              backgroundColor: 'var(--bg-card)',
-              border: '1px solid var(--border-color)',
-              borderRadius: '20px',
-              padding: '2rem',
-              cursor: 'pointer',
-              boxShadow: 'var(--shadow-card)',
-              transition: 'all 0.25s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = '#EC4899';
-              e.currentTarget.style.transform = 'translateY(-4px)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'var(--border-color)';
-              e.currentTarget.style.transform = 'translateY(0)';
-            }}
-          >
-            <div style={{ width: '44px', height: '44px', borderRadius: '12px', backgroundColor: '#FCE7F3', color: '#EC4899', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
-              <Gamepad2 size={22} />
-            </div>
-            <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#EC4899', letterSpacing: '0.05em' }}>GAMESTORE</span>
-            <h3 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)', margin: '0.25rem 0' }}>
-              {gameCount} INTERACTIVE GAMES
-            </h3>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-              Casual web puzzle games & voxel sandbox building experiences.
-            </p>
-          </div>
-
-          <div
-            onClick={() => onSelectCategory('web')}
-            className="gsap-showcase-item"
-            style={{
-              backgroundColor: 'var(--bg-card)',
-              border: '1px solid var(--border-color)',
-              borderRadius: '20px',
-              padding: '2rem',
-              cursor: 'pointer',
-              boxShadow: 'var(--shadow-card)',
-              transition: 'all 0.25s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = '#4F46E5';
-              e.currentTarget.style.transform = 'translateY(-4px)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'var(--border-color)';
-              e.currentTarget.style.transform = 'translateY(0)';
-            }}
-          >
-            <div style={{ width: '44px', height: '44px', borderRadius: '12px', backgroundColor: '#E0E7FF', color: '#4F46E5', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
-              <Code2 size={22} />
-            </div>
-            <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#4F46E5', letterSpacing: '0.05em' }}>WEBSTORE</span>
-            <h3 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)', margin: '0.25rem 0' }}>
-              {webCount} WEB PRODUCTS
-            </h3>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-              React web applications, EdTech platforms & source code projects.
+              Developer roadmaps & strategic mastery guides anchored at ₹2,096 total value.
             </p>
           </div>
         </div>
@@ -180,7 +113,7 @@ export const AboutShowcase: React.FC<AboutShowcaseProps> = ({ onSelectProduct, o
           }}
         >
           <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-            THE KRISHNASTORES MOTTO — HOVER TO DISCOVER ARTWORK
+            THE KRISHNAELITE MOTTO — 03 FLAGSHIP ROADMAPS
           </span>
 
           <div
@@ -251,10 +184,10 @@ export const AboutShowcase: React.FC<AboutShowcaseProps> = ({ onSelectProduct, o
         <div style={{ marginBottom: '4.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
             <h3 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)' }}>
-              A FEW THINGS YOU CAN DISCOVER
+              THE 03 FLAGSHIP ROADMAPS
             </h3>
             <button onClick={() => onSelectCategory('all')} style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--primary)' }}>
-              Explore All 8 Products →
+              Explore The Catalog →
             </button>
           </div>
 
@@ -334,7 +267,7 @@ export const AboutShowcase: React.FC<AboutShowcaseProps> = ({ onSelectProduct, o
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.75rem' }}>
             <Shield size={20} color="var(--primary)" />
             <h3 style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--text-main)' }}>
-              THE KRISHNASTORES PROMISE
+              THE KRISHNAELITE PROMISE
             </h3>
           </div>
           <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '1.5rem' }}>

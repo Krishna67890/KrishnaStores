@@ -6,7 +6,8 @@ import { Search, Menu, X, ArrowRight, Heart, ShoppingBag, Sparkles } from "lucid
 import gsap from "gsap";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/store/useStore";
-import { products, Product } from "@/data/products";
+import { products } from "@/data/products";
+import { Product } from "@/types";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -54,10 +55,8 @@ const Navbar = () => {
   }, []);
 
   const navLinks = [
-    { name: "Books", href: "/books", color: "text-blue-400" },
-    { name: "Games", href: "/games", color: "text-purple-400" },
-    { name: "Web", href: "/web", color: "text-emerald-400" },
-    { name: "About", href: "/about", color: "text-slate-400" },
+    { name: "Elite Mastery (03)", href: "/books", color: "text-blue-400" },
+    { name: "About The Creators", href: "/about", color: "text-slate-400" },
   ];
 
   return (
@@ -65,9 +64,9 @@ const Navbar = () => {
       {/* Premium Top Bar */}
       <div className="bg-[#05ffa3] text-black py-1.5 px-4 text-center text-[9px] font-black uppercase tracking-[0.4em] z-[110] relative overflow-hidden">
         <div className="absolute inset-0 bg-white/20 animate-pulse" />
-        <span className="relative flex items-center justify-center gap-2">
+        <span className="relative flex items-center justify-center gap-2 text-glow-emerald">
            <Sparkles className="w-3 h-3" />
-           Elite Asset Protocol: Version 2.0.4 — Krishna Patil Rajput
+           Elite Mastery Bundle: ₹2,096 Total Value Anchor — Krishna Ajaysing Rajput | Krishna Patil Rajput
            <Sparkles className="w-3 h-3" />
         </span>
       </div>
@@ -87,7 +86,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group shrink-0">
             <span className="text-2xl font-black tracking-tighter uppercase text-white">
-              KRISHNA<span className="text-[#05ffa3] text-glow-emerald">STORES</span>
+              KRISHNA<span className="text-[#05ffa3] text-glow-emerald">ELITE</span>
             </span>
           </Link>
 
@@ -239,7 +238,7 @@ const Navbar = () => {
 
           <div className="flex justify-between items-center mb-16 relative z-10">
             <span className="text-2xl font-black tracking-tighter uppercase text-white">
-              KRISHNA<span className="text-blue-500">STORES</span>
+              KRISHNA<span className="text-blue-500">ELITE</span>
             </span>
             <button
               onClick={() => setIsMobileMenuOpen(false)}
@@ -257,7 +256,7 @@ const Navbar = () => {
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="group flex items-center justify-between"
               >
-                 <span className={cn("text-5xl font-black uppercase tracking-tighter transition-all duration-500 group-hover:pl-4", link.color)}>
+                 <span className={cn("text-4xl font-black uppercase tracking-tighter transition-all duration-500 group-hover:pl-4", link.color)}>
                    {link.name}
                  </span>
                  <ArrowRight className="w-8 h-8 opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-500" />

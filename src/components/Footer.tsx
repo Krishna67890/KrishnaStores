@@ -16,22 +16,22 @@ export const Footer: React.FC = () => {
         >
           {/* Brand Col */}
           <div>
-            <a href="#" aria-label="KrishnaStores home" style={{ display: 'inline-block', marginBottom: '1rem' }}>
+            <a href="#" aria-label="KrishnaElite home" style={{ display: 'inline-block', marginBottom: '1rem' }}>
               <img
                 src="/important/KrishnaStores%20logo.png"
-                alt="KrishnaStores"
+                alt="KrishnaElite"
                 style={{ height: '42px', width: 'auto', objectFit: 'contain', display: 'block' }}
               />
             </a>
             <p style={{ fontSize: '0.875rem', color: '#94A3B8', lineHeight: 1.6, maxWidth: '320px' }}>
-              An independent digital storefront for books, games and web projects created by Krishna Patil Rajput.
+              The flagship digital bookstore for elite mastery roadmaps. Signature collection by Krishna Ajaysing Rajput | Krishna Patil Rajput.
             </p>
           </div>
 
           {/* Direct External Storefront Links */}
           <div>
             <h4 style={{ fontSize: '0.9rem', fontWeight: 800, color: '#F8FAFC', letterSpacing: '0.05em', marginBottom: '1rem' }}>
-              OFFICIAL MARKETPLACES
+              OFFICIAL MARKETPLACE
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', fontSize: '0.9rem', color: '#CBD5E1' }}>
               <a
@@ -44,28 +44,18 @@ export const Footer: React.FC = () => {
               >
                 Gumroad Storefront ↗
               </a>
-              <a
-                href="https://krishnapatilrajput.itch.io/"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ display: 'flex', alignItems: 'center', gap: '6px', transition: 'color 0.2s' }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = '#38BDF8')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = '#CBD5E1')}
-              >
-                itch.io Game Page ↗
-              </a>
             </div>
           </div>
 
           {/* Department Breakdown */}
           <div>
             <h4 style={{ fontSize: '0.9rem', fontWeight: 800, color: '#F8FAFC', letterSpacing: '0.05em', marginBottom: '1rem' }}>
-              DEPARTMENTS (08 PRODUCTS)
+              DEPARTMENTS (03 FLAGSHIP BOOKS)
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.85rem', color: '#94A3B8' }}>
-              <span>• BOOKSTORE — 04 Digital Publications</span>
-              <span>• GAMESTORE — 02 Interactive Web Games</span>
-              <span>• WEBSTORE — 02 Developer Source Projects</span>
+              <span>• WEB DEVELOPMENT — 2026 Edition</span>
+              <span>• ANDROID DEVELOPMENT — 2026 Edition</span>
+              <span>• SELF-HELP & HEALING — Personal Growth</span>
             </div>
           </div>
         </div>
@@ -83,9 +73,9 @@ export const Footer: React.FC = () => {
             color: '#64748B'
           }}
         >
-          <span>© 2026 Krishna Patil Rajput. All rights reserved.</span>
+          <span>© 2026 Krishna Ajaysing Rajput | Krishna Patil Rajput. All rights reserved.</span>
           <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            Build by Krishna Ajaysing Patil
+            Built for Elite Performance
           </span>
         </div>
       </div>

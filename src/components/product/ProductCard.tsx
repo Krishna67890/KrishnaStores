@@ -75,9 +75,7 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
       ref={cardRef}
       className={cn(
         "group relative flex flex-col bg-white/5 backdrop-blur-md border border-white/10 rounded-[2rem] overflow-hidden transition-all duration-500 shadow-2xl",
-        isGame && "hover:shadow-[0_0_30px_rgba(139,92,246,0.2)]",
-        isWeb && "hover:shadow-[0_0_30px_rgba(16,185,129,0.2)]",
-        isBook && "hover:shadow-[0_0_30px_rgba(37,99,235,0.2)]",
+        "hover:shadow-[0_0_30px_rgba(37,99,235,0.2)]",
         className
       )}
     >
@@ -97,9 +95,7 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
         <div className="absolute top-4 left-4 flex flex-wrap gap-2">
           <span className={cn(
             "px-3 py-1 text-[9px] font-black uppercase tracking-widest rounded-full border backdrop-blur-md",
-            isBook && "bg-blue-500/10 text-blue-400 border-blue-500/20",
-            isGame && "bg-purple-500/10 text-purple-400 border-purple-500/20",
-            isWeb && "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+            "bg-blue-500/10 text-blue-400 border-blue-500/20"
           )}>
             {product.category}
           </span>
@@ -152,13 +148,11 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
               <ArrowUpRight className="w-4 h-4" />
             </Link>
             <a
-              href={product.gumroadUrl || product.buyLink || product.itchUrl}
+              href={product.gumroadUrl || product.buyLink}
               target="_blank"
               rel="noopener noreferrer"
               className={cn(
                 "flex items-center gap-2 px-5 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all shadow-lg active:scale-95",
-                isGame ? "bg-purple-600 text-white hover:bg-purple-500 shadow-purple-900/20" :
-                isWeb ? "bg-emerald-600 text-white hover:bg-emerald-500 shadow-emerald-900/20" :
                 "bg-blue-600 text-white hover:bg-blue-500 shadow-blue-900/20"
               )}
             >

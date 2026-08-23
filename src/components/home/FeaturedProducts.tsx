@@ -6,7 +6,7 @@ import { ArrowRight, Sparkles, Star } from "lucide-react";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Product } from "@/data/products";
+import { Product } from "@/types";
 
 interface FeaturedProductsProps {
   products: Product[];

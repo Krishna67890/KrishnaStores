@@ -53,12 +53,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             e.preventDefault();
             onGoHome();
           }}
-          aria-label="KrishnaStores home"
+          aria-label="KrishnaElite home"
           style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}
         >
           <img
             src="/important/KrishnaStoreslogo.png"
-            alt="KrishnaStores"
+            alt="KrishnaElite"
             className="krishna-logo"
           />
         </a>
@@ -91,35 +91,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               transition: 'color 0.15s'
             }}
           >
-            <BookOpen size={16} /> Books
-          </button>
-          <button
-            onClick={() => handleNavClick('game')}
-            style={{
-              fontSize: '0.9rem',
-              fontWeight: activeCategory === 'game' ? 700 : 600,
-              color: activeCategory === 'game' ? 'var(--primary)' : 'var(--text-muted)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              transition: 'color 0.15s'
-            }}
-          >
-            <Gamepad2 size={16} /> Games
-          </button>
-          <button
-            onClick={() => handleNavClick('web')}
-            style={{
-              fontSize: '0.9rem',
-              fontWeight: activeCategory === 'web' ? 700 : 600,
-              color: activeCategory === 'web' ? 'var(--primary)' : 'var(--text-muted)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              transition: 'color 0.15s'
-            }}
-          >
-            <Code2 size={16} /> Web
+            <BookOpen size={16} /> Elite Mastery (03)
           </button>
           <button
             onClick={() => handleNavClick('about')}
@@ -277,7 +249,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               gap: '10px'
             }}
           >
-            <Layers size={18} /> Home Store
+            <Layers size={18} /> KrishnaElite Home
           </button>
           <button
             onClick={() => handleNavClick('book')}
@@ -291,35 +263,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               gap: '10px'
             }}
           >
-            <BookOpen size={18} /> Bookstore (04)
-          </button>
-          <button
-            onClick={() => handleNavClick('game')}
-            style={{
-              padding: '10px 0',
-              fontSize: '1rem',
-              fontWeight: activeCategory === 'game' ? 700 : 600,
-              color: activeCategory === 'game' ? 'var(--primary)' : 'var(--text-main)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px'
-            }}
-          >
-            <Gamepad2 size={18} /> Gamestore (02)
-          </button>
-          <button
-            onClick={() => handleNavClick('web')}
-            style={{
-              padding: '10px 0',
-              fontSize: '1rem',
-              fontWeight: activeCategory === 'web' ? 700 : 600,
-              color: activeCategory === 'web' ? 'var(--primary)' : 'var(--text-main)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px'
-            }}
-          >
-            <Code2 size={18} /> Webstore (02)
+            <BookOpen size={18} /> Elite Mastery (03)
           </button>
           <button
             onClick={() => handleNavClick('about')}
@@ -333,7 +277,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               gap: '10px'
             }}
           >
-            <Info size={18} /> ABOUT KRISHNASTORES
+            <Info size={18} /> ABOUT THE CREATORS
           </button>
           <button
             onClick={() => {

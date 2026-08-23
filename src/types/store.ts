@@ -1,4 +1,4 @@
-export type ProductCategory = 'book' | 'game' | 'web';
+export type ProductCategory = 'book';
 
 export interface ProductDetails {
   type: string;
@@ -18,10 +18,10 @@ export interface Product {
   author?: string;
   subtitle?: string;
   category: ProductCategory;
-  categoryLabel: string; // 'BOOK', 'GAME', 'WEB', 'SOURCE CODE'
+  categoryLabel: string; // 'BOOK', 'GUIDE', 'DIGITAL EDITION'
   priceINR: number;
   priceUSD?: number;
-  priceDisplay: string; // '₹299', '$1 / ₹100'
+  priceDisplay: string; // '₹299'
   image: string;
   gallery: string[];
   shortDescription: string;
@@ -47,4 +47,4 @@ export interface Product {
   whyBuyNow?: string;
 }
 
-export type CategoryFilter = 'all' | 'book' | 'game' | 'web' | 'about';
+export type CategoryFilter = 'all' | 'book' | 'about';

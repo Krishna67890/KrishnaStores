@@ -47,7 +47,7 @@ export const FeaturedProduct: React.FC<FeaturedProductProps> = ({
         <div className="gsap-featured-badge" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1rem' }}>
           <Star size={18} fill="#D97706" color="#D97706" />
           <span style={{ fontSize: '0.8rem', fontWeight: 800, letterSpacing: '0.08em', color: '#D97706', textTransform: 'uppercase' }}>
-            FEATURED DIGITAL SPOTLIGHT — HIGH CONVERSION CHOICE
+            FEATURED DIGITAL SPOTLIGHT — ELITE MASTERY ROADMAPS
           </span>
         </div>
 

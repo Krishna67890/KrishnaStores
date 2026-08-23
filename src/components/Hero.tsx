@@ -115,8 +115,8 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick }) => {
             marginBottom: '1.25rem'
           }}
         >
-          EVERYTHING I BUILD.<br />
-          <span style={{ color: 'var(--primary)' }}>IN ONE STORE.</span>
+          KRISHNAELITE.<br />
+          <span style={{ color: 'var(--primary)' }}>03 FLAGSHIP BOOKS.</span>
         </h1>
 
         <p
@@ -129,9 +129,9 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick }) => {
             lineHeight: 1.5
           }}
         >
-          Books · Games · Developer Web Projects<br />
+          ₹2,096 Elite Mastery Bundle Value Anchored<br />
           <span style={{ fontSize: '0.95rem', color: 'var(--text-muted)', fontWeight: 600 }}>
-            Crafted directly by Krishna Patil Rajput — 100% Authentic & Verified Digital Access
+            Krishna Ajaysing Rajput | Krishna Patil Rajput — 100% Authentic Digital Roadmaps
           </span>
         </p>
 

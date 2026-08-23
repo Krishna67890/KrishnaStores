@@ -92,7 +92,7 @@ export const AboutHero: React.FC<AboutHeroProps> = ({ onExploreProducts, onMeetC
               }}
             >
               <Sparkles size={14} color="var(--primary)" />
-              <span>ABOUT KRISHNASTORES</span>
+              <span>ABOUT KRISHNAELITE</span>
             </div>
 
             <h1
@@ -106,8 +106,8 @@ export const AboutHero: React.FC<AboutHeroProps> = ({ onExploreProducts, onMeetC
                 marginBottom: '1.25rem'
               }}
             >
-              MORE THAN A STORE.<br />
-              <span style={{ color: 'var(--primary)' }}>A PLACE TO LEARN, PLAY & BUILD.</span>
+              ELITE MASTERY.<br />
+              <span style={{ color: 'var(--primary)' }}>03 FLAGSHIP EXPERIENCES.</span>
             </h1>
 
             <p
@@ -120,7 +120,7 @@ export const AboutHero: React.FC<AboutHeroProps> = ({ onExploreProducts, onMeetC
                 marginBottom: '2rem'
               }}
             >
-              KrishnaStores brings together digital books, games, web projects and developer-focused products created to give people something useful, interesting or enjoyable to discover.
+              KrishnaElite focuses exclusively on the three flagship roadmaps created by Krishna Ajaysing Rajput | Krishna Patil Rajput. We believe in depth over breadth, providing world-class guides for developers and individuals.
             </p>
 
             <div className="gsap-about-cta" style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
@@ -128,7 +128,7 @@ export const AboutHero: React.FC<AboutHeroProps> = ({ onExploreProducts, onMeetC
                 EXPLORE PRODUCTS <ArrowRight size={18} />
               </button>
               <button onClick={onMeetCreator} className="btn-secondary" style={{ padding: '0.85rem 1.75rem', fontSize: '1rem' }}>
-                <User size={18} color="var(--primary)" /> MEET THE CREATOR →
+                <User size={18} color="var(--primary)" /> MEET THE CREATORS →
               </button>
             </div>
           </div>
@@ -186,7 +186,7 @@ export const AboutHero: React.FC<AboutHeroProps> = ({ onExploreProducts, onMeetC
               </div>
             </div>
 
-            {/* Item 2: Game Artwork (0.7x parallax) */}
+            {/* Item 2: Relationship Artwork (0.7x parallax) */}
             <div
               ref={gameRef}
               style={{
@@ -204,14 +204,14 @@ export const AboutHero: React.FC<AboutHeroProps> = ({ onExploreProducts, onMeetC
               }}
             >
               <img
-                src="/assets/Candy-Match 2.png"
-                alt="Game preview"
+                src="/assets/Why Was I Only An Option.png"
+                alt="Personal Growth preview"
                 style={{ width: '100%', height: '130px', objectFit: 'cover', borderRadius: '8px' }}
               />
               <div style={{ marginTop: '6px', textAlign: 'center' }}>
-                <span className="category-badge" style={{ fontSize: '0.6rem', color: '#EC4899', backgroundColor: '#FCE7F3' }}>GAMESTORE</span>
+                <span className="category-badge" style={{ fontSize: '0.6rem', color: '#EC4899', backgroundColor: '#FCE7F3' }}>ELITE MASTERY</span>
                 <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-main)', marginTop: '2px' }} className="line-clamp-1">
-                  Candy Match 2
+                  Why Was I Only An Option?
                 </span>
               </div>
             </div>
@@ -234,12 +234,12 @@ export const AboutHero: React.FC<AboutHeroProps> = ({ onExploreProducts, onMeetC
               }}
             >
               <img
-                src="/assets/web-dev-roadmap-2026.png"
+                src="/assets/Web Development Fundamentals & Advanced Concepts (2026 Edition) Thumbnail.png"
                 alt="Web project preview"
                 style={{ width: '100%', height: '140px', objectFit: 'cover', borderRadius: '8px' }}
               />
               <div style={{ marginTop: '6px', textAlign: 'center' }}>
-                <span className="category-badge" style={{ fontSize: '0.6rem', color: '#4F46E5', backgroundColor: '#E0E7FF' }}>WEBSTORE</span>
+                <span className="category-badge" style={{ fontSize: '0.6rem', color: '#4F46E5', backgroundColor: '#E0E7FF' }}>ELITE MASTERY</span>
                 <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-main)', marginTop: '2px' }} className="line-clamp-1">
                   Web Dev Roadmap 2026
                 </span>

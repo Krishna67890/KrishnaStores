@@ -38,13 +38,12 @@ const Footer = () => {
           <div className="lg:col-span-5">
             <div className="footer-reveal mb-6">
               <span className="text-2xl font-black tracking-tighter uppercase text-white">
-                Krishna<span className="text-blue-500">Stores</span>
+                Krishna<span className="text-blue-500">Elite</span>
               </span>
             </div>
             <p className="footer-reveal text-lg text-slate-400 max-w-sm font-medium leading-relaxed mb-8">
-              Discover, Learn, Play, and Build.
-              High-quality digital books, games and developer projects
-              crafted by Krishna Patil Rajput.
+              Premium Flagship Roadmaps & Strategic Mastery Guides
+              crafted by Krishna Ajaysing Rajput | Krishna Patil Rajput.
             </p>
 
             <div className="footer-reveal flex items-center gap-4">
@@ -74,19 +73,16 @@ const Footer = () => {
           {/* Quick Links */}
           <div className="lg:col-span-7 grid grid-cols-2 md:grid-cols-3 gap-10">
             <div className="footer-reveal">
-              <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-white mb-8">Shop</h4>
+              <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-white mb-8">Catalog</h4>
               <ul className="flex flex-col gap-4">
-                <li><Link href="/books" className="text-sm text-slate-400 hover:text-blue-500 transition-colors font-medium uppercase tracking-tight">BookStore</Link></li>
-                <li><Link href="/games" className="text-sm text-slate-400 hover:text-purple-500 transition-colors font-medium uppercase tracking-tight">GameStore</Link></li>
-                <li><Link href="/web" className="text-sm text-slate-400 hover:text-emerald-500 transition-colors font-medium uppercase tracking-tight">WebStore</Link></li>
+                <li><Link href="/books" className="text-sm text-slate-400 hover:text-blue-500 transition-colors font-medium uppercase tracking-tight">Elite Mastery (03)</Link></li>
               </ul>
             </div>
             <div className="footer-reveal">
-              <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-white mb-8">Support</h4>
+              <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-white mb-8">Creators</h4>
               <ul className="flex flex-col gap-4">
-                <li><Link href="/about" className="text-sm text-slate-400 hover:text-white transition-colors font-medium uppercase tracking-tight">About Us</Link></li>
+                <li><Link href="/about" className="text-sm text-slate-400 hover:text-white transition-colors font-medium uppercase tracking-tight">About The Creators</Link></li>
                 <li><Link href="/about#faq" className="text-sm text-slate-400 hover:text-white transition-colors font-medium uppercase tracking-tight">FAQ</Link></li>
-                <li><Link href="/wishlist" className="text-sm text-slate-400 hover:text-white transition-colors font-medium uppercase tracking-tight">Wishlist</Link></li>
               </ul>
             </div>
             <div className="footer-reveal">
@@ -97,11 +93,6 @@ const Footer = () => {
                     Gumroad <ExternalLink className="w-3 h-3" />
                   </Link>
                 </li>
-                <li>
-                  <Link href="https://krishnapatilrajput.itch.io/" target="_blank" className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors font-medium uppercase tracking-tight">
-                    itch.io <ExternalLink className="w-3 h-3" />
-                  </Link>
-                </li>
               </ul>
             </div>
           </div>
@@ -110,10 +101,10 @@ const Footer = () => {
         <div className="footer-reveal pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex flex-col gap-2">
             <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em]">
-              © 2026 KrishnaStores. Protocol by Krishna Patil Rajput.
+              © 2026 Krishna Ajaysing Rajput | Krishna Patil Rajput.
             </p>
             <p className="text-[9px] font-black text-blue-500/50 uppercase tracking-[0.2em]">
-              Build by Krishna Ajaysing Patil
+              Elite Mastery Roadmap Protocol
             </p>
           </div>
           <div className="flex gap-8">

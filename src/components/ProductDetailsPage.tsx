@@ -112,17 +112,6 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
             >
               BUY ON GUMROAD ↗
             </a>
-            {product.itchUrl && (
-              <a
-                href={product.itchUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-secondary"
-                style={{ padding: '0.45rem 1.15rem', fontSize: '0.85rem' }}
-              >
-                ITCH.IO ↗
-              </a>
-            )}
           </div>
         </div>
       </div>
@@ -151,9 +140,9 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
           <ChevronRight size={14} color="var(--text-light)" />
           <button
             onClick={() => onSelectCategory(product.category)}
-            style={{ color: 'var(--primary)', textTransform: 'capitalize' }}
+            style={{ color: 'var(--primary)', textTransform: 'uppercase' }}
           >
-            {product.category}store
+            Elite Mastery
           </button>
           <ChevronRight size={14} color="var(--text-light)" />
           <span style={{ color: 'var(--text-main)', fontWeight: 700 }} className="line-clamp-1">
@@ -283,7 +272,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                   {product.priceDisplay}
                 </div>
                 <span style={{ fontSize: '0.85rem', color: 'var(--accent-emerald)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px', marginTop: '0.25rem' }}>
-                  <CheckCircle2 size={14} /> 100% Verified Gumroad & itch.io Fulfill
+                  <CheckCircle2 size={14} /> 100% Verified Gumroad Fulfill
                 </span>
               </div>
 
@@ -308,18 +297,6 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
               >
                 BUY ON GUMROAD ↗ <Zap size={18} />
               </a>
-
-              {product.itchUrl && (
-                <a
-                  href={product.itchUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-secondary"
-                  style={{ width: '100%', padding: '0.9rem 1.5rem', fontSize: '1.05rem', justifyContent: 'center' }}
-                >
-                  VIEW ON ITCH.IO ↗
-                </a>
-              )}
 
               <button
                 onClick={(e) => onToggleWishlist(product, e)}
@@ -350,7 +327,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
               WHY YOU SHOULD PURCHASE THIS PRODUCT TODAY
             </h2>
             <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
-              Designed directly by Krishna Patil Rajput to provide real outcomes, lifetime utility, and instant deployment.
+              Designed directly by Krishna Ajaysing Rajput | Krishna Patil Rajput to provide real outcomes, lifetime utility, and instant deployment.
             </p>
           </div>
 
@@ -385,7 +362,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                 Direct Author Delivery
               </h3>
               <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-                Created by independent developer Krishna Patil Rajput. No broken dependencies or outdated synthetic snippets.
+                Created by Krishna Ajaysing Rajput | Krishna Patil Rajput. No broken dependencies or outdated synthetic snippets.
               </p>
             </div>
 
@@ -405,10 +382,10 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
           </div>
         </section>
 
-        {/* COMPARISON: KRISHNASTORES VS OTHER SOURCES */}
+        {/* COMPARISON: SIGNATURE STORE VS OTHER SOURCES */}
         <section className="gsap-detail-item" style={{ marginBottom: '3.5rem' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1.25rem', textAlign: 'center' }}>
-            WHY KRISHNASTORES VS SCATTERED INTERNET TUTORIALS
+            WHY SIGNATURE MASTERY VS SCATTERED INTERNET TUTORIALS
           </h2>
 
           <div
@@ -423,14 +400,14 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1rem' }}>
                 <CheckCircle2 size={22} color="var(--primary)" />
                 <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-main)' }}>
-                  KRISHNASTORES DIRECT PRODUCT
+                  ELITE MASTERY SIGNATURE PRODUCT
                 </h3>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.9rem', color: 'var(--text-main)', fontWeight: 600 }}>
                 <p>✓ 100% Code-Grounded & 2026 Production Standards</p>
-                <p>✓ Instant Gumroad & itch.io Digital Fulfillment</p>
+                <p>✓ Instant Gumroad & Official Digital Fulfillment</p>
                 <p>✓ Structured End-to-End Practical Architecture</p>
-                <p>✓ Direct Author Support & Lifetime Updates</p>
+                <p>✓ Direct Dual-Creator Support & Lifetime Updates</p>
               </div>
             </div>
 
@@ -442,7 +419,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                   SCATTERED ONLINE TUTORIALS
                 </h3>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.9rem', color: '#CBD5E1' }}>
                 <p>✕ Outdated syntax and deprecated dependencies</p>
                 <p>✕ Fragmented snippets with zero real context</p>
                 <p>✕ Wasted hours debugging syntax errors</p>
@@ -689,20 +666,9 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
             >
               BUY ON GUMROAD ↗
             </a>
-            {product.itchUrl && (
-              <a
-                href={product.itchUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-secondary"
-                style={{ padding: '1rem 2.5rem', fontSize: '1.1rem', backgroundColor: 'transparent', color: '#FFFFFF', borderColor: '#475569' }}
-              >
-                VIEW ON ITCH.IO ↗
-              </a>
-            )}
           </div>
           <p style={{ fontSize: '0.85rem', color: '#94A3B8', marginTop: '1.25rem' }}>
-            Secure checkout powered by official Gumroad & itch.io platform services. Instant digital delivery to your email.
+            Secure checkout powered by official Gumroad platform services. Instant digital delivery to your email.
           </p>
         </section>
 
@@ -739,10 +705,42 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
           </div>
         </section>
 
-        {/* KEEP EXPLORING CATEGORIES */}
+        {/* ELITE MASTERY BUNDLE UPSell */}
+        <section className="gsap-detail-item" style={{ marginBottom: '3.5rem', background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)', borderRadius: '24px', padding: '2.5rem', border: '1px solid var(--primary)', position: 'relative', overflow: 'hidden' }}>
+          <div style={{ position: 'absolute', top: 0, right: 0, padding: '10px 20px', backgroundColor: 'var(--primary)', color: 'white', fontWeight: 900, fontSize: '0.75rem', borderBottomLeftRadius: '15px' }}>
+            BEST VALUE
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', color: 'white' }}>
+            <h2 style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '0.5rem' }}>GET THE ELITE MASTERY BUNDLE</h2>
+            <p style={{ color: '#94A3B8', maxWidth: '600px', marginBottom: '2rem' }}>
+              Unlock the complete 3-book flagship collection including Web Development, Android Mastery, and Personal Growth. Total value anchored at ₹2,096.
+            </p>
+
+            <div style={{ display: 'flex', gap: '1.5rem', marginBottom: '2.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+              {allProducts.map(p => (
+                <div key={p.id} style={{ width: '80px', textAlign: 'center' }}>
+                  <img src={p.image} alt="" style={{ width: '100%', borderRadius: '8px', border: '1px solid #334155', marginBottom: '0.5rem' }} />
+                  <div style={{ fontSize: '0.65rem', fontWeight: 700, color: '#CBD5E1' }} className="line-clamp-1">{p.title}</div>
+                </div>
+              ))}
+            </div>
+
+            <a
+              href="https://krishnapatilrajput.gumroad.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary"
+              style={{ padding: '1rem 3rem', fontSize: '1.2rem', background: 'white', color: '#0F172A' }}
+            >
+              ACCESS ALL 3 BOOKS NOW
+            </a>
+          </div>
+        </section>
+
+        {/* KEEP EXPLORING ELITE MASTERY */}
         <section className="gsap-detail-item" style={{ backgroundColor: 'var(--bg-secondary)', padding: '2.5rem', borderRadius: '20px', border: '1px solid var(--border-color)', textAlign: 'center' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1.5rem' }}>
-            KEEP EXPLORING KRISHNASTORES
+            COMPLETE YOUR ELITE COLLECTION
           </h2>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '1.25rem', flexWrap: 'wrap' }}>
             <button
@@ -750,21 +748,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
               className="btn-secondary"
               style={{ padding: '0.75rem 1.5rem' }}
             >
-              <BookOpen size={18} color="var(--primary)" /> BOOKSTORE (04) →
-            </button>
-            <button
-              onClick={() => onSelectCategory('game')}
-              className="btn-secondary"
-              style={{ padding: '0.75rem 1.5rem' }}
-            >
-              <Gamepad2 size={18} color="#EC4899" /> GAMESTORE (02) →
-            </button>
-            <button
-              onClick={() => onSelectCategory('web')}
-              className="btn-secondary"
-              style={{ padding: '0.75rem 1.5rem' }}
-            >
-              <Code2 size={18} color="#4F46E5" /> WEBSTORE (02) →
+              <BookOpen size={18} color="var(--primary)" /> ELITE MASTERY (03) →
             </button>
           </div>
         </section>
