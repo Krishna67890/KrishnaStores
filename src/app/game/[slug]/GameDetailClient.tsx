@@ -72,7 +72,7 @@ export default function GameDetailClient({ game }: GameDetailClientProps) {
                 >
                   <ExternalLink className="w-6 h-6 group-hover:scale-110 transition-transform" />
                   <span className="text-lg font-black uppercase tracking-tighter">
-                    Buy Now • {formatPrice(game.discountPrice || game.price)}
+                    Buy Now • {formatPrice((game.discountPrice || game.price) ?? 0)}
                   </span>
                 </a>
                 <button className="w-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors">

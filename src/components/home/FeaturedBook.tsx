@@ -92,7 +92,7 @@ const FeaturedBook = ({ book }: FeaturedBookProps) => {
                   Instant Access
                 </span>
                 <span style={{ fontSize: '2.25rem', fontWeight: 900, letterSpacing: '-0.05em' }}>
-                  {formatPrice(book.price)}
+                  {formatPrice(book.price || 0)}
                 </span>
               </motion.div>
             </div>

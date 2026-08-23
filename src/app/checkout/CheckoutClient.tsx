@@ -268,7 +268,7 @@ const CheckoutClient = () => {
                      </>
                   ) : (
                     <>
-                      <Lock className="w-5 h-5" /> Pay {formatPrice(totalPrice())}
+                      <Lock className="w-5 h-5" /> Pay {formatPrice(totalPrice() ?? 0)}
                     </>
                   )}
                 </button>
@@ -289,7 +289,7 @@ const CheckoutClient = () => {
                     <div className="flex-grow">
                       <h4 className="font-bold text-sm line-clamp-1">{item.title}</h4>
                       <p className="text-xs text-white/40">{item.author}</p>
-                      <p className="font-bold text-primary text-sm mt-1">{formatPrice(item.discountPrice || item.price)}</p>
+                      <p className="font-bold text-primary text-sm mt-1">{formatPrice((item.discountPrice || item.price) ?? 0)}</p>
                     </div>
                   </div>
                 ))}
@@ -298,7 +298,7 @@ const CheckoutClient = () => {
               <div className="pt-6 border-t border-white/10 space-y-4">
                 <div className="flex justify-between font-bold text-xl">
                   <span>Total amount</span>
-                  <span className="premium-gradient-text">{formatPrice(totalPrice())}</span>
+                  <span className="premium-gradient-text">{formatPrice(totalPrice() ?? 0)}</span>
                 </div>
               </div>
 

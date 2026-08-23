@@ -13,6 +13,10 @@ interface BookCardProps {
 }
 
 const BookCard = ({ book }: BookCardProps) => {
+  const price = book.price ?? 0;
+  const discountPrice = book.discountPrice;
+  const hasDiscount = discountPrice !== undefined && price > 0 && discountPrice < price;
+
   return (
     <Link href={`/book/${book.slug}`}>
       <motion.div
@@ -47,9 +51,9 @@ const BookCard = ({ book }: BookCardProps) => {
                 Bestseller
               </span>
             )}
-            {book.discountPrice && book.discountPrice < book.price && (
+            {hasDiscount && (
               <span className="bg-emerald-500 text-white text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-[0.1em] shadow-2xl backdrop-blur-md">
-                Save {Math.round(((book.price - book.discountPrice) / book.price) * 100)}%
+                Save {Math.round(((price - discountPrice) / price) * 100)}%
               </span>
             )}
             {book.isNew && (
@@ -95,11 +99,11 @@ const BookCard = ({ book }: BookCardProps) => {
 
           <div className="mt-auto flex items-center justify-between pt-4 border-t border-white/5">
             <div className="flex flex-col">
-              {book.discountPrice && book.discountPrice < book.price && (
-                <span className="text-xs text-white/20 line-through mb-0.5">{formatPrice(book.price)}</span>
+              {hasDiscount && (
+                <span className="text-xs text-white/20 line-through mb-0.5">{formatPrice(price)}</span>
               )}
               <span className="text-2xl font-black text-white tracking-tighter">
-                {formatPrice(book.discountPrice || book.price)}
+                {formatPrice(discountPrice || price)}
               </span>
             </div>
             <a

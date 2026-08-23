@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 const GalleryPage = () => {
   // Combine derivation from books and the specific galleryImages array
   const bookDerivedImages = books.flatMap(book =>
-    (book.images || []).map((img, i) => ({
+    (book.images || []).map((img: string, i: number) => ({
       id: `book-${book.id}-${i}`,
       src: img,
       title: book.title,

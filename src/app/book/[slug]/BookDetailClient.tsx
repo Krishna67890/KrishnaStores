@@ -80,7 +80,7 @@ export default function BookDetailClient({ book }: BookDetailClientProps) {
                   className={`btn-premium ${styles.addToCartBtn} group flex items-center justify-center`}
                 >
                   <ExternalLink className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                  <span className="ml-2">Buy Now • {formatPrice(book.discountPrice || book.price)}</span>
+                  <span className="ml-2">Buy Now • {formatPrice((book.discountPrice || book.price) ?? 0)}</span>
                 </a>
                 <button className={styles.wishlistBtn}>
                   <Heart className="w-7 h-7 text-white/40" />
@@ -364,7 +364,7 @@ export default function BookDetailClient({ book }: BookDetailClientProps) {
                     </div>
                     <div className="flex justify-between items-center p-6 rounded-2xl bg-primary/10 border border-primary/20 text-2xl font-black">
                       <span className="text-primary uppercase tracking-tighter">Your Price Today</span>
-                      <span className="color-gradient-text">{formatPrice(book.discountPrice || book.price)}</span>
+                      <span className="color-gradient-text">{formatPrice((book.discountPrice || book.price) ?? 0)}</span>
                     </div>
                   </div>
                   <p className="text-center text-xs font-bold text-white/30 uppercase tracking-[0.2em]">
@@ -404,7 +404,7 @@ export default function BookDetailClient({ book }: BookDetailClientProps) {
                     {isWebsiteStore ? 'Project Screenshots' : 'Inside the Preview'}
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {book.images.map((img, i) => (
+                    {book.images?.map((img: string, i: number) => (
                       <motion.div
                         key={i}
                         whileHover={{ y: -5, scale: 1.02 }}

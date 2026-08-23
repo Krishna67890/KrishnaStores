@@ -59,7 +59,7 @@ const CartClient = () => {
                 </div>
 
                 <div className="flex flex-col items-end gap-4">
-                  <span className="text-xl font-bold">{formatPrice(item.discountPrice || item.price)}</span>
+                  <span className="text-xl font-bold">{formatPrice((item.discountPrice || item.price) ?? 0)}</span>
                   <button
                     onClick={() => removeItem(item.id)}
                     className="p-2 text-white/20 hover:text-danger transition-colors"

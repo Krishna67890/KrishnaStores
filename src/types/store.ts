@@ -1,4 +1,4 @@
-export type ProductCategory = 'book' | 'game' | 'web';
+export type ProductCategory = 'book' | 'game' | 'web' | 'Programming' | 'Self-Help' | 'Website Store' | 'Elite' | 'AI' | 'Development' | 'Security' | 'Career' | 'Cloud' | 'Tools';
 
 export interface ProductDetails {
   type: string;
@@ -47,4 +47,4 @@ export interface Product {
   whyBuyNow?: string;
 }
 
-export type CategoryFilter = 'all' | 'book' | 'about';
+export type CategoryFilter = 'all' | 'about' | ProductCategory;

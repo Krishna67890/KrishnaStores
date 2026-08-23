@@ -14,6 +14,9 @@ export interface Product extends StoreProduct {
   coverImage?: string;
   buyLink?: string;
   demoLink?: string;
+  aiVoice?: string;
+  whyWritten?: string;
+  images?: string[];
 }
 
 export interface Book extends Product {
@@ -31,6 +34,9 @@ export interface Book extends Product {
   features: string[];
   whyBuy?: { title: string; description: string }[];
   contents: any[];
+  aiVoice?: string;
+  whyWritten?: string;
+  images?: string[];
 }
 
 export interface Game extends Product {
@@ -40,6 +46,7 @@ export interface Game extends Product {
   whatsIncluded: string[];
   requirements: string[];
   genre: string;
+  images?: string[];
 }
 
 export interface User {
