@@ -24,11 +24,12 @@ export const App: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [sortBy, setSortBy] = useState<'recommended' | 'price-low' | 'price-high' | 'name'>('recommended');
 
   const catalogRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
 
-  // 1. Mount effect: load theme & wishlist from localStorage safely on client side (prevents SSR hydration error)
+  // 1. Mount effect: load theme & wishlist from localStorage safely on client side
   useEffect(() => {
     setMounted(true);
     try {
@@ -76,7 +77,7 @@ export const App: React.FC = () => {
     }
   }, [wishlistIds, mounted]);
 
-  // 4. Handle URL Hash & Route Navigation (e.g. #product-slug or #about or /about)
+  // 4. Handle URL Hash & Route Navigation (e.g. /products/[slug] or #product-slug or #about or /about)
   useEffect(() => {
     const handleHashAndRoute = () => {
       const path = window.location.pathname;
@@ -88,26 +89,44 @@ export const App: React.FC = () => {
         return;
       }
 
-      if (hash.startsWith('product-')) {
-        const slug = hash.replace('product-', '');
-        const found = PRODUCTS.find((p) => p.slug === slug);
+      // Check pathname for /products/[slug], /book/[slug], /game/[slug], /website-store/[slug]
+      const matchProductPath = path.match(/^\/(?:products|book|game|website-store)\/([^/]+)/);
+      if (matchProductPath && matchProductPath[1]) {
+        const slug = matchProductPath[1];
+        const found = PRODUCTS.find((p) => p.slug === slug || p.id === slug);
         if (found) {
           setSelectedProduct(found);
           return;
         }
       }
-      if (hash === 'books') setActiveCategory('book');
+
+      if (hash.startsWith('product-')) {
+        const slug = hash.replace('product-', '');
+        const found = PRODUCTS.find((p) => p.slug === slug || p.id === slug);
+        if (found) {
+          setSelectedProduct(found);
+          return;
+        }
+      }
+
+      if (hash === 'books' || hash === 'book') setActiveCategory('book');
+      else if (hash === 'games' || hash === 'game') setActiveCategory('game');
+      else if (hash === 'web') setActiveCategory('web');
       else if (hash === 'all') setActiveCategory('all');
     };
 
     handleHashAndRoute();
     window.addEventListener('hashchange', handleHashAndRoute);
-    return () => window.removeEventListener('hashchange', handleHashAndRoute);
+    window.addEventListener('popstate', handleHashAndRoute);
+    return () => {
+      window.removeEventListener('hashchange', handleHashAndRoute);
+      window.removeEventListener('popstate', handleHashAndRoute);
+    };
   }, []);
 
-  // Filter products by category & search query
+  // Filter & sort products by category, search query, and sortBy
   const filteredProducts = useMemo(() => {
-    return PRODUCTS.filter((p) => {
+    let result = PRODUCTS.filter((p) => {
       const matchesCat = activeCategory === 'all' || p.category === activeCategory;
       const q = searchQuery.trim().toLowerCase();
       const matchesSearch =
@@ -119,7 +138,17 @@ export const App: React.FC = () => {
 
       return matchesCat && matchesSearch;
     });
-  }, [activeCategory, searchQuery]);
+
+    if (sortBy === 'price-low') {
+      result = [...result].sort((a, b) => (a.priceINR || a.price || 0) - (b.priceINR || b.price || 0));
+    } else if (sortBy === 'price-high') {
+      result = [...result].sort((a, b) => (b.priceINR || b.price || 0) - (a.priceINR || a.price || 0));
+    } else if (sortBy === 'name') {
+      result = [...result].sort((a, b) => a.title.localeCompare(b.title));
+    }
+
+    return result;
+  }, [activeCategory, searchQuery, sortBy]);
 
   // GSAP animation when filtered products list updates
   useEffect(() => {
@@ -145,6 +174,9 @@ export const App: React.FC = () => {
 
   const handleSelectProduct = (product: Product) => {
     setSelectedProduct(product);
+    if (window.history && window.history.pushState) {
+      window.history.pushState(null, '', `/products/${product.slug}`);
+    }
     window.location.hash = `product-${product.slug}`;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -152,12 +184,18 @@ export const App: React.FC = () => {
   const handleBackToStore = () => {
     setSelectedProduct(null);
     setActiveCategory('all');
+    if (window.history && window.history.pushState) {
+      window.history.pushState(null, '', '/');
+    }
     window.location.hash = '';
   };
 
   const handleCategorySelect = (category: CategoryFilter) => {
     setActiveCategory(category);
     setSelectedProduct(null);
+    if (window.history && window.history.pushState) {
+      window.history.pushState(null, '', category === 'all' ? '/' : `#${category}`);
+    }
     window.location.hash = category;
     if (category !== 'about' && catalogRef.current) {
       catalogRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -244,32 +282,57 @@ export const App: React.FC = () => {
                     </h2>
                   </div>
 
-                  {/* Filter Pills */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                    {[
-                      { key: 'all', label: 'ALL PRODUCTS', count: PRODUCTS.length },
-                      { key: 'book', label: 'BOOKSTORE', count: PRODUCTS.filter((p) => p.category === 'book').length },
-                      { key: 'game', label: 'GAMESTORE', count: PRODUCTS.filter((p) => p.category === 'game').length },
-                      { key: 'web', label: 'WEBSTORE', count: PRODUCTS.filter((p) => p.category === 'web').length },
-                    ].map((pill) => (
-                      <button
-                        key={pill.key}
-                        onClick={() => handleCategorySelect(pill.key as CategoryFilter)}
-                        style={{
-                          padding: '0.5rem 1rem',
-                          borderRadius: '9999px',
-                          fontSize: '0.85rem',
-                          fontWeight: 700,
-                          backgroundColor: activeCategory === pill.key ? 'var(--primary)' : 'var(--bg-secondary)',
-                          color: activeCategory === pill.key ? '#FFFFFF' : 'var(--text-muted)',
-                          border: '1px solid',
-                          borderColor: activeCategory === pill.key ? 'var(--primary)' : 'var(--border-color)',
-                          transition: 'all 0.2s'
-                        }}
-                      >
-                        {pill.label} ({pill.count < 10 ? `0${pill.count}` : pill.count})
-                      </button>
-                    ))}
+                  {/* Filter Pills & Sorting */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                      {[
+                        { key: 'all', label: 'ALL PRODUCTS', count: PRODUCTS.length },
+                        { key: 'book', label: 'BOOKSTORE', count: PRODUCTS.filter((p) => p.category === 'book').length },
+                        { key: 'game', label: 'GAMESTORE', count: PRODUCTS.filter((p) => p.category === 'game').length },
+                        { key: 'web', label: 'WEBSTORE', count: PRODUCTS.filter((p) => p.category === 'web').length },
+                      ].map((pill) => (
+                        <button
+                          key={pill.key}
+                          onClick={() => handleCategorySelect(pill.key as CategoryFilter)}
+                          style={{
+                            padding: '0.5rem 1rem',
+                            borderRadius: '9999px',
+                            fontSize: '0.85rem',
+                            fontWeight: 700,
+                            backgroundColor: activeCategory === pill.key ? 'var(--primary)' : 'var(--bg-secondary)',
+                            color: activeCategory === pill.key ? '#FFFFFF' : 'var(--text-muted)',
+                            border: '1px solid',
+                            borderColor: activeCategory === pill.key ? 'var(--primary)' : 'var(--border-color)',
+                            transition: 'all 0.2s',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          {pill.label} ({pill.count < 10 ? `0${pill.count}` : pill.count})
+                        </button>
+                      ))}
+                    </div>
+
+                    <select
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value as any)}
+                      aria-label="Sort products"
+                      style={{
+                        padding: '0.5rem 1rem',
+                        borderRadius: '9999px',
+                        fontSize: '0.85rem',
+                        fontWeight: 700,
+                        backgroundColor: 'var(--bg-secondary)',
+                        color: 'var(--text-main)',
+                        border: '1px solid var(--border-color)',
+                        cursor: 'pointer',
+                        outline: 'none'
+                      }}
+                    >
+                      <option value="recommended">Recommended</option>
+                      <option value="price-low">Price: Low → High</option>
+                      <option value="price-high">Price: High → Low</option>
+                      <option value="name">A → Z</option>
+                    </select>
                   </div>
                 </div>
 

@@ -15,9 +15,12 @@ import {
   Zap,
   Clock,
   Award,
-  TrendingUp,
   XCircle,
-  Star
+  ChevronDown,
+  Layers,
+  ShoppingBag,
+  ArrowRight,
+  FileText
 } from 'lucide-react';
 import { Product, CategoryFilter } from '../types/store';
 import { ProductCard } from './ProductCard';
@@ -43,45 +46,164 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
   onSelectCategory
 }) => {
   const [activeImage, setActiveImage] = useState(product.image);
-  const detailsRef = useRef<HTMLDivElement>(null);
+  const [showStickyBar, setShowStickyBar] = useState(false);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+  const [recentlyViewed, setRecentlyViewed] = useState<Product[]>([]);
 
+  const detailsRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const mainImageRef = useRef<HTMLImageElement>(null);
+
+  // 1. On product change: reset state, scroll to top, load recently viewed & animate
   useEffect(() => {
     setActiveImage(product.image);
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    if (!detailsRef.current) return;
+    // Track recently viewed in localStorage
+    try {
+      const stored = localStorage.getItem('krishnastores_recently_viewed');
+      const viewedIds: string[] = stored ? JSON.parse(stored) : [];
+      const updatedIds = [product.id, ...viewedIds.filter((id) => id !== product.id)].slice(0, 6);
+      localStorage.setItem('krishnastores_recently_viewed', JSON.stringify(updatedIds));
 
-    const ctx = gsap.context(() => {
-      gsap.from('.gsap-detail-item', {
-        y: 30,
+      // Resolve full product objects for recently viewed (excluding current product)
+      const viewedProducts = updatedIds
+        .filter((id) => id !== product.id)
+        .map((id) => allProducts.find((p) => p.id === id))
+        .filter((p): p is Product => Boolean(p));
+
+      setRecentlyViewed(viewedProducts);
+    } catch (e) {
+      console.error(e);
+    }
+
+    // GSAP Staggered Entry Animations
+    if (detailsRef.current) {
+      const ctx = gsap.context(() => {
+        gsap.from('.gsap-detail-item', {
+          y: 35,
+          opacity: 0,
+          duration: 0.65,
+          stagger: 0.07,
+          ease: 'power3.out'
+        });
+
+        gsap.from(mainImageRef.current, {
+          scale: 0.94,
+          opacity: 0,
+          duration: 0.7,
+          ease: 'power2.out'
+        });
+      }, detailsRef);
+
+      return () => ctx.revert();
+    }
+  }, [product, allProducts]);
+
+  // 2. Scroll listener to show desktop sticky bar past hero
+  useEffect(() => {
+    const handleScroll = () => {
+      if (heroRef.current) {
+        const heroBottom = heroRef.current.getBoundingClientRect().bottom;
+        setShowStickyBar(heroBottom < 100);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Thumbnail click image swap animation
+  const handleThumbnailClick = (img: string) => {
+    if (img === activeImage) return;
+    if (mainImageRef.current) {
+      gsap.to(mainImageRef.current, {
         opacity: 0,
-        duration: 0.7,
-        stagger: 0.08,
-        ease: 'power3.out'
+        scale: 0.96,
+        duration: 0.15,
+        onComplete: () => {
+          setActiveImage(img);
+          gsap.to(mainImageRef.current, { opacity: 1, scale: 1, duration: 0.25, ease: 'power2.out' });
+        }
       });
-    }, detailsRef);
+    } else {
+      setActiveImage(img);
+    }
+  };
 
-    return () => ctx.revert();
-  }, [product]);
+  // Determine category display details
+  const isBook = product.category === 'book';
+  const isGame = product.category === 'game';
+  const isWeb = product.category === 'web';
 
+  const categoryName = isBook ? 'Bookstore' : isGame ? 'Gamestore' : 'Webstore';
+
+  // Primary Purchase Link (Gumroad default, itch.io secondary if available)
+  const primaryPurchaseUrl = product.gumroadUrl || product.buyLink;
+  const secondaryPurchaseUrl = product.itchUrl || product.demoLink;
+
+  // Recommendations: same category + matching tags
   const relatedProducts = allProducts
-    .filter((p) => p.id !== product.id && p.category === product.category)
-    .concat(allProducts.filter((p) => p.id !== product.id && p.category !== product.category))
+    .filter((p) => p.id !== product.id && (p.category === product.category || p.tags.some((t) => product.tags.includes(t))))
     .slice(0, 3);
 
+  // Comparable Products (for "NOT SURE WHICH ONE?" matrix)
+  const comparableProducts = allProducts.filter((p) => p.category === product.category).slice(0, 3);
+
+  // Dynamic FAQs
+  const productFaqs = [
+    {
+      q: `Is this a physical ${isBook ? 'book' : isGame ? 'game' : 'product'}?`,
+      a: `No. This is a 100% digital product. No physical package will be shipped.`
+    },
+    {
+      q: 'Where do I complete my purchase?',
+      a: `Your purchase is securely processed and fulfilled through ${product.itchUrl ? 'official Gumroad or itch.io' : 'official Gumroad'} storefronts.`
+    },
+    {
+      q: 'How much does it cost?',
+      a: `${product.priceDisplay}. This is a one-time purchase with lifetime access and zero subscription fees.`
+    },
+    {
+      q: 'How will I receive my product after purchase?',
+      a: `Immediately after checkout, you will receive an instant download link in your email and on the checkout confirmation screen.`
+    },
+    {
+      q: 'What format is this product delivered in?',
+      a: isBook
+        ? 'Delivered as a high-resolution PDF digital book suitable for reading on phone, tablet, or desktop.'
+        : isGame
+        ? 'Delivered as a ZIP archive containing all HTML5/WebGL source code files, graphics, and sound assets.'
+        : 'Delivered as a ZIP archive containing complete full-stack React / Node source code and setup instructions.'
+    }
+  ];
+
   return (
-    <div ref={detailsRef} style={{ backgroundColor: 'var(--bg-main)', color: 'var(--text-main)', minHeight: '100vh', paddingBottom: '5rem', transition: 'background-color 0.3s ease' }}>
-      {/* Sticky Desktop Top Purchase Bar */}
+    <div
+      ref={detailsRef}
+      style={{
+        backgroundColor: 'var(--bg-main)',
+        color: 'var(--text-main)',
+        minHeight: '100vh',
+        paddingBottom: '6rem',
+        transition: 'background-color 0.3s ease'
+      }}
+    >
+      {/* 20. STICKY DESKTOP PURCHASE BAR */}
       <div
         style={{
-          position: 'sticky',
+          position: 'fixed',
           top: '72px',
+          left: 0,
+          right: 0,
           zIndex: 7000,
           backgroundColor: 'var(--bg-card)',
           borderBottom: '1px solid var(--border-color)',
           boxShadow: 'var(--shadow-sticky)',
           padding: '0.6rem 0',
-          transition: 'background-color 0.3s ease'
+          transform: showStickyBar ? 'translateY(0)' : 'translateY(-120%)',
+          opacity: showStickyBar ? 1 : 0,
+          transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
         }}
         className="sticky-purchase-bar"
       >
@@ -90,7 +212,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
             <img
               src={product.image}
               alt={product.title}
-              style={{ width: '36px', height: '36px', objectFit: 'cover', borderRadius: '6px' }}
+              style={{ width: '38px', height: '38px', objectFit: 'cover', borderRadius: '6px', border: '1px solid var(--border-color)' }}
             />
             <div>
               <span className="line-clamp-1" style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--text-main)' }}>
@@ -104,21 +226,20 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <a
-              href={product.gumroadUrl}
+              href={primaryPurchaseUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary"
-              style={{ padding: '0.45rem 1.15rem', fontSize: '0.85rem' }}
+              style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem', gap: '6px' }}
             >
-              BUY ON GUMROAD ↗
+              BUY NOW → <ExternalLink size={14} />
             </a>
           </div>
         </div>
       </div>
 
-      {/* Main Container */}
       <div className="container" style={{ paddingTop: '1.5rem' }}>
-        {/* Breadcrumb Navigation */}
+        {/* 35. BREADCRUMBS */}
         <nav
           aria-label="Breadcrumb"
           style={{
@@ -128,21 +249,22 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
             fontSize: '0.85rem',
             fontWeight: 600,
             color: 'var(--text-muted)',
-            marginBottom: '1.5rem'
+            marginBottom: '1.5rem',
+            flexWrap: 'wrap'
           }}
         >
           <button
             onClick={onBackToStore}
-            style={{ color: 'var(--primary)', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+            style={{ color: 'var(--primary)', display: 'inline-flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }}
           >
             <ArrowLeft size={14} /> Home Store
           </button>
           <ChevronRight size={14} color="var(--text-light)" />
           <button
             onClick={() => onSelectCategory(product.category)}
-            style={{ color: 'var(--primary)', textTransform: 'uppercase' }}
+            style={{ color: 'var(--primary)', textTransform: 'uppercase', cursor: 'pointer' }}
           >
-            Elite Mastery
+            {categoryName}
           </button>
           <ChevronRight size={14} color="var(--text-light)" />
           <span style={{ color: 'var(--text-main)', fontWeight: 700 }} className="line-clamp-1">
@@ -150,153 +272,160 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
           </span>
         </nav>
 
-        {/* TOP MAIN PRODUCT SECTION (55% Visual, 45% Info) */}
+        {/* 3. PRODUCT HERO SECTION (55% Visual, 45% Info) */}
         <div
+          ref={heroRef}
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
             gap: '3rem',
             alignItems: 'start',
-            marginBottom: '3.5rem'
+            marginBottom: '4rem'
           }}
         >
-          {/* Visual Gallery Area (55%) */}
+          {/* 21. PRODUCT IMAGE GALLERY (55%) */}
           <div className="gsap-detail-item">
             <div
               style={{
-                borderRadius: '16px',
+                borderRadius: '20px',
                 border: '1px solid var(--border-color)',
                 backgroundColor: 'var(--bg-secondary)',
-                padding: '1.5rem',
+                padding: '2rem',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                marginBottom: '1rem',
-                minHeight: '380px'
+                marginBottom: '1.25rem',
+                minHeight: '380px',
+                boxShadow: 'var(--shadow-card)'
               }}
             >
               <img
+                ref={mainImageRef}
                 src={activeImage}
                 alt={product.title}
                 style={{
                   maxWidth: '100%',
                   maxHeight: '440px',
                   objectFit: 'contain',
-                  borderRadius: '8px',
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.06)'
+                  borderRadius: '10px',
+                  boxShadow: '0 12px 32px rgba(0,0,0,0.08)'
                 }}
               />
             </div>
 
-            {/* Thumbnails */}
+            {/* Clickable Thumbnails */}
             {product.gallery && product.gallery.length > 1 && (
-              <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '4px' }}>
+              <div style={{ display: 'flex', gap: '12px', overflowX: 'auto', paddingBottom: '6px' }}>
                 {product.gallery.map((img, idx) => (
                   <button
                     key={idx}
-                    onClick={() => setActiveImage(img)}
+                    onClick={() => handleThumbnailClick(img)}
                     style={{
-                      width: '72px',
-                      height: '72px',
-                      borderRadius: '10px',
+                      width: '76px',
+                      height: '76px',
+                      borderRadius: '12px',
                       border: activeImage === img ? '2px solid var(--primary)' : '1px solid var(--border-color)',
                       padding: '4px',
                       backgroundColor: 'var(--bg-secondary)',
-                      overflow: 'hidden'
+                      cursor: 'pointer',
+                      overflow: 'hidden',
+                      transition: 'all 0.2s ease',
+                      flexShrink: 0
                     }}
                   >
-                    <img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '6px' }} />
+                    <img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }} />
                   </button>
                 ))}
               </div>
             )}
           </div>
 
-          {/* Product Information Area (45%) */}
+          {/* PRODUCT INFORMATION (45%) */}
           <div className="gsap-detail-item" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             <div>
-              <span className="category-badge" style={{ marginBottom: '0.5rem' }}>
+              <span className="category-badge" style={{ marginBottom: '0.6rem', display: 'inline-block' }}>
                 {product.categoryLabel}
               </span>
-              <h1 style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)', fontWeight: 800, color: 'var(--text-main)', lineHeight: 1.15 }}>
+              <h1 style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)', fontWeight: 900, color: 'var(--text-main)', lineHeight: 1.15 }}>
                 {product.title}
               </h1>
               {product.subtitle && (
-                <p style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--primary)', marginTop: '0.25rem' }}>
+                <p style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--primary)', marginTop: '0.4rem' }}>
                   {product.subtitle}
                 </p>
               )}
             </div>
 
-            <p style={{ fontSize: '1rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
-              {product.description}
+            {/* Factual Short Description */}
+            <p style={{ fontSize: '0.98rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+              {product.shortDescription || product.description}
             </p>
 
-            {/* Conversion Impact Box */}
-            {product.whyBuyNow && (
-              <div
-                style={{
-                  backgroundColor: 'var(--primary-light)',
-                  border: '1px solid var(--border-color)',
-                  borderRadius: '12px',
-                  padding: '1rem',
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  gap: '10px'
-                }}
-              >
-                <Sparkles size={20} color="var(--primary)" style={{ flexShrink: 0, marginTop: '2px' }} />
-                <p style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--text-main)', lineHeight: 1.4 }}>
-                  {product.whyBuyNow}
-                </p>
-              </div>
-            )}
-
-            {/* Price Box */}
+            {/* 5. PRICE + VALUE BOX */}
             <div
               style={{
                 backgroundColor: 'var(--bg-secondary)',
                 border: '1px solid var(--border-color)',
-                borderRadius: '14px',
-                padding: '1.25rem',
+                borderRadius: '16px',
+                padding: '1.5rem',
                 display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between'
+                flexDirection: 'column',
+                gap: '0.75rem'
               }}
             >
-              <div>
-                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.05em' }}>
-                  INSTANT DIGITAL ACCESS
-                </span>
-                <div style={{ fontSize: '2.25rem', fontWeight: 800, color: 'var(--text-main)', lineHeight: 1.1 }}>
-                  {product.priceDisplay}
+              <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
+                <div>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-muted)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                    ONE-TIME PURCHASE
+                  </span>
+                  <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--text-main)', lineHeight: 1.1 }}>
+                    {product.priceDisplay}
+                  </div>
                 </div>
-                <span style={{ fontSize: '0.85rem', color: 'var(--accent-emerald)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px', marginTop: '0.25rem' }}>
-                  <CheckCircle2 size={14} /> 100% Verified Gumroad Fulfill
-                </span>
+
+                {product.estimatedValue && (
+                  <div style={{ textAlign: 'right' }}>
+                    <span style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-muted)', display: 'block' }}>ESTIMATED VALUE</span>
+                    <span style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--accent-warm)', textDecoration: 'line-through' }}>
+                      {product.estimatedValue}
+                    </span>
+                  </div>
+                )}
               </div>
 
-              {product.estimatedValue && (
-                <div style={{ textAlign: 'right' }}>
-                  <span style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-muted)' }}>ESTIMATED VALUE</span>
-                  <span style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--accent-warm)', textDecoration: 'line-through' }}>
-                    {product.estimatedValue}
-                  </span>
-                </div>
-              )}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', fontSize: '0.825rem', fontWeight: 600, color: 'var(--text-muted)', paddingTop: '0.5rem', borderTop: '1px solid var(--border-color)' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--accent-emerald)' }}>
+                  <CheckCircle2 size={15} /> 100% Digital Product
+                </span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <Zap size={15} color="var(--primary)" /> Instant Access via Gumroad
+                </span>
+              </div>
             </div>
 
-            {/* Actions */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            {/* 6 & 7. PRIMARY & SECONDARY CTAS */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '0.25rem' }}>
               <a
-                href={product.gumroadUrl}
+                href={primaryPurchaseUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary"
-                style={{ width: '100%', padding: '0.95rem 1.5rem', fontSize: '1.05rem', gap: '8px' }}
+                style={{ width: '100%', padding: '1rem 1.5rem', fontSize: '1.1rem', fontWeight: 800, justifyContent: 'center', gap: '8px' }}
               >
-                BUY ON GUMROAD ↗ <Zap size={18} />
+                BUY NOW → <ExternalLink size={18} />
               </a>
+
+              {secondaryPurchaseUrl && (
+                <a
+                  href={secondaryPurchaseUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-secondary"
+                  style={{ width: '100%', padding: '0.8rem 1.5rem', fontSize: '0.95rem', justifyContent: 'center', gap: '8px' }}
+                >
+                  VIEW ON ITCH.IO ↗ <ExternalLink size={16} />
+                </a>
+              )}
 
               <button
                 onClick={(e) => onToggleWishlist(product, e)}
@@ -305,87 +434,300 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                   width: '100%',
                   padding: '0.75rem 1.5rem',
                   fontSize: '0.95rem',
+                  fontWeight: 700,
+                  justifyContent: 'center',
+                  gap: '8px',
                   color: isWishlisted ? '#EF4444' : 'var(--text-main)',
                   borderColor: isWishlisted ? '#FCA5A5' : 'var(--border-color)',
                   backgroundColor: isWishlisted ? '#FEF2F2' : 'var(--bg-card)'
                 }}
               >
                 <Heart size={18} fill={isWishlisted ? '#EF4444' : 'none'} color={isWishlisted ? '#EF4444' : 'var(--text-main)'} />
-                {isWishlisted ? '✓ SAVED IN WISHLIST' : 'SAVE TO WISHLIST'}
+                {isWishlisted ? '✓ SAVED TO WISHLIST' : '♡ SAVE FOR LATER'}
               </button>
             </div>
           </div>
         </div>
 
-        {/* HIGH-CONVERTING "WHY YOU SHOULD PURCHASE THIS PRODUCT" SECTION */}
-        <section className="gsap-detail-item" style={{ marginBottom: '3.5rem', backgroundColor: 'var(--bg-blue-tint)', borderRadius: '24px', padding: '2.5rem', border: '1px solid var(--border-color)' }}>
-          <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 2rem auto' }}>
+        {/* 8. "WHY SHOULD YOU BUY THIS?" SECTION */}
+        <section className="gsap-detail-item" style={{ marginBottom: '4rem', backgroundColor: 'var(--bg-secondary)', borderRadius: '24px', padding: '2.5rem', border: '1px solid var(--border-color)' }}>
+          <div style={{ textAlign: 'center', maxWidth: '650px', margin: '0 auto 2.25rem auto' }}>
             <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-              BUYER CONFIDENCE & VALUE
+              PRODUCT BENEFIT BREAKDOWN
             </span>
             <h2 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-main)', marginTop: '0.25rem' }}>
-              WHY YOU SHOULD PURCHASE THIS PRODUCT TODAY
+              WHY SHOULD YOU BUY THIS?
             </h2>
-            <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
-              Designed directly by Krishna Ajaysing Rajput | Krishna Patil Rajput to provide real outcomes, lifetime utility, and instant deployment.
-            </p>
           </div>
 
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
               gap: '1.5rem'
             }}
           >
-            {/* Metric Card 1: Time Saved */}
-            <div style={{ backgroundColor: 'var(--bg-card)', padding: '1.75rem', borderRadius: '16px', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-card)' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: 'var(--primary-light)', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
-                <Clock size={20} />
+            {product.benefits && product.benefits.length > 0 ? (
+              product.benefits.map((benefit) => (
+                <div
+                  key={benefit.number}
+                  style={{
+                    backgroundColor: 'var(--bg-card)',
+                    padding: '1.75rem',
+                    borderRadius: '16px',
+                    border: '1px solid var(--border-color)',
+                    boxShadow: 'var(--shadow-card)'
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: '0.8rem',
+                      fontWeight: 900,
+                      color: 'var(--primary)',
+                      backgroundColor: 'var(--primary-light)',
+                      padding: '4px 10px',
+                      borderRadius: '6px',
+                      display: 'inline-block',
+                      marginBottom: '0.75rem'
+                    }}
+                  >
+                    {benefit.number}
+                  </span>
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '0.4rem' }}>
+                    {benefit.title}
+                  </h3>
+                  <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', lineHeight: 1.55 }}>
+                    {benefit.desc}
+                  </p>
+                </div>
+              ))
+            ) : (
+              [
+                { number: '01', title: 'LEARN', desc: 'Gain structured, factual knowledge grounded in practical modern standards.' },
+                { number: '02', title: 'UNDERSTAND', desc: 'Clear explanations without jargon to build solid foundational understanding.' },
+                { number: '03', title: 'PRACTICE', desc: 'Use the material as an immediate reference for building your own projects.' },
+                { number: '04', title: '2026 EDITION', desc: 'Up-to-date resources aligned with current industry tools and techniques.' }
+              ].map((b) => (
+                <div key={b.number} style={{ backgroundColor: 'var(--bg-card)', padding: '1.75rem', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
+                  <span style={{ fontSize: '0.8rem', fontWeight: 900, color: 'var(--primary)', backgroundColor: 'var(--primary-light)', padding: '4px 10px', borderRadius: '6px', display: 'inline-block', marginBottom: '0.75rem' }}>{b.number}</span>
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '0.4rem' }}>{b.title}</h3>
+                  <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', lineHeight: 1.55 }}>{b.desc}</p>
+                </div>
+              ))
+            )}
+          </div>
+        </section>
+
+        {/* 9. "WHY YOU MIGHT LIKE THIS" SECTION */}
+        <section className="gsap-detail-item" style={{ marginBottom: '4rem' }}>
+          <h2 style={{ fontSize: '1.65rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1.25rem' }}>
+            WHY YOU MIGHT LIKE THIS
+          </h2>
+
+          <div
+            style={{
+              backgroundColor: 'var(--primary-light)',
+              border: '1px solid var(--border-color)',
+              borderRadius: '20px',
+              padding: '2rem',
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+              gap: '1rem'
+            }}
+          >
+            {(product.youMightWantThisIf && product.youMightWantThisIf.length > 0
+              ? product.youMightWantThisIf
+              : [
+                  `You enjoy structured learning and clear digital references`,
+                  `You are building skills in ${product.categoryLabel.toLowerCase()}`,
+                  `You want immediate access without subscription commitments`,
+                  `You appreciate factual, code-grounded digital products`
+                ]
+            ).map((item, idx) => (
+              <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-main)' }}>
+                <CheckCircle2 size={20} color="var(--primary)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                <span>{item}</span>
               </div>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--primary)' }}>EFFICIENCY ROI</span>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)', margin: '0.25rem 0' }}>
-                {product.hoursSaved || 'Saves Dozens of Hours'}
-              </h3>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-                Skip frustrating trial & error. Get structured, battle-tested knowledge & components ready to use immediately.
-              </p>
+            ))}
+          </div>
+        </section>
+
+        {/* 10. "IS THIS FOR YOU?" (GOOD FIT vs OTHER OPTIONS) */}
+        <section className="gsap-detail-item" style={{ marginBottom: '4rem' }}>
+          <h2 style={{ fontSize: '1.65rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1.25rem' }}>
+            IS THIS FOR YOU?
+          </h2>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gap: '1.75rem'
+            }}
+          >
+            {/* Good Fit */}
+            <div
+              style={{
+                backgroundColor: 'var(--bg-card)',
+                border: '2px solid var(--accent-emerald)',
+                borderRadius: '20px',
+                padding: '2rem',
+                boxShadow: 'var(--shadow-card)'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.25rem' }}>
+                <CheckCircle2 size={22} color="var(--accent-emerald)" />
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)' }}>
+                  THIS MAY BE A GOOD FIT IF...
+                </h3>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-main)' }}>
+                {(product.isRightForYou?.goodFit || [
+                  'You want a clear, concise digital resource.',
+                  'You prefer practical examples over generic theory.',
+                  'You want instant digital download access.'
+                ]).map((fit, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <span style={{ color: 'var(--accent-emerald)', fontWeight: 800 }}>✓</span>
+                    <span>{fit}</span>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            {/* Metric Card 2: 100% Authentic Code & Content */}
-            <div style={{ backgroundColor: 'var(--bg-card)', padding: '1.75rem', borderRadius: '16px', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-card)' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: '#D1FAE5', color: '#059669', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
-                <ShieldCheck size={20} />
+            {/* Look At Something Else */}
+            <div
+              style={{
+                backgroundColor: 'var(--bg-secondary)',
+                border: '1px solid var(--border-color)',
+                borderRadius: '20px',
+                padding: '2rem'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.25rem' }}>
+                <XCircle size={22} color="var(--text-muted)" />
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-muted)' }}>
+                  YOU MAY WANT TO LOOK AT SOMETHING ELSE IF...
+                </h3>
               </div>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--accent-emerald)' }}>QUALITY GUARANTEE</span>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)', margin: '0.25rem 0' }}>
-                Direct Author Delivery
-              </h3>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-                Created by Krishna Ajaysing Rajput | Krishna Patil Rajput. No broken dependencies or outdated synthetic snippets.
-              </p>
-            </div>
-
-            {/* Metric Card 3: Instant 1-Click Download */}
-            <div style={{ backgroundColor: 'var(--bg-card)', padding: '1.75rem', borderRadius: '16px', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-card)' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: '#FEF3C7', color: '#D97706', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
-                <Award size={20} />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-muted)' }}>
+                {(product.isRightForYou?.mayNotBe || [
+                  'You are looking specifically for a physical printed book shipped in the mail.'
+                ]).map((noFit, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <span style={{ color: 'var(--text-muted)', fontWeight: 800 }}>✕</span>
+                    <span>{noFit}</span>
+                  </div>
+                ))}
               </div>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--accent-warm)' }}>LIFETIME ACCESS</span>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)', margin: '0.25rem 0' }}>
-                Zero Subscription Overhead
-              </h3>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-                Pay once, own forever. Delivered securely to your inbox via Gumroad / itch.io with offline access.
-              </p>
             </div>
           </div>
         </section>
 
-        {/* COMPARISON: SIGNATURE STORE VS OTHER SOURCES */}
-        <section className="gsap-detail-item" style={{ marginBottom: '3.5rem' }}>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1.25rem', textAlign: 'center' }}>
-            WHY SIGNATURE MASTERY VS SCATTERED INTERNET TUTORIALS
+        {/* 11. CUSTOMER DECISION MATRIX (QUICK DECISION TABLE) */}
+        <section className="gsap-detail-item" style={{ marginBottom: '4rem' }}>
+          <h2 style={{ fontSize: '1.65rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1.25rem' }}>
+            QUICK DECISION MATRIX
+          </h2>
+
+          <div
+            style={{
+              overflowX: 'auto',
+              borderRadius: '16px',
+              border: '1px solid var(--border-color)',
+              backgroundColor: 'var(--bg-card)'
+            }}
+          >
+            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.9rem' }}>
+              <thead>
+                <tr style={{ backgroundColor: 'var(--bg-secondary)', borderBottom: '1px solid var(--border-color)' }}>
+                  <th style={{ padding: '1rem 1.25rem', fontWeight: 800, color: 'var(--text-main)', width: '35%' }}>Decision Metric</th>
+                  <th style={{ padding: '1rem 1.25rem', fontWeight: 800, color: 'var(--primary)' }}>Product Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight: 700, color: 'var(--text-muted)' }}>What is it?</td>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight: 700, color: 'var(--text-main)' }}>{product.details.type || product.categoryLabel}</td>
+                </tr>
+                <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight: 700, color: 'var(--text-muted)' }}>Who is it for?</td>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight: 700, color: 'var(--text-main)' }}>Students, developers & digital creators</td>
+                </tr>
+                <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight: 700, color: 'var(--text-muted)' }}>Format</td>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight 700, color: 'var(--text-main)' }}>{product.format ? product.format.join(', ') : 'Digital File (PDF/ZIP)'}</td>
+                </tr>
+                <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight 700, color: 'var(--text-muted)' }}>Price</td>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight 800, color: 'var(--text-main)' }}>{product.priceDisplay} (One-Time)</td>
+                </tr>
+                <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight 700, color: 'var(--text-muted)' }}>Purchase Platform</td>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight 700, color: 'var(--primary)' }}>{product.details.purchasePlatform || 'Gumroad'}</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight 700, color: 'var(--text-muted)' }}>Physical product shipped?</td>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight 700, color: 'var(--text-main)' }}>No — Instant digital download</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* 12. "WHAT DO YOU GET?" & 13. HIGHLIGHTS */}
+        <div
+          className="gsap-detail-item"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '2rem',
+            marginBottom: '4rem'
+          }}
+        >
+          {/* What Do You Get? */}
+          <div style={{ backgroundColor: 'var(--bg-secondary)', padding: '2rem', borderRadius: '20px', border: '1px solid var(--border-color)' }}>
+            <h3 style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1.25rem' }}>
+              WHAT DO YOU GET?
+            </h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+              {product.whatYouGet.map((item, idx) => (
+                <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.925rem', color: 'var(--text-main)', fontWeight: 600 }}>
+                  <ShieldCheck size={18} color="var(--accent-emerald)" style={{ flexShrink: 0 }} />
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Product Highlights */}
+          <div style={{ backgroundColor: 'var(--bg-secondary)', padding: '2rem', borderRadius: '20px', border: '1px solid var(--border-color)' }}>
+            <h3 style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1.25rem' }}>
+              PRODUCT HIGHLIGHTS
+            </h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+              {(product.whatMakesItUseful && product.whatMakesItUseful.length > 0
+                ? product.whatMakesItUseful
+                : [
+                    'Digital format accessible on all devices',
+                    'Product-specific practical content',
+                    'Created for modern 2026 standards',
+                    'Instant fulfillment upon purchase'
+                  ]
+              ).map((highlight, idx) => (
+                <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.925rem', color: 'var(--text-main)', fontWeight: 600 }}>
+                  <Sparkles size={18} color="var(--primary)" style={{ flexShrink: 0 }} />
+                  <span>{highlight}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* 14. "WHAT MAKES THIS PRODUCT DIFFERENT?" */}
+        <section className="gsap-detail-item" style={{ marginBottom: '4rem' }}>
+          <h2 style={{ fontSize: '1.65rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1.25rem', textAlign: 'center' }}>
+            WHAT MAKES THIS PRODUCT DIFFERENT?
           </h2>
 
           <div
@@ -395,251 +737,143 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
               gap: '1.5rem'
             }}
           >
-            {/* KrishnaStores Column */}
-            <div style={{ border: '2px solid var(--primary)', backgroundColor: 'var(--bg-card)', padding: '1.75rem', borderRadius: '16px', boxShadow: 'var(--shadow-card)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1rem' }}>
-                <CheckCircle2 size={22} color="var(--primary)" />
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-main)' }}>
-                  ELITE MASTERY SIGNATURE PRODUCT
-                </h3>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.9rem', color: 'var(--text-main)', fontWeight: 600 }}>
-                <p>✓ 100% Code-Grounded & 2026 Production Standards</p>
-                <p>✓ Instant Gumroad & Official Digital Fulfillment</p>
-                <p>✓ Structured End-to-End Practical Architecture</p>
-                <p>✓ Direct Dual-Creator Support & Lifetime Updates</p>
-              </div>
-            </div>
-
-            {/* Generic Tutorials Column */}
-            <div style={{ border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-secondary)', padding: '1.75rem', borderRadius: '16px' }}>
+            {/* Alternative Approach */}
+            <div style={{ border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-secondary)', padding: '2rem', borderRadius: '20px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1rem' }}>
                 <XCircle size={22} color="var(--text-muted)" />
                 <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-muted)' }}>
-                  SCATTERED ONLINE TUTORIALS
+                  TYPICAL ALTERNATIVE
                 </h3>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.9rem', color: '#CBD5E1' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+                <p>✕ Searching across scattered YouTube video tutorials</p>
                 <p>✕ Outdated syntax and deprecated dependencies</p>
-                <p>✕ Fragmented snippets with zero real context</p>
-                <p>✕ Wasted hours debugging syntax errors</p>
-                <p>✕ No structured reference materials provided</p>
+                <p>✕ Mandatory monthly recurring subscription fees</p>
               </div>
             </div>
-          </div>
-        </section>
 
-        {/* AT A GLANCE GRID */}
-        <section className="gsap-detail-item" style={{ marginBottom: '3.5rem' }}>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1.25rem' }}>
-            AT A GLANCE
-          </h2>
-
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-              gap: '1rem'
-            }}
-          >
-            <div style={{ padding: '1.25rem', backgroundColor: 'var(--bg-secondary)', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', display: 'block' }}>PRODUCT TYPE</span>
-              <span style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--text-main)' }}>{product.details.type}</span>
-            </div>
-
-            <div style={{ padding: '1.25rem', backgroundColor: 'var(--bg-secondary)', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', display: 'block' }}>CATEGORY</span>
-              <span style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--text-main)' }}>{product.details.category}</span>
-            </div>
-
-            <div style={{ padding: '1.25rem', backgroundColor: 'var(--bg-secondary)', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', display: 'block' }}>EDITION / STATUS</span>
-              <span style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--text-main)' }}>{product.details.edition}</span>
-            </div>
-
-            <div style={{ padding: '1.25rem', backgroundColor: 'var(--bg-secondary)', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', display: 'block' }}>PRICE</span>
-              <span style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--text-main)' }}>{product.priceDisplay}</span>
-            </div>
-
-            <div style={{ padding: '1.25rem', backgroundColor: 'var(--bg-secondary)', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', display: 'block' }}>DELIVERY</span>
-              <span style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--text-main)' }}>{product.details.delivery}</span>
-            </div>
-
-            <div style={{ padding: '1.25rem', backgroundColor: 'var(--bg-secondary)', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', display: 'block' }}>PURCHASE PLATFORM</span>
-              <span style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--text-main)' }}>{product.details.purchasePlatform}</span>
-            </div>
-          </div>
-        </section>
-
-        {/* WHY THIS PRODUCT? */}
-        <section className="gsap-detail-item" style={{ marginBottom: '3.5rem', backgroundColor: 'var(--bg-secondary)', padding: '2.5rem', borderRadius: '20px', border: '1px solid var(--border-color)' }}>
-          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--primary)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-            VALUE & HIGHLIGHTS
-          </span>
-          <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1.5rem' }}>
-            WHY THIS PRODUCT?
-          </h2>
-
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-              gap: '1.5rem'
-            }}
-          >
-            {product.benefits.map((benefit) => (
-              <div
-                key={benefit.number}
-                style={{
-                  backgroundColor: 'var(--bg-card)',
-                  padding: '1.5rem',
-                  borderRadius: '14px',
-                  border: '1px solid var(--border-color)'
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: '0.8rem',
-                    fontWeight: 800,
-                    color: 'var(--primary)',
-                    backgroundColor: 'var(--primary-light)',
-                    padding: '2px 8px',
-                    borderRadius: '4px'
-                  }}
-                >
-                  {benefit.number}
-                </span>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-main)', margin: '0.75rem 0 0.4rem 0' }}>
-                  {benefit.title}
+            {/* KrishnaStores Approach */}
+            <div style={{ border: '2px solid var(--primary)', backgroundColor: 'var(--bg-card)', padding: '2rem', borderRadius: '20px', boxShadow: 'var(--shadow-card)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1rem' }}>
+                <CheckCircle2 size={22} color="var(--primary)" />
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-main)' }}>
+                  KRISHNASTORES DEDICATED RESOURCE
                 </h3>
-                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-                  {benefit.desc}
-                </p>
               </div>
-            ))}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', fontSize: '0.9rem', color: 'var(--text-main)', fontWeight: 600 }}>
+                <p>✓ One structured, dedicated product with all key answers</p>
+                <p>✓ Code-grounded 2026 production standards</p>
+                <p>✓ Pay once, own forever with lifetime digital access</p>
+              </div>
+            </div>
           </div>
         </section>
 
-        {/* YOU MIGHT WANT THIS IF... */}
-        <section className="gsap-detail-item" style={{ marginBottom: '3.5rem' }}>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1.25rem' }}>
-            YOU MIGHT WANT THIS IF...
-          </h2>
-
-          <div
-            style={{
-              backgroundColor: 'var(--primary-light)',
-              border: '1px solid var(--border-color)',
-              borderRadius: '16px',
-              padding: '1.75rem',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '0.85rem'
-            }}
-          >
-            {product.youMightWantThisIf.map((item, idx) => (
-              <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-main)' }}>
-                <CheckCircle2 size={20} color="var(--primary)" style={{ flexShrink: 0, marginTop: '2px' }} />
-                <span>{item}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* WHO IS THIS FOR? */}
-        <section className="gsap-detail-item" style={{ marginBottom: '3.5rem' }}>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1.25rem' }}>
-            WHO IS THIS FOR?
-          </h2>
-
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-              gap: '1.25rem'
-            }}
-          >
-            {product.audience.map((aud, idx) => (
-              <div key={idx} style={{ padding: '1.5rem', borderRadius: '14px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-card)' }}>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '0.4rem' }}>
-                  {aud.title}
-                </h3>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-                  {aud.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* WHAT YOU GET & WHAT MAKES IT USEFUL */}
+        {/* 15. CUSTOMER USE CASES & 16. WHO IS THIS FOR? */}
         <div
           className="gsap-detail-item"
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
             gap: '2rem',
-            marginBottom: '3.5rem'
+            marginBottom: '4rem'
           }}
         >
-          {/* What You Get */}
-          <div style={{ backgroundColor: 'var(--bg-secondary)', padding: '2rem', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1rem' }}>
-              WHAT YOU GET
-            </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              {product.whatYouGet.map((item, idx) => (
-                <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.9rem', color: 'var(--text-main)', fontWeight: 600 }}>
-                  <ShieldCheck size={18} color="var(--accent-emerald)" />
-                  <span>{item}</span>
+          {/* Customer Use Cases */}
+          <div>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1.25rem' }}>
+              WHAT COULD YOU USE THIS FOR?
+            </h2>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              {(isBook
+                ? ['Learning Core Concepts', 'Project Reference', 'Skill Expansion', 'Portfolio Preparation']
+                : isGame
+                ? ['Browser Gaming', 'Source Code Study', 'Game Reskinning', 'Match-3 / WebGL Sandbox']
+                : ['Full-Stack Foundation', 'Portfolio Project', 'Architecture Study', 'Code Re-use']
+              ).map((useCase, idx) => (
+                <div key={idx} style={{ padding: '1.25rem', backgroundColor: 'var(--bg-secondary)', borderRadius: '14px', border: '1px solid var(--border-color)', textAlign: 'center' }}>
+                  <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--text-main)' }}>{useCase}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* What Makes It Useful */}
-          <div style={{ backgroundColor: 'var(--bg-secondary)', padding: '2rem', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1rem' }}>
-              WHAT MAKES THIS USEFUL?
-            </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              {product.whatMakesItUseful.map((item, idx) => (
-                <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.9rem', color: 'var(--text-main)', fontWeight: 600 }}>
-                  <Sparkles size={18} color="var(--primary)" />
-                  <span>{item}</span>
+          {/* Who Is This For? */}
+          <div>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1.25rem' }}>
+              WHO IS THIS FOR?
+            </h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '1rem' }}>
+              {product.audience.map((aud, idx) => (
+                <div key={idx} style={{ padding: '1.25rem', borderRadius: '14px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-card)' }}>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--primary)', marginBottom: '0.25rem' }}>
+                    {aud.title}
+                  </h3>
+                  <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: 1.4 }}>
+                    {aud.desc}
+                  </p>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        {/* BEFORE YOU BUY */}
-        <section className="gsap-detail-item" style={{ marginBottom: '3.5rem', backgroundColor: '#FEF3C7', border: '1px solid #FDE68A', padding: '1.75rem', borderRadius: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.75rem' }}>
-            <Info size={20} color="#D97706" />
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#92400E' }}>
+        {/* 17. "BEFORE YOU BUY" (TRANSPARENT WARNING PANEL) */}
+        <section className="gsap-detail-item" style={{ marginBottom: '4rem', backgroundColor: '#FEF3C7', border: '1px solid #FDE68A', padding: '2rem', borderRadius: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '0.85rem' }}>
+            <Info size={22} color="#D97706" />
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#92400E' }}>
               BEFORE YOU BUY — TRANSPARENT DETAILS
             </h3>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
             {product.beforeYouBuy.map((note, idx) => (
-              <p key={idx} style={{ fontSize: '0.9rem', color: '#78350F', fontWeight: 600 }}>
+              <p key={idx} style={{ fontSize: '0.925rem', color: '#78350F', fontWeight: 700 }}>
                 • {note}
               </p>
             ))}
           </div>
         </section>
 
-        {/* PURCHASE PANEL */}
+        {/* 18. TRUST SECTION ("KNOW WHAT YOU'RE BUYING") */}
+        <section className="gsap-detail-item" style={{ marginBottom: '4rem', backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)', padding: '2.5rem', borderRadius: '24px', textAlign: 'center' }}>
+          <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+            TRANSPARENT DECISION PROCESS
+          </span>
+          <h2 style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--text-main)', marginTop: '0.25rem', marginBottom: '2rem' }}>
+            KNOW WHAT YOU'RE BUYING
+          </h2>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem', alignItems: 'center' }}>
+            <div style={{ padding: '1.25rem', backgroundColor: 'var(--bg-secondary)', borderRadius: '14px', border: '1px solid var(--border-color)' }}>
+              <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--primary)', display: 'block' }}>STEP 01</span>
+              <span style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--text-main)' }}>Clear Information</span>
+            </div>
+
+            <div style={{ padding: '1.25rem', backgroundColor: 'var(--bg-secondary)', borderRadius: '14px', border: '1px solid var(--border-color)' }}>
+              <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--primary)', display: 'block' }}>STEP 02</span>
+              <span style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--text-main)' }}>Visible Pricing</span>
+            </div>
+
+            <div style={{ padding: '1.25rem', backgroundColor: 'var(--bg-secondary)', borderRadius: '14px', border: '1px solid var(--border-color)' }}>
+              <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--primary)', display: 'block' }}>STEP 03</span>
+              <span style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--text-main)' }}>Specific Details</span>
+            </div>
+
+            <div style={{ padding: '1.25rem', backgroundColor: 'var(--primary-light)', borderRadius: '14px', border: '1px solid var(--border-color)' }}>
+              <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--primary)', display: 'block' }}>STEP 04</span>
+              <span style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--primary)' }}>Official Store Checkout</span>
+            </div>
+          </div>
+        </section>
+
+        {/* 19. PURCHASE PLATFORM ("WHERE WILL I BUY IT?") */}
         <section
           className="gsap-detail-item"
           style={{
             backgroundColor: '#0F172A',
             color: '#FFFFFF',
-            borderRadius: '20px',
+            borderRadius: '24px',
             padding: '3.5rem 2rem',
             textAlign: 'center',
             marginBottom: '4rem',
@@ -647,114 +881,239 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
           }}
         >
           <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#38BDF8', letterSpacing: '0.1em' }}>
-            READY TO GET INSTANT ACCESS?
+            WHERE WILL I BUY IT?
           </span>
-          <h2 style={{ fontSize: '2.25rem', fontWeight: 800, margin: '0.5rem 0 1rem 0' }}>
+          <h2 style={{ fontSize: '2.25rem', fontWeight: 900, margin: '0.5rem 0 1rem 0' }}>
             {product.title}
           </h2>
-          <div style={{ fontSize: '2.75rem', fontWeight: 800, color: '#FFFFFF', marginBottom: '1.5rem' }}>
+          <div style={{ fontSize: '2.75rem', fontWeight: 900, color: '#FFFFFF', marginBottom: '1.5rem' }}>
             {product.priceDisplay}
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '1.25rem', flexWrap: 'wrap' }}>
             <a
-              href={product.gumroadUrl}
+              href={primaryPurchaseUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary"
-              style={{ padding: '1rem 2.5rem', fontSize: '1.1rem', backgroundColor: '#2563EB' }}
+              style={{ padding: '1rem 2.5rem', fontSize: '1.1rem', backgroundColor: '#2563EB', gap: '8px' }}
             >
-              BUY ON GUMROAD ↗
+              BUY ON GUMROAD ↗ <ExternalLink size={18} />
             </a>
+
+            {secondaryPurchaseUrl && (
+              <a
+                href={secondaryPurchaseUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-secondary"
+                style={{ padding: '1rem 2.5rem', fontSize: '1.1rem', color: '#FFFFFF', borderColor: '#334155', gap: '8px' }}
+              >
+                BUY ON ITCH.IO ↗ <ExternalLink size={18} />
+              </a>
+            )}
           </div>
-          <p style={{ fontSize: '0.85rem', color: '#94A3B8', marginTop: '1.25rem' }}>
-            Secure checkout powered by official Gumroad platform services. Instant digital delivery to your email.
+          <p style={{ fontSize: '0.85rem', color: '#94A3B8', marginTop: '1.5rem' }}>
+            Secure payment & instant digital delivery via official platform checkout.
           </p>
         </section>
 
-        {/* RELATED PRODUCTS */}
+        {/* 30. PRODUCT FAQ SECTION */}
         <section className="gsap-detail-item" style={{ marginBottom: '4rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
-            <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)' }}>
-              YOU MAY ALSO LIKE
-            </h2>
-            <button
-              onClick={onBackToStore}
-              style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--primary)' }}
-            >
-              View Full Catalog →
-            </button>
-          </div>
+          <h2 style={{ fontSize: '1.65rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1.5rem', textAlign: 'center' }}>
+            FREQUENTLY ASKED QUESTIONS
+          </h2>
 
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-              gap: '1.5rem'
-            }}
-          >
-            {relatedProducts.map((relProduct) => (
-              <ProductCard
-                key={relProduct.id}
-                product={relProduct}
-                isWishlisted={false}
-                onToggleWishlist={onToggleWishlist}
-                onSelectProduct={onSelectProduct}
-              />
-            ))}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '800px', margin: '0 auto' }}>
+            {productFaqs.map((faq, idx) => {
+              const isOpen = openFaqIndex === idx;
+              return (
+                <div
+                  key={idx}
+                  style={{
+                    backgroundColor: 'var(--bg-card)',
+                    border: '1px solid var(--border-color)',
+                    borderRadius: '16px',
+                    overflow: 'hidden',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  <button
+                    onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                    style={{
+                      width: '100%',
+                      padding: '1.25rem 1.5rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      backgroundColor: 'transparent',
+                      border: 'none',
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                      fontSize: '1rem',
+                      fontWeight: 800,
+                      color: 'var(--text-main)'
+                    }}
+                  >
+                    <span>{faq.q}</span>
+                    <ChevronDown
+                      size={20}
+                      color="var(--primary)"
+                      style={{
+                        transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                        transition: 'transform 0.25s ease'
+                      }}
+                    />
+                  </button>
+
+                  {isOpen && (
+                    <div style={{ padding: '0 1.5rem 1.25rem 1.5rem', fontSize: '0.9rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+                      {faq.a}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </section>
 
-        {/* ELITE MASTERY BUNDLE UPSell */}
-        <section className="gsap-detail-item" style={{ marginBottom: '3.5rem', background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)', borderRadius: '24px', padding: '2.5rem', border: '1px solid var(--primary)', position: 'relative', overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', top: 0, right: 0, padding: '10px 20px', backgroundColor: 'var(--primary)', color: 'white', fontWeight: 900, fontSize: '0.75rem', borderBottomLeftRadius: '15px' }}>
-            BEST VALUE
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', color: 'white' }}>
-            <h2 style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '0.5rem' }}>GET THE ELITE MASTERY BUNDLE</h2>
-            <p style={{ color: '#94A3B8', maxWidth: '600px', marginBottom: '2rem' }}>
-              Unlock the complete 3-book flagship collection including Web Development, Android Mastery, and Personal Growth. Total value anchored at ₹2,096.
-            </p>
+        {/* 34. STILL HAVE QUESTIONS? (FINAL CTA) */}
+        <section className="gsap-detail-item" style={{ marginBottom: '4rem', backgroundColor: 'var(--bg-secondary)', borderRadius: '20px', padding: '2.5rem', border: '1px solid var(--border-color)', textAlign: 'center' }}>
+          <h3 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '0.5rem' }}>
+            STILL HAVE QUESTIONS?
+          </h3>
+          <p style={{ fontSize: '0.925rem', color: 'var(--text-muted)', maxWidth: '550px', margin: '0 auto 1.5rem auto' }}>
+            Explore the product details above or visit the official purchase platform for complete product information.
+          </p>
+          <a
+            href={primaryPurchaseUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary"
+            style={{ padding: '0.85rem 2rem', fontSize: '1rem', display: 'inline-flex', gap: '8px' }}
+          >
+            VIEW PURCHASE PAGE → <ExternalLink size={16} />
+          </a>
+        </section>
 
-            <div style={{ display: 'flex', gap: '1.5rem', marginBottom: '2.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-              {allProducts.map(p => (
-                <div key={p.id} style={{ width: '80px', textAlign: 'center' }}>
-                  <img src={p.image} alt="" style={{ width: '100%', borderRadius: '8px', border: '1px solid #334155', marginBottom: '0.5rem' }} />
-                  <div style={{ fontSize: '0.65rem', fontWeight: 700, color: '#CBD5E1' }} className="line-clamp-1">{p.title}</div>
-                </div>
-              ))}
+        {/* 29. "COMPARE YOUR OPTIONS" MATRIX */}
+        {comparableProducts.length > 1 && (
+          <section className="gsap-detail-item" style={{ marginBottom: '4rem' }}>
+            <h2 style={{ fontSize: '1.65rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1.5rem' }}>
+              NOT SURE WHICH ONE? — COMPARE YOUR OPTIONS
+            </h2>
+
+            <div
+              style={{
+                overflowX: 'auto',
+                borderRadius: '16px',
+                border: '1px solid var(--border-color)',
+                backgroundColor: 'var(--bg-card)'
+              }}
+            >
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.875rem' }}>
+                <thead>
+                  <tr style={{ backgroundColor: 'var(--bg-secondary)', borderBottom: '1px solid var(--border-color)' }}>
+                    <th style={{ padding: '1rem', fontWeight: 800, color: 'var(--text-main)' }}>Product</th>
+                    <th style={{ padding: '1rem', fontWeight: 800, color: 'var(--text-main)' }}>Category</th>
+                    <th style={{ padding: '1rem', fontWeight: 800, color: 'var(--text-main)' }}>Price</th>
+                    <th style={{ padding: '1rem', fontWeight: 800, color: 'var(--text-main)' }}>Format</th>
+                    <th style={{ padding: '1rem', fontWeight: 800, color: 'var(--primary)' }}>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {comparableProducts.map((p) => (
+                    <tr key={p.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                      <td style={{ padding: '1rem', fontWeight: 800, color: 'var(--text-main)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <img src={p.image} alt="" style={{ width: '32px', height: '32px', objectFit: 'cover', borderRadius: '4px' }} />
+                          <span className="line-clamp-1">{p.title}</span>
+                        </div>
+                      </td>
+                      <td style={{ padding: '1rem', fontWeight: 600, color: 'var(--text-muted)' }}>{p.categoryLabel}</td>
+                      <td style={{ padding: '1rem', fontWeight: 800, color: 'var(--text-main)' }}>{p.priceDisplay}</td>
+                      <td style={{ padding: '1rem', fontWeight: 600, color: 'var(--text-muted)' }}>Digital</td>
+                      <td style={{ padding: '1rem' }}>
+                        <button
+                          onClick={() => onSelectProduct(p)}
+                          className="btn-secondary"
+                          style={{ padding: '0.45rem 0.9rem', fontSize: '0.8rem' }}
+                        >
+                          View Details →
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )}
+
+        {/* 28. YOU MAY ALSO LIKE */}
+        {relatedProducts.length > 0 && (
+          <section className="gsap-detail-item" style={{ marginBottom: '4rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
+              <h2 style={{ fontSize: '1.65rem', fontWeight: 800, color: 'var(--text-main)' }}>
+                YOU MAY ALSO LIKE
+              </h2>
+              <button
+                onClick={onBackToStore}
+                style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--primary)', cursor: 'pointer' }}
+              >
+                View Full Catalog →
+              </button>
             </div>
 
-            <a
-              href="https://krishnapatilrajput.gumroad.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-primary"
-              style={{ padding: '1rem 3rem', fontSize: '1.2rem', background: 'white', color: '#0F172A' }}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+                gap: '1.75rem'
+              }}
             >
-              ACCESS ALL 3 BOOKS NOW
-            </a>
-          </div>
-        </section>
+              {relatedProducts.map((relProduct) => (
+                <ProductCard
+                  key={relProduct.id}
+                  product={relProduct}
+                  isWishlisted={false}
+                  onToggleWishlist={onToggleWishlist}
+                  onSelectProduct={onSelectProduct}
+                />
+              ))}
+            </div>
+          </section>
+        )}
 
-        {/* KEEP EXPLORING ELITE MASTERY */}
-        <section className="gsap-detail-item" style={{ backgroundColor: 'var(--bg-secondary)', padding: '2.5rem', borderRadius: '20px', border: '1px solid var(--border-color)', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1.5rem' }}>
-            COMPLETE YOUR ELITE COLLECTION
-          </h2>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '1.25rem', flexWrap: 'wrap' }}>
-            <button
-              onClick={() => onSelectCategory('book')}
-              className="btn-secondary"
-              style={{ padding: '0.75rem 1.5rem' }}
+        {/* 27. RECENTLY VIEWED PRODUCTS */}
+        {recentlyViewed.length > 0 && (
+          <section className="gsap-detail-item" style={{ marginBottom: '3.5rem' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1.5rem' }}>
+              RECENTLY VIEWED
+            </h2>
+
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+                gap: '1.5rem'
+              }}
             >
-              <BookOpen size={18} color="var(--primary)" /> ELITE MASTERY (03) →
-            </button>
-          </div>
-        </section>
+              {recentlyViewed.map((rvProduct) => (
+                <ProductCard
+                  key={rvProduct.id}
+                  product={rvProduct}
+                  isWishlisted={false}
+                  onToggleWishlist={onToggleWishlist}
+                  onSelectProduct={onSelectProduct}
+                />
+              ))}
+            </div>
+          </section>
+        )}
       </div>
 
-      {/* MOBILE FIXED BOTTOM PURCHASE BAR */}
+      {/* 38. MOBILE FIXED BOTTOM PURCHASE BAR */}
       <div
         style={{
           position: 'fixed',
@@ -764,7 +1123,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
           zIndex: 8000,
           backgroundColor: 'var(--bg-card)',
           borderTop: '1px solid var(--border-color)',
-          padding: '12px 16px',
+          padding: '12px 16px env(safe-area-inset-bottom, 12px) 16px',
           boxShadow: 'var(--shadow-sticky)',
           display: 'none',
           alignItems: 'center',
@@ -773,17 +1132,17 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
         className="mobile-bottom-bar"
       >
         <div>
-          <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', display: 'block', fontWeight: 600 }}>PRICE</span>
-          <span style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-main)' }}>{product.priceDisplay}</span>
+          <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', display: 'block', fontWeight: 700, textTransform: 'uppercase' }}>PRICE</span>
+          <span style={{ fontSize: '1.25rem', fontWeight: 900, color: 'var(--text-main)' }}>{product.priceDisplay}</span>
         </div>
         <a
-          href={product.gumroadUrl}
+          href={primaryPurchaseUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="btn-primary"
-          style={{ padding: '0.65rem 1.5rem', fontSize: '0.9rem' }}
+          style={{ padding: '0.7rem 1.75rem', fontSize: '0.95rem', fontWeight: 800 }}
         >
-          BUY NOW ↗
+          BUY NOW →
         </a>
       </div>
 
