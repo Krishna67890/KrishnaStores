@@ -10,13 +10,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   if (!product) return { title: "Product Not Found" };
 
+  const ogImage = product.coverImage || product.image || '';
+
   return {
     title: product.title,
     description: product.subtitle || product.description.substring(0, 160),
     openGraph: {
       title: product.title,
       description: product.subtitle,
-      images: product.coverImage ? [product.coverImage] : [product.image],
+      images: ogImage ? [ogImage] : [],
     }
   };
 }

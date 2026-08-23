@@ -124,7 +124,7 @@ export default function GameDetailClient({ game }: GameDetailClientProps) {
               transition={{ delay: 0.2 }}
             >
               <div className="flex flex-wrap gap-2 mb-8">
-                {game.tags.map((tag: string) => (
+                {(game.tags || []).map((tag: string) => (
                   <span key={tag} className="px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-white/40">
                     {tag}
                   </span>
@@ -154,7 +154,7 @@ export default function GameDetailClient({ game }: GameDetailClientProps) {
                   <div className="bg-white/[0.03] border border-white/10 rounded-3xl p-6">
                     <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-4">Core Tech Stack</h4>
                     <div className="flex flex-wrap gap-2">
-                       {game.tags.slice(0, 4).map((tag: string) => (
+                       {(game.tags || []).slice(0, 4).map((tag: string) => (
                          <span key={tag} className="px-3 py-1 bg-white/5 rounded-lg text-[10px] font-bold text-white/40">{tag}</span>
                        ))}
                     </div>

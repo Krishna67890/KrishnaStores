@@ -20,11 +20,13 @@ const ProductGrid = ({ products, category }: ProductGridProps) => {
     .filter((p) => {
       if (category && p.category !== category) return false;
       if (filter === "ALL") return true;
-      return p.tags.some((tag: string) => tag.toUpperCase() === filter);
+      return (p.tags || []).some((tag: string) => tag.toUpperCase() === filter);
     })
     .sort((a, b) => {
-      if (sort === "PRICE_LOW") return a.priceINR - b.priceINR;
-      if (sort === "PRICE_HIGH") return b.priceINR - a.priceINR;
+      const priceA = a.priceINR ?? a.price ?? 0;
+      const priceB = b.priceINR ?? b.price ?? 0;
+      if (sort === "PRICE_LOW") return priceA - priceB;
+      if (sort === "PRICE_HIGH") return priceB - priceA;
       return (a.featured ? -1 : 1) - (b.featured ? -1 : 1);
     });
 
@@ -38,7 +40,7 @@ const ProductGrid = ({ products, category }: ProductGridProps) => {
     });
   }, [filter, sort]);
 
-  const allTags = Array.from(new Set(products.flatMap((p: Product) => p.tags.map((t: string) => t.toUpperCase()))));
+  const allTags = Array.from(new Set(products.flatMap((p: Product) => (p.tags || []).map((t: string) => t.toUpperCase()))));
 
   return (
     <div className="w-full">

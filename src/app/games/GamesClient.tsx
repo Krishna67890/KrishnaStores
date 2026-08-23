@@ -14,7 +14,7 @@ const GamesClient = () => {
 
   const filteredGames = games.filter((game) => {
     const matchesSearch = game.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         game.tags.some((tag: string) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+                         (game.tags || []).some((tag: string) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
     const matchesGenre = selectedGenre === "All" || game.genre === selectedGenre;
     return matchesSearch && matchesGenre;
   });
