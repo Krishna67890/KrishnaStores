@@ -656,19 +656,19 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                 </tr>
                 <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
                   <td style={{ padding: '1rem 1.25rem', fontWeight: 700, color: 'var(--text-muted)' }}>Format</td>
-                  <td style={{ padding: '1rem 1.25rem', fontWeight 700, color: 'var(--text-main)' }}>{product.format ? product.format.join(', ') : 'Digital File (PDF/ZIP)'}</td>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight: 700, color: 'var(--text-main)' }}>{product.format ? product.format.join(', ') : 'Digital File (PDF/ZIP)'}</td>
                 </tr>
                 <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
-                  <td style={{ padding: '1rem 1.25rem', fontWeight 700, color: 'var(--text-muted)' }}>Price</td>
-                  <td style={{ padding: '1rem 1.25rem', fontWeight 800, color: 'var(--text-main)' }}>{product.priceDisplay} (One-Time)</td>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight: 700, color: 'var(--text-muted)' }}>Price</td>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight: 800, color: 'var(--text-main)' }}>{product.priceDisplay} (One-Time)</td>
                 </tr>
                 <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
-                  <td style={{ padding: '1rem 1.25rem', fontWeight 700, color: 'var(--text-muted)' }}>Purchase Platform</td>
-                  <td style={{ padding: '1rem 1.25rem', fontWeight 700, color: 'var(--primary)' }}>{product.details.purchasePlatform || 'Gumroad'}</td>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight: 700, color: 'var(--text-muted)' }}>Purchase Platform</td>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight: 700, color: 'var(--primary)' }}>{product.details.purchasePlatform || 'Gumroad'}</td>
                 </tr>
                 <tr>
-                  <td style={{ padding: '1rem 1.25rem', fontWeight 700, color: 'var(--text-muted)' }}>Physical product shipped?</td>
-                  <td style={{ padding: '1rem 1.25rem', fontWeight 700, color: 'var(--text-main)' }}>No — Instant digital download</td>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight: 700, color: 'var(--text-muted)' }}>Physical product shipped?</td>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight: 700, color: 'var(--text-main)' }}>No — Instant digital download</td>
                 </tr>
               </tbody>
             </table>
