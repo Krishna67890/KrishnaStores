@@ -75,13 +75,13 @@ const CartSidebar = () => {
                 items.map((item) => (
                   <div key={item.id} className="flex gap-4 group">
                     <div className="w-20 aspect-[3/4] bg-white/5 rounded-lg overflow-hidden border border-white/10 shrink-0">
-                      <img src={item.coverImage} alt={item.title} className="w-full h-full object-cover" />
+                      <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
                     </div>
                     <div className="flex-grow min-w-0">
                       <h4 className="font-bold text-sm line-clamp-2 group-hover:text-primary transition-colors">{item.title}</h4>
                       <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest mt-1">{item.category}</p>
                       <div className="flex items-center justify-between mt-3">
-                        <span className="font-black text-white">{formatPrice(item.discountPrice || item.price)}</span>
+                        <span className="font-black text-white">{formatPrice(item.priceINR)}</span>
                         <button
                           onClick={() => removeItem(item.id)}
                           className="p-1.5 rounded-lg hover:bg-red-500/10 text-white/20 hover:text-red-500 transition-all"

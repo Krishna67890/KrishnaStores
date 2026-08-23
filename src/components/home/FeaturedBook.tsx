@@ -140,7 +140,7 @@ const FeaturedBook = ({ book }: FeaturedBookProps) => {
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-14">
-                {book.learnings.slice(0, 4).map((item, i) => (
+                {book.learnings.slice(0, 4).map((item: string, i: number) => (
                   <div key={i} className={styles.learningCard}>
                     <CheckCircle2 className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
                     <span style={{ fontSize: '0.875rem', fontWeight: 700, opacity: 0.6, lineHeight: 1.4 }}>{item}</span>

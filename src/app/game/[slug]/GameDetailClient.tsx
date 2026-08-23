@@ -87,7 +87,7 @@ export default function GameDetailClient({ game }: GameDetailClientProps) {
                   { icon: Globe, label: "Platform", value: game.platform },
                   { icon: Cpu, label: "Engine", value: "HTML5/CSS" },
                   { icon: Share2, label: "Source", value: "Full Code" }
-                ].map((spec, i) => (
+                ].map((spec, i: number) => (
                   <div key={i} className="p-5 rounded-2xl bg-white/5 border border-white/10">
                     <spec.icon className="w-5 h-5 text-primary mb-3" />
                     <p className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-1">{spec.label}</p>
@@ -106,7 +106,7 @@ export default function GameDetailClient({ game }: GameDetailClientProps) {
                     "Perfect for Learning & Portfolio",
                     "Easy to customize & reskin",
                     "No monthly subscription fees"
-                  ].map((item, i) => (
+                  ].map((item: string, i: number) => (
                     <li key={i} className="flex items-center gap-3 text-sm font-bold text-white/70">
                       <CheckCircle2 className="w-4 h-4 text-primary" /> {item}
                     </li>
@@ -124,7 +124,7 @@ export default function GameDetailClient({ game }: GameDetailClientProps) {
               transition={{ delay: 0.2 }}
             >
               <div className="flex flex-wrap gap-2 mb-8">
-                {game.tags.map(tag => (
+                {game.tags.map((tag: string) => (
                   <span key={tag} className="px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-white/40">
                     {tag}
                   </span>
@@ -132,7 +132,7 @@ export default function GameDetailClient({ game }: GameDetailClientProps) {
               </div>
 
               <h1 className="text-6xl md:text-9xl font-black mb-8 tracking-tighter italic uppercase leading-[0.8] relative">
-                {game.title.split(' ').map((word, i) => (
+                {game.title.split(' ').map((word: string, i: number) => (
                   <span key={i} className={i % 2 !== 0 ? 'text-gradient' : ''}>
                     {word}<br className="hidden md:block" />
                   </span>
@@ -154,7 +154,7 @@ export default function GameDetailClient({ game }: GameDetailClientProps) {
                   <div className="bg-white/[0.03] border border-white/10 rounded-3xl p-6">
                     <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-4">Core Tech Stack</h4>
                     <div className="flex flex-wrap gap-2">
-                       {game.tags.slice(0, 4).map(tag => (
+                       {game.tags.slice(0, 4).map((tag: string) => (
                          <span key={tag} className="px-3 py-1 bg-white/5 rounded-lg text-[10px] font-bold text-white/40">{tag}</span>
                        ))}
                     </div>
@@ -168,7 +168,7 @@ export default function GameDetailClient({ game }: GameDetailClientProps) {
                   <div className="w-12 h-1 bg-primary" /> Features
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {game.features.map((feature, i) => (
+                  {game.features.map((feature: string, i: number) => (
                     <div key={i} className="flex items-start gap-4 p-5 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-primary/30 transition-all">
                       <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-0.5">
                         <Sparkles className="w-3 h-3 text-primary" />
@@ -186,7 +186,7 @@ export default function GameDetailClient({ game }: GameDetailClientProps) {
                     <Camera className="w-6 h-6" /> Gameplay Screenshots
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {game.images.map((img, i) => (
+                    {game.images?.map((img: string, i: number) => (
                       <motion.div
                         key={i}
                         whileHover={{ scale: 1.02 }}
@@ -243,7 +243,7 @@ export default function GameDetailClient({ game }: GameDetailClientProps) {
                   <Layers className="w-6 h-6" /> What's Included
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {game.whatsIncluded.map((item, i) => (
+                  {game.whatsIncluded.map((item: string, i: number) => (
                     <div key={i} className="flex items-center gap-3">
                       <div className="w-2 h-2 rounded-full bg-indigo-500" />
                       <span className="text-white/60 font-bold">{item}</span>
@@ -259,7 +259,7 @@ export default function GameDetailClient({ game }: GameDetailClientProps) {
                 </h2>
                 <div className="p-8 rounded-3xl bg-white/5 border border-white/10">
                    <ul className="space-y-4">
-                     {game.requirements.map((req, i) => (
+                     {game.requirements.map((req: string, i: number) => (
                        <li key={i} className="flex items-center gap-4 text-white/50">
                          <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
                          {req}

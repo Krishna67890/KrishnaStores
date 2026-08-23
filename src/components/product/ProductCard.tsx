@@ -34,9 +34,7 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
       gsap.to(card, {
         y: -10,
         backgroundColor: "rgba(255, 255, 255, 0.05)",
-        borderColor: product.category === 'game' ? "rgba(139, 92, 246, 0.5)" :
-                     product.category === 'web' ? "rgba(16, 185, 129, 0.5)" :
-                     "rgba(37, 99, 235, 0.5)",
+        borderColor: "rgba(37, 99, 235, 0.5)",
         duration: 0.4,
         ease: "power2.out",
       });
@@ -66,8 +64,6 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
     };
   }, [product.category]);
 
-  const isGame = product.category === "game";
-  const isWeb = product.category === "web";
   const isBook = product.category === "book";
 
   return (
@@ -83,7 +79,7 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
       <div className="relative aspect-[4/3] overflow-hidden bg-black/40 border-b border-white/5">
         <div ref={imageRef} className="w-full h-full relative">
           <Image
-            src={product.coverImage || product.image || ""}
+            src={product.image || ""}
             alt={product.title}
             fill
             className="object-cover transition-opacity duration-700 opacity-80 group-hover:opacity-100"
@@ -131,7 +127,7 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
         <div className="mt-auto pt-6 border-t border-white/5 flex items-center justify-between">
           <div className="flex flex-col">
             <span className="text-2xl font-black text-white tracking-tighter">
-              ₹{product.priceINR || product.price}
+              ₹{product.priceINR}
               {product.priceUSD && (
                 <span className="text-slate-500 text-[10px] ml-1 font-bold">
                   / ${product.priceUSD}
@@ -148,7 +144,7 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
               <ArrowUpRight className="w-4 h-4" />
             </Link>
             <a
-              href={product.gumroadUrl || product.buyLink}
+              href={product.gumroadUrl}
               target="_blank"
               rel="noopener noreferrer"
               className={cn(

@@ -1,4 +1,4 @@
-export type ProductCategory = 'book';
+export type ProductCategory = 'book' | 'game' | 'web';
 
 export interface ProductDetails {
   type: string;
