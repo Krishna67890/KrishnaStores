@@ -7,7 +7,7 @@ import gsap from "gsap";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/store/useStore";
 import { products } from "@/data/products";
-import { Product } from "@/types";
+import { Product } from "@/types/store";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -132,15 +132,11 @@ const Navbar = () => {
                         className="flex items-center gap-4 px-4 py-3 hover:bg-white/5 rounded-2xl transition-all duration-300 group/item"
                       >
                         <div className="w-12 h-12 rounded-xl bg-slate-900 overflow-hidden relative shrink-0 border border-white/5">
-                          <Image src={result.image} alt={result.title} fill className="object-cover opacity-80 group-hover/item:opacity-100 transition-opacity" />
+                          <Image src={result.image || ""} alt={result.title} fill className="object-cover opacity-80 group-hover/item:opacity-100 transition-opacity" />
                         </div>
                         <div className="flex flex-col">
                           <span className="text-sm font-black text-white line-clamp-1 uppercase tracking-tight">{result.title}</span>
-                          <span className={cn(
-                            "text-[9px] font-black uppercase tracking-widest",
-                            result.category === 'game' ? 'text-purple-400' :
-                            result.category === 'web' ? 'text-emerald-400' : 'text-blue-400'
-                          )}>
+                          <span className="text-[9px] font-black uppercase tracking-widest text-blue-400">
                             {result.category} • ₹{result.priceINR}
                           </span>
                         </div>

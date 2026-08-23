@@ -1,61 +1,4 @@
-export interface Product {
-  id: string;
-  slug: string;
-  title: string;
-  subtitle?: string;
-  description: string;
-  price: number;
-  discountPrice?: number;
-  coverImage: string;
-  buyLink: string;
-  demoLink?: string;
-  category: string;
-  tags: string[];
-  images?: string[];
-  author?: string;
-  priceUSD?: number;
-  shortDescription?: string;
-  image?: string;
-  gumroadUrl?: string;
-  itchUrl?: string;
-  priceINR?: number;
-}
-
-export interface Book extends Product {
-  author: string;
-  rating: number;
-  reviewsCount: number;
-  pages: number | string;
-  language: string;
-  format: string[];
-  isBestseller?: boolean;
-  isNew?: boolean;
-  publishedDate: string;
-  publisher: string;
-  learnings: string[];
-  features: string[];
-  whyBuy?: { title: string; description: string }[];
-  contents: Chapter[];
-  aiVoice?: string;
-  whyWritten?: string;
-}
-
-export interface Game extends Product {
-  developer: string;
-  platform: string;
-  features: string[];
-  whatsIncluded: string[];
-  requirements: string[];
-  demoLink?: string;
-  itchLink?: string;
-  genre: string;
-}
-
-export interface Chapter {
-  title: string;
-  duration?: string;
-  subChapters?: string[];
-}
+export * from './store';
 
 export interface User {
   uid: string;
@@ -64,4 +7,15 @@ export interface User {
   photoURL?: string;
   gender?: 'boy' | 'girl';
   role: 'user' | 'admin';
+}
+
+// Legacy support if needed, but primarily redirecting to store.ts
+export interface PurchasedBook {
+  id: string;
+  title: string;
+  author: string;
+  coverImage: string;
+  purchaseDate: string;
+  progress: number;
+  lastRead: string;
 }

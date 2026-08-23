@@ -48,7 +48,7 @@ const FeaturedProducts = ({ products }: FeaturedProductsProps) => {
     });
   }, []);
 
-  const featured = products.filter(p => p.featured).slice(0, 4);
+  const featured = products.filter((p: Product) => p.featured).slice(0, 4);
 
   return (
     <section ref={sectionRef} className="py-32 bg-[#050505] relative border-b border-white/5 overflow-hidden">

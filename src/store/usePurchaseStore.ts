@@ -19,8 +19,8 @@ interface PurchaseState {
 
 export const usePurchaseStore = create<PurchaseState>()(
   persist(
-    (set: any, get: any) => ({
-      purchasedBooks: [],
+    (set, get) => ({
+      purchasedBooks: [] as PurchasedBook[],
       addPurchase: (book: any) => {
         const alreadyPurchased = get().purchasedBooks.some((b: PurchasedBook) => b.id === book.id);
         if (alreadyPurchased) return;

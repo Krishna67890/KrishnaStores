@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Product } from "@/data/products";
+import { products } from "@/data/products";
+import { Product } from "@/types";
 import ProductCard from "./ProductCard";
 import gsap from "gsap";
 import { cn } from "@/lib/utils";
@@ -19,7 +20,7 @@ const ProductGrid = ({ products, category }: ProductGridProps) => {
     .filter((p) => {
       if (category && p.category !== category) return false;
       if (filter === "ALL") return true;
-      return p.tags.some(tag => tag.toUpperCase() === filter);
+      return p.tags.some((tag: string) => tag.toUpperCase() === filter);
     })
     .sort((a, b) => {
       if (sort === "PRICE_LOW") return a.priceINR - b.priceINR;
@@ -37,7 +38,7 @@ const ProductGrid = ({ products, category }: ProductGridProps) => {
     });
   }, [filter, sort]);
 
-  const allTags = Array.from(new Set(products.flatMap(p => p.tags.map(t => t.toUpperCase()))));
+  const allTags = Array.from(new Set(products.flatMap((p: Product) => p.tags.map((t: string) => t.toUpperCase()))));
 
   return (
     <div className="w-full">

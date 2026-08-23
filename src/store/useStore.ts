@@ -16,9 +16,9 @@ interface StoreState {
 
 export const useStore = create<StoreState>()(
   persist(
-    (set: any, get: any) => ({
-      wishlist: [],
-      recentlyViewed: [],
+    (set, get) => ({
+      wishlist: [] as string[],
+      recentlyViewed: [] as string[],
 
       addToWishlist: (productId: string) =>
         set((state: StoreState) => ({
