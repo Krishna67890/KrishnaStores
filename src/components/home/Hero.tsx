@@ -16,32 +16,41 @@ const Hero = () => {
   useEffect(() => {
     const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
-    tl.from(headingRef.current, {
-      y: 100,
-      opacity: 0,
-      duration: 1.2,
-      skewY: 7,
-    });
+    if (headingRef.current) {
+      tl.from(headingRef.current, {
+        y: 100,
+        opacity: 0,
+        duration: 1.2,
+        skewY: 7,
+      });
+    }
 
-    tl.from(textRef.current, {
-      y: 40,
-      opacity: 0,
-      duration: 1,
-    }, "-=0.8");
+    if (textRef.current) {
+      tl.from(textRef.current, {
+        y: 40,
+        opacity: 0,
+        duration: 1,
+      }, "-=0.8");
+    }
 
-    tl.from(ctaRef.current, {
-      y: 40,
-      opacity: 0,
-      duration: 1,
-    }, "-=0.8");
+    if (ctaRef.current) {
+      tl.from(ctaRef.current, {
+        y: 40,
+        opacity: 0,
+        duration: 1,
+      }, "-=0.8");
+    }
 
-    tl.from(visualRef.current?.querySelectorAll(".hero-card"), {
-      x: 100,
-      opacity: 0,
-      rotate: 15,
-      duration: 1.5,
-      stagger: 0.2,
-    }, "-=1.2");
+    const cards = visualRef.current?.querySelectorAll(".hero-card");
+    if (cards && cards.length > 0) {
+      tl.from(cards, {
+        x: 100,
+        opacity: 0,
+        rotate: 15,
+        duration: 1.5,
+        stagger: 0.2,
+      }, "-=1.2");
+    }
 
     // Parallax effect on mouse move
     const handleMouseMove = (e: MouseEvent) => {
@@ -49,12 +58,15 @@ const Hero = () => {
       const xPos = (clientX / window.innerWidth - 0.5) * 40;
       const yPos = (clientY / window.innerHeight - 0.5) * 40;
 
-      gsap.to(".hero-parallax", {
-        x: xPos,
-        y: yPos,
-        duration: 1.5,
-        ease: "power2.out",
-      });
+      const parallaxElements = document.querySelectorAll(".hero-parallax");
+      if (parallaxElements.length > 0) {
+        gsap.to(parallaxElements, {
+          x: xPos,
+          y: yPos,
+          duration: 1.5,
+          ease: "power2.out",
+        });
+      }
     };
 
     window.addEventListener("mousemove", handleMouseMove);

@@ -15,10 +15,12 @@ export interface Product {
   slug: string;
   number: string;
   title: string;
+  author?: string;
   subtitle?: string;
   category: ProductCategory;
   categoryLabel: string; // 'BOOK', 'GAME', 'WEB', 'SOURCE CODE'
   priceINR: number;
+  priceUSD?: number;
   priceDisplay: string; // '₹299', '$1 / ₹100'
   image: string;
   gallery: string[];

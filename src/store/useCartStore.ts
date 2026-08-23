@@ -19,8 +19,8 @@ interface CartState {
 
 export const useCartStore = create<CartState>()(
   persist(
-    (set: any, get: any) => ({
-      items: [],
+    (set, get) => ({
+      items: [] as CartItem[],
       isSidebarOpen: false,
       setSidebarOpen: (isOpen: boolean) => set({ isSidebarOpen: isOpen }),
       addItem: (product: Product) => {
@@ -36,7 +36,7 @@ export const useCartStore = create<CartState>()(
       removeItem: (productId: string) => {
         set({ items: get().items.filter((item: CartItem) => item.id !== productId) });
       },
-      clearCart: () => set({ items: [] }),
+      clearCart: () => set({ items: [] as CartItem[] }),
       totalItems: () => get().items.length,
       totalPrice: () => get().items.reduce((total: number, item: CartItem) => total + (item.price || 0), 0),
     }),

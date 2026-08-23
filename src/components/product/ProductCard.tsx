@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowUpRight, Heart, ExternalLink } from "lucide-react";
 import gsap from "gsap";
-import { Product } from "@/types/store";
+import { Product } from "@/types";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/store/useStore";
 
@@ -85,7 +85,7 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
       <div className="relative aspect-[4/3] overflow-hidden bg-black/40 border-b border-white/5">
         <div ref={imageRef} className="w-full h-full relative">
           <Image
-            src={product.image}
+            src={product.coverImage || product.image || ""}
             alt={product.title}
             fill
             className="object-cover transition-opacity duration-700 opacity-80 group-hover:opacity-100"
@@ -129,13 +129,13 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
           {product.title}
         </h3>
         <p className="text-[11px] text-slate-400 mb-6 line-clamp-2 leading-relaxed font-medium">
-          {product.shortDescription}
+          {product.shortDescription || product.description}
         </p>
 
         <div className="mt-auto pt-6 border-t border-white/5 flex items-center justify-between">
           <div className="flex flex-col">
             <span className="text-2xl font-black text-white tracking-tighter">
-              ₹{product.priceINR}
+              ₹{product.priceINR || product.price}
               {product.priceUSD && (
                 <span className="text-slate-500 text-[10px] ml-1 font-bold">
                   / ${product.priceUSD}
@@ -152,7 +152,7 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
               <ArrowUpRight className="w-4 h-4" />
             </Link>
             <a
-              href={product.gumroadUrl || product.itchUrl}
+              href={product.gumroadUrl || product.buyLink || product.itchUrl}
               target="_blank"
               rel="noopener noreferrer"
               className={cn(

@@ -31,24 +31,31 @@ const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
     });
 
     // Text animations
-    tl.fromTo(textRef.current,
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
-      0.2
-    );
+    if (textRef.current) {
+      tl.fromTo(textRef.current,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
+        0.2
+      );
+    }
 
-    tl.fromTo(taglineRef.current?.querySelectorAll("span"),
-      { opacity: 0, y: 10 },
-      { opacity: 1, y: 0, duration: 0.5, stagger: 0.2, ease: "power2.out" },
-      0.5
-    );
+    const spans = taglineRef.current?.querySelectorAll("span");
+    if (spans && spans.length > 0) {
+      tl.fromTo(spans,
+        { opacity: 0, y: 10 },
+        { opacity: 1, y: 0, duration: 0.5, stagger: 0.2, ease: "power2.out" },
+        0.5
+      );
+    }
 
     // Exit animation
-    tl.to(containerRef.current, {
-      yPercent: -100,
-      duration: 1,
-      ease: "power4.inOut",
-    }, "+=0.2");
+    if (containerRef.current) {
+      tl.to(containerRef.current, {
+        yPercent: -100,
+        duration: 1,
+        ease: "power4.inOut",
+      }, "+=0.2");
+    }
 
     return () => {
       tl.kill();

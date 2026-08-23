@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import ProductCard from "../ProductCard";
+import ProductCard from "../product/ProductCard";
 import { ArrowRight, BookOpen } from "lucide-react";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Product } from "@/data/products";
+import { Product } from "@/types";
 
 interface FeaturedBooksProps {
   products: Product[];

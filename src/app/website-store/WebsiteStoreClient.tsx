@@ -3,11 +3,11 @@
 import React, { useState } from 'react';
 import ProductCard from '@/components/product/ProductCard';
 import { Search, Code2, Globe, Layout, Cpu, ShieldCheck, Zap } from 'lucide-react';
-import { Book } from '@/types';
+import { Product } from '@/types';
 import styles from '../books/books.module.css'; // Reuse existing styles
 
 interface WebsiteStoreClientProps {
-  products: Book[];
+  products: Product[];
 }
 
 const WebsiteStoreClient = ({ products }: WebsiteStoreClientProps) => {
@@ -15,7 +15,7 @@ const WebsiteStoreClient = ({ products }: WebsiteStoreClientProps) => {
 
   const filteredProducts = products.filter(product =>
     product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    product.subtitle.toLowerCase().includes(searchQuery.toLowerCase())
+    (product.subtitle && product.subtitle.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   const features = [

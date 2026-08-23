@@ -12,6 +12,13 @@ export interface Product {
   category: string;
   tags: string[];
   images?: string[];
+  author?: string;
+  priceUSD?: number;
+  shortDescription?: string;
+  image?: string;
+  gumroadUrl?: string;
+  itchUrl?: string;
+  priceINR?: number;
 }
 
 export interface Book extends Product {
