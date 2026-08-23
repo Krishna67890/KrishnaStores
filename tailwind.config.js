@@ -1,9 +1,9 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+// Elite Protocol Cache Bust: 2024-05-20-001
+export default {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
@@ -24,7 +24,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ['var(--font-inter)', 'Inter', 'sans-serif'],
-        display: ['var(--font-poppins)', 'Poppins', 'sans-serif'],
+        display: ['var(--font-display)', 'Plus Jakarta Sans', 'sans-serif'],
       },
       animation: {
         'gradient-x': 'gradient-x 10s ease infinite',
@@ -48,6 +48,6 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [],
   darkMode: 'class',
 };

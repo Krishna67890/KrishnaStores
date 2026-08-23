@@ -510,7 +510,7 @@ export default function BookDetailClient({ book }: BookDetailClientProps) {
                 <div className="p-8 rounded-[2.5rem] bg-indigo-500/5 border border-indigo-500/10 relative overflow-hidden group">
                   <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:scale-110 transition-transform">
                     {book.author === "Krishna Patil Rajput" ? (
-                      <img src="/assets/devloper logo.jpg" className="w-20 h-20 rounded-full object-cover" />
+                      <img src="/important/KrishnaStores%20logo.png" alt="KrishnaStores" className="w-20 h-20 rounded-full object-contain" />
                     ) : (
                       <User className="w-20 h-20" />
                     )}

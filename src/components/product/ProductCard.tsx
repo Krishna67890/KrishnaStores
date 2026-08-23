@@ -1,222 +1,173 @@
 "use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Star, Eye, BookOpen, Gamepad2, ExternalLink, Camera, ChevronRight, ChevronLeft } from 'lucide-react';
-import { Product, Book, Game } from '@/types';
-import { formatPrice } from '@/lib/utils';
+import React, { useRef, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { ArrowUpRight, Heart, ExternalLink } from "lucide-react";
+import gsap from "gsap";
+import { Product } from "@/data/products";
+import { cn } from "@/lib/utils";
+import { useStore } from "@/store/useStore";
 
 interface ProductCardProps {
   product: Product;
+  className?: string;
 }
 
-const ProductCard = ({ product }: ProductCardProps) => {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
-  const isBook = 'author' in product;
-  const isGame = 'developer' in product;
-  const isWebsite = product.category === 'Website Store';
-  const href = isWebsite ? `/website-store/${product.slug}` : (isBook ? `/book/${product.slug}` : `/game/${product.slug}`);
-  const router = useRouter();
+const ProductCard = ({ product, className }: ProductCardProps) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
 
-  const allImages = [product.coverImage, ...(product.images || [])].filter(Boolean);
+  const { toggleWishlist, isInWishlist } = useStore();
+  const isWishlisted = isInWishlist(product.id);
 
-  // Clean up paths that don't exist in public/assets (based on file list)
-  const existingAssets = [
-    "why-option-1.png", "why-option-2.png", "why-option-3.png",
-    "web-roadmap-1.png", "web-roadmap-2.png", "android-react-1.png",
-    "android-react-2.png", "why-only-an-option.png", "android-native-2026.png",
-    "web-dev-roadmap-2026.png", "Android Native React 1.png",
-    "Android Native React 2.png", "Web devlopment roadmap 1.png",
-    "Web Devlopment Roadmap 2.png", "Why Was I Only An Option.png",
-    "Why Was I Only An Option 1.png", "Why Was I Only An Option 2.png",
-    "Why Was I Only An Option 3.png", "Android Native 2026 Thumbnail.png",
-    "Web Development Fundamentals & Advanced Concepts (2026 Edition) Thumbnail.png"
-  ];
+  useEffect(() => {
+    const card = cardRef.current;
+    if (!card) return;
 
-  const validImages = allImages.map(img => {
-    const filename = img.split('/').pop();
-    if (existingAssets.includes(filename || '')) return img;
-    return "/assets/web-dev-roadmap-2026.png"; // Fallback to verified existing asset
-  });
+    const handleMouseEnter = () => {
+      gsap.to(imageRef.current, {
+        scale: 1.1,
+        duration: 0.8,
+        ease: "power2.out",
+      });
+      gsap.to(card, {
+        y: -10,
+        backgroundColor: "rgba(255, 255, 255, 0.05)",
+        borderColor: product.category === 'game' ? "rgba(139, 92, 246, 0.5)" :
+                     product.category === 'web' ? "rgba(16, 185, 129, 0.5)" :
+                     "rgba(37, 99, 235, 0.5)",
+        duration: 0.4,
+        ease: "power2.out",
+      });
+    };
 
-  const getBadges = () => {
-    const badges = [];
-    if ('isBestseller' in product && (product as Book).isBestseller) {
-      badges.push({ label: 'Bestseller', color: 'bg-amber-500' });
-    }
-    if (product.discountPrice && product.discountPrice < product.price) {
-      const savings = Math.round(((product.price - product.discountPrice) / product.price) * 100);
-      badges.push({ label: `Save ${savings}%`, color: 'bg-emerald-500' });
-    }
-    if ('isNew' in product && (product as Book).isNew) {
-      badges.push({ label: 'New Arrival', color: 'bg-indigo-600' });
-    }
-    if (isWebsite) {
-      badges.push({ label: 'Source Code', color: 'bg-primary' });
-    }
-    return badges;
-  };
+    const handleMouseLeave = () => {
+      gsap.to(imageRef.current, {
+        scale: 1,
+        duration: 0.8,
+        ease: "power2.out",
+      });
+      gsap.to(card, {
+        y: 0,
+        backgroundColor: "rgba(255, 255, 255, 0.02)",
+        borderColor: "rgba(255, 255, 255, 0.08)",
+        duration: 0.4,
+        ease: "power2.out",
+      });
+    };
 
-  const handleCardClick = () => {
-    router.push(href);
-  };
+    card.addEventListener("mouseenter", handleMouseEnter);
+    card.addEventListener("mouseleave", handleMouseLeave);
 
-  const nextImage = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setCurrentImageIndex((prev) => (prev + 1) % allImages.length);
-  };
+    return () => {
+      card.removeEventListener("mouseenter", handleMouseEnter);
+      card.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  }, [product.category]);
 
-  const prevImage = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setCurrentImageIndex((prev) => (prev - 1 + allImages.length) % allImages.length);
-  };
+  const isGame = product.category === "game";
+  const isWeb = product.category === "web";
+  const isBook = product.category === "book";
 
   return (
-    <motion.div
-      whileHover={{
-        y: -12,
-        transition: { duration: 0.4, ease: [0.23, 1, 0.32, 1] }
-      }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-      onClick={handleCardClick}
-      className="glass-card group flex flex-col h-full overflow-hidden luxury-shine cursor-pointer bg-white/[0.02] border border-white/10"
+    <div
+      ref={cardRef}
+      className={cn(
+        "group relative flex flex-col bg-white/5 backdrop-blur-md border border-white/10 rounded-[2rem] overflow-hidden transition-all duration-500 shadow-2xl",
+        isGame && "hover:shadow-[0_0_30px_rgba(139,92,246,0.2)]",
+        isWeb && "hover:shadow-[0_0_30px_rgba(16,185,129,0.2)]",
+        isBook && "hover:shadow-[0_0_30px_rgba(37,99,235,0.2)]",
+        className
+      )}
     >
-      <div className="relative aspect-[3/4] overflow-hidden">
-        {/* Product Images with Mini-Gallery logic */}
-        <div className="w-full h-full bg-gradient-to-br from-slate-800 to-slate-950 relative">
-          <AnimatePresence mode="wait">
-            <motion.img
-              key={currentImageIndex}
-              src={validImages[currentImageIndex]}
-              alt={product.title}
-              initial={{ opacity: 0, scale: 1.1 }}
-              animate={{ opacity: 1, scale: isHovered ? 1.1 : 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.6 }}
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = "/assets/web-dev-roadmap-2026.png"; // Fallback to a known existing image
-              }}
-            />
-          </AnimatePresence>
-
-          {/* Overlay gradient */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
-
-          {/* Image Navigation Arrows (on hover) */}
-          {isHovered && allImages.length > 1 && (
-            <>
-              <button
-                onClick={prevImage}
-                className="absolute left-2 top-1/2 -translate-y-1/2 z-40 w-8 h-8 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center text-white hover:bg-primary transition-colors"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <button
-                onClick={nextImage}
-                className="absolute right-2 top-1/2 -translate-y-1/2 z-40 w-8 h-8 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center text-white hover:bg-primary transition-colors"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </>
-          )}
-
-          {/* Image Count Indicator */}
-          {allImages.length > 1 && (
-            <div className="absolute bottom-4 left-4 z-20 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10">
-              <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-              <span className="text-[10px] font-black text-white/90 uppercase tracking-tighter">
-                {currentImageIndex + 1} / {allImages.length}
-              </span>
-            </div>
-          )}
+      {/* Image Container */}
+      <div className="relative aspect-[4/3] overflow-hidden bg-black/40 border-b border-white/5">
+        <div ref={imageRef} className="w-full h-full relative">
+          <Image
+            src={product.image}
+            alt={product.title}
+            fill
+            className="object-cover transition-opacity duration-700 opacity-80 group-hover:opacity-100"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
         </div>
 
-        {/* Badges */}
-        <div className="absolute top-5 left-5 flex flex-col gap-2 z-20">
-          {getBadges().map((badge, index) => (
-            <span key={index} className={`${badge.color} text-white text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-[0.1em] shadow-2xl backdrop-blur-md border border-white/10`}>
-              {badge.label}
+        {/* Overlay Badges */}
+        <div className="absolute top-4 left-4 flex flex-wrap gap-2">
+          <span className={cn(
+            "px-3 py-1 text-[9px] font-black uppercase tracking-widest rounded-full border backdrop-blur-md",
+            isBook && "bg-blue-500/10 text-blue-400 border-blue-500/20",
+            isGame && "bg-purple-500/10 text-purple-400 border-purple-500/20",
+            isWeb && "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+          )}>
+            {product.category}
+          </span>
+        </div>
+
+        {/* Wishlist Toggle */}
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleWishlist(product.id);
+          }}
+          className={cn(
+            "absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-xl backdrop-blur-md border transition-all duration-300",
+            isWishlisted
+              ? "bg-red-500 border-red-500 text-white shadow-[0_0_15px_rgba(239,68,68,0.4)]"
+              : "bg-black/20 border-white/10 text-white/40 hover:text-red-400 hover:border-red-400/50"
+          )}
+        >
+          <Heart className={cn("w-4 h-4", isWishlisted && "fill-current")} />
+        </button>
+      </div>
+
+      {/* Content */}
+      <div className="p-6 flex flex-col flex-grow">
+        <h3 className="text-lg font-black text-white tracking-tight mb-2 group-hover:text-white transition-colors duration-300 line-clamp-1 uppercase">
+          {product.title}
+        </h3>
+        <p className="text-[11px] text-slate-400 mb-6 line-clamp-2 leading-relaxed font-medium">
+          {product.shortDescription}
+        </p>
+
+        <div className="mt-auto pt-6 border-t border-white/5 flex items-center justify-between">
+          <div className="flex flex-col">
+            <span className="text-2xl font-black text-white tracking-tighter">
+              ₹{product.priceINR}
+              {product.priceUSD && (
+                <span className="text-slate-500 text-[10px] ml-1 font-bold">
+                  / ${product.priceUSD}
+                </span>
+              )}
             </span>
-          ))}
-        </div>
+          </div>
 
-        {/* Hover Actions */}
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center gap-4 z-30">
-          <div className="flex items-center gap-4">
-            {product.demoLink && (
-              <a
-                href={product.demoLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md text-white border border-white/20 flex flex-col items-center justify-center hover:bg-white hover:text-black transition-all duration-300 transform scale-75 group-hover:scale-100 shadow-2xl"
-              >
-                <Gamepad2 className="w-6 h-6" />
-                <span className="text-[8px] font-black uppercase mt-1">Demo</span>
-              </a>
-            )}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                router.push(href);
-              }}
-              className="w-16 h-16 rounded-full bg-white text-black flex flex-col items-center justify-center hover:bg-primary hover:text-white transition-all duration-300 transform scale-75 group-hover:scale-100 delay-[50ms] shadow-2xl"
+          <div className="flex gap-2">
+            <Link
+              href={`/products/${product.slug}`}
+              className="w-10 h-10 flex items-center justify-center bg-white/5 text-white rounded-xl hover:bg-white/10 border border-white/10 transition-all"
             >
-              <Eye className="w-6 h-6" />
-              <span className="text-[8px] font-black uppercase mt-1">Details</span>
-            </button>
+              <ArrowUpRight className="w-4 h-4" />
+            </Link>
             <a
-              href={product.buyLink}
+              href={product.gumroadUrl || product.itchUrl}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="w-16 h-16 rounded-full bg-primary text-white flex flex-col items-center justify-center hover:bg-white hover:text-black transition-all duration-300 transform scale-75 group-hover:scale-100 delay-[100ms] shadow-2xl"
+              className={cn(
+                "flex items-center gap-2 px-5 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all shadow-lg active:scale-95",
+                isGame ? "bg-purple-600 text-white hover:bg-purple-500 shadow-purple-900/20" :
+                isWeb ? "bg-emerald-600 text-white hover:bg-emerald-500 shadow-emerald-900/20" :
+                "bg-blue-600 text-white hover:bg-blue-500 shadow-blue-900/20"
+              )}
             >
-              <ExternalLink className="w-6 h-6" />
-              <span className="text-[8px] font-black uppercase mt-1">Buy</span>
+              GET <ExternalLink className="w-3 h-3" />
             </a>
           </div>
         </div>
       </div>
-
-      <div className="p-8 flex flex-col flex-grow relative bg-mesh-light">
-        <div className="flex items-center gap-2 mb-3">
-          <div className="flex">
-            {[...Array(5)].map((_, i) => (
-              <Star key={i} className={`w-3 h-3 ${i < Math.floor((product as Book).rating || 5) ? 'text-amber-400 fill-amber-400' : 'text-white/20'}`} />
-            ))}
-          </div>
-          {isBook && <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">{(product as Book).reviewsCount} Reviews</span>}
-          {isGame && <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">{(product as Game).genre}</span>}
-        </div>
-
-        <h3 className="text-xl font-black line-clamp-2 mb-2 group-hover:text-primary transition-colors duration-300 leading-tight uppercase italic tracking-tighter">
-          {product.title}
-        </h3>
-        <p className="text-sm text-white/30 mb-6 font-medium italic">
-          {isBook ? `By ${(product as Book).author}` : `By ${(product as Game).developer}`}
-        </p>
-
-        <div className="mt-auto flex items-center justify-between pt-6 border-t border-white/5">
-          <div className="flex flex-col">
-            {product.discountPrice && product.discountPrice < product.price && (
-              <span className="text-[10px] text-white/20 line-through mb-0.5 font-bold tracking-widest">{formatPrice(product.price)}</span>
-            )}
-            <span className="text-2xl font-black text-white tracking-tighter color-gradient-text">
-              {formatPrice(product.discountPrice || product.price)}
-            </span>
-          </div>
-          <div className="flex items-center gap-2 text-[10px] font-black text-white/40 uppercase tracking-[0.2em] group-hover:text-primary transition-colors">
-            View Project <ChevronRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-          </div>
-        </div>
-      </div>
-    </motion.div>
+    </div>
   );
 };
 

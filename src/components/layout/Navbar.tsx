@@ -1,285 +1,284 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
-import { Menu, X, Search, BookOpen, User, LogOut, Mic } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from '@/lib/utils';
-import { useRouter } from 'next/navigation';
-
-import { useAuthStore } from '@/store/useAuthStore';
+import React, { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import { Search, Menu, X, ArrowRight, Heart, ShoppingBag, Sparkles } from "lucide-react";
+import gsap from "gsap";
+import { cn } from "@/lib/utils";
+import { useStore } from "@/store/useStore";
+import { products, Product } from "@/data/products";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const Navbar = () => {
+  const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { user, isAuthenticated, logout } = useAuthStore();
-  const navRef = useRef(null);
-  const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<Product[]>([]);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const navRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLDivElement>(null);
+
+  const { wishlist } = useStore();
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleLogout = () => {
-    logout();
-    router.push('/login');
-    setIsMobileMenuOpen(false);
-  };
+  useEffect(() => {
+    if (searchQuery.trim().length > 1) {
+      const results = products.filter(p =>
+        p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.tags.some(t => t.toLowerCase().includes(searchQuery.toLowerCase()))
+      ).slice(0, 5);
+      setSearchResults(results);
+    } else {
+      setSearchResults([]);
+    }
+  }, [searchQuery]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setIsSearchFocused(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const navLinks = [
-    { name: 'Home', href: '/' },
-    { name: 'Books', href: '/books' },
-    { name: 'Games', href: '/games' },
-    { name: 'Website Store', href: '/website-store' },
-    { name: 'About', href: '/about' },
-    { name: 'Contact', href: '/contact' },
+    { name: "Books", href: "/books", color: "text-blue-400" },
+    { name: "Games", href: "/games", color: "text-purple-400" },
+    { name: "Web", href: "/web", color: "text-emerald-400" },
+    { name: "About", href: "/about", color: "text-slate-400" },
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex justify-center p-4 md:p-6 pointer-events-none">
-      <nav
-        ref={navRef}
+    <>
+      {/* Premium Top Bar */}
+      <div className="bg-[#05ffa3] text-black py-1.5 px-4 text-center text-[9px] font-black uppercase tracking-[0.4em] z-[110] relative overflow-hidden">
+        <div className="absolute inset-0 bg-white/20 animate-pulse" />
+        <span className="relative flex items-center justify-center gap-2">
+           <Sparkles className="w-3 h-3" />
+           Elite Asset Protocol: Version 2.0.4 — Krishna Patil Rajput
+           <Sparkles className="w-3 h-3" />
+        </span>
+      </div>
+
+      <header
         className={cn(
-          "pointer-events-auto transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] flex items-center justify-between px-6 py-3 md:px-10 md:py-4 rounded-full border",
+          "sticky top-0 left-0 right-0 z-[100] transition-all duration-500",
           isScrolled
-            ? "w-full max-w-5xl bg-black/60 backdrop-blur-2xl border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
-            : "w-full max-w-7xl bg-white/[0.03] backdrop-blur-md border-white/5"
+            ? "py-3 bg-black/80 backdrop-blur-xl border-b border-white/10 shadow-2xl"
+            : "py-6 bg-transparent border-b border-transparent"
         )}
       >
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 md:w-12 md:h-12 bg-premium-gradient rounded-xl md:rounded-2xl flex items-center justify-center group-hover:rotate-[-10deg] transition-all duration-500 shadow-lg shadow-primary/20">
-            <BookOpen className="text-white w-5 h-5 md:w-6 md:h-6" />
-          </div>
-          <span className="text-xl md:text-2xl font-black font-display tracking-tighter">
-            Krishna<span className="color-gradient-text">Stores</span>
-          </span>
-        </Link>
-
-        {/* Desktop Links */}
-        <div className="hidden lg:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className="text-[11px] font-black uppercase tracking-[0.2em] text-white/40 hover:text-white transition-all duration-300 relative group/link"
-            >
-              {link.name}
-              <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-primary group-hover/link:w-full transition-all duration-300 rounded-full" />
-            </Link>
-          ))}
-        </div>
-
-        {/* Desktop Actions */}
-        <div className="hidden lg:flex items-center gap-4">
-          <VoiceSearch />
-          <button className="p-2.5 rounded-full hover:bg-white/5 text-white/40 hover:text-white transition-all group">
-            <Search className="w-5 h-5 group-hover:scale-110 transition-transform" />
-          </button>
-
-          <div className="w-px h-6 bg-white/10 mx-2" />
-
-          {isAuthenticated && (
-            <button
-              onClick={handleLogout}
-              className="p-2.5 rounded-full hover:bg-red-500/10 text-white/40 hover:text-red-400 transition-all group"
-              title="Logout"
-            >
-              <LogOut className="w-5 h-5 group-hover:scale-110 transition-transform" />
-            </button>
-          )}
-
-          <Link href={isAuthenticated ? "/dashboard" : "/login"} className="flex items-center gap-3 group">
-             <div className="w-10 h-10 rounded-full overflow-hidden bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition-colors border border-white/10">
-                {isAuthenticated && (user?.photoURL || user?.gender) ? (
-                   <img
-                    src={user.photoURL || (user.gender === 'boy' ? '/assets/boy.png' : '/assets/girl.png')}
-                    alt="User"
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = '/assets/boy.png';
-                    }}
-                   />
-                ) : (
-                   <User className="w-5 h-5 text-white/60 group-hover:text-white" />
-                )}
-             </div>
-             {isAuthenticated ? (
-                <div className="flex flex-col">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-white/40 group-hover:text-primary transition-colors">Dashboard</span>
-                  <span className="text-xs font-bold truncate max-w-[80px]">{user?.displayName || 'User'}</span>
-                </div>
-             ) : (
-                <div className="flex flex-col">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-white/40 group-hover:text-primary transition-colors">Account</span>
-                  <span className="text-xs font-bold truncate max-w-[80px]">Sign In</span>
-                </div>
-             )}
-          </Link>
-        </div>
-
-        {/* Mobile Toggle */}
-        <button
-          className="lg:hidden p-3 rounded-full bg-white/5 text-white hover:bg-white/10 transition-all pointer-events-auto relative z-[60]"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setIsMobileMenuOpen(!isMobileMenuOpen);
-          }}
-          aria-label="Toggle menu"
+        <nav
+          ref={navRef}
+          className="container mx-auto px-6 max-w-7xl flex items-center justify-between gap-8"
         >
-          {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
-      </nav>
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2 group shrink-0">
+            <span className="text-2xl font-black tracking-tighter uppercase text-white">
+              KRISHNA<span className="text-[#05ffa3] text-glow-emerald">STORES</span>
+            </span>
+          </Link>
 
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="fixed inset-0 bg-black/80 backdrop-blur-xl z-[45] lg:hidden pointer-events-auto"
+          {/* Search Bar - Premium Dark */}
+          <div ref={searchRef} className="hidden md:flex flex-grow max-w-lg relative group">
+            <div className={cn(
+              "absolute inset-0 bg-[#05ffa3]/10 blur-xl opacity-0 transition-opacity duration-500",
+              isSearchFocused && "opacity-100"
+            )} />
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-hover:text-[#05ffa3] transition-colors">
+              <Search className="w-4 h-4" />
+            </div>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onFocus={() => setIsSearchFocused(true)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && searchQuery.trim()) {
+                  router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+                  setIsSearchFocused(false);
+                  setSearchQuery("");
+                }
+              }}
+              placeholder="Decrypt vault assets..."
+              className="w-full bg-white/5 border border-white/10 rounded-2xl py-2.5 pl-11 pr-4 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#05ffa3]/20 focus:border-[#05ffa3]/50 transition-all placeholder:text-slate-600 backdrop-blur-md"
             />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="fixed inset-x-4 top-24 z-[50] lg:hidden pointer-events-auto"
-            >
-            <div className="glass-card p-8 flex flex-col gap-6 items-center text-center shadow-[0_40px_100px_rgba(0,0,0,0.8)] border-white/20">
+
+            {/* Suggestions Overlay */}
+            {isSearchFocused && (searchQuery.length > 0 || searchResults.length > 0) && (
+              <div className="absolute top-full left-0 right-0 mt-3 bg-[#0A0A0A] border border-white/10 rounded-[2rem] shadow-2xl overflow-hidden z-[110] backdrop-blur-2xl">
+                {searchResults.length > 0 ? (
+                  <div className="p-3">
+                    <div className="px-4 py-2 text-[10px] font-black text-slate-500 uppercase tracking-widest border-b border-white/5 mb-2">Suggestions</div>
+                    {searchResults.map((result) => (
+                      <Link
+                        key={result.id}
+                        href={`/products/${result.slug}`}
+                        onClick={() => {
+                          setIsSearchFocused(false);
+                          setSearchQuery("");
+                        }}
+                        className="flex items-center gap-4 px-4 py-3 hover:bg-white/5 rounded-2xl transition-all duration-300 group/item"
+                      >
+                        <div className="w-12 h-12 rounded-xl bg-slate-900 overflow-hidden relative shrink-0 border border-white/5">
+                          <Image src={result.image} alt={result.title} fill className="object-cover opacity-80 group-hover/item:opacity-100 transition-opacity" />
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-sm font-black text-white line-clamp-1 uppercase tracking-tight">{result.title}</span>
+                          <span className={cn(
+                            "text-[9px] font-black uppercase tracking-widest",
+                            result.category === 'game' ? 'text-purple-400' :
+                            result.category === 'web' ? 'text-emerald-400' : 'text-blue-400'
+                          )}>
+                            {result.category} • ₹{result.priceINR}
+                          </span>
+                        </div>
+                      </Link>
+                    ))}
+                    <button
+                      onClick={() => {
+                        router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+                        setIsSearchFocused(false);
+                        setSearchQuery("");
+                      }}
+                      className="w-full mt-2 py-3 text-[10px] font-black text-white bg-white/5 uppercase tracking-[0.2em] hover:bg-blue-600 transition-all rounded-xl"
+                    >
+                      View All Results
+                    </button>
+                  </div>
+                ) : searchQuery.length > 0 ? (
+                  <div className="p-12 text-center">
+                    <p className="text-sm text-slate-500 font-medium italic">No matches found in the mainframe.</p>
+                  </div>
+                ) : null}
+              </div>
+            )}
+          </div>
+
+          {/* Desktop Links */}
+          <div className="hidden lg:flex items-center gap-10">
+            <div className="flex items-center gap-8">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-2xl font-black tracking-tighter text-white/60 hover:text-white transition-colors"
+                  className={cn(
+                    "text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:scale-110",
+                    link.color
+                  )}
                 >
                   {link.name}
                 </Link>
               ))}
-              <hr className="w-full border-white/10" />
-              <div className="flex gap-8 items-center">
-                <button className="p-3 rounded-full bg-white/5 text-white/40">
-                  <Search className="w-6 h-6" />
-                </button>
-                <Link href={isAuthenticated ? "/dashboard" : "/login"} onClick={() => setIsMobileMenuOpen(false)} className="p-1 rounded-full bg-white/5 text-white/40 border border-white/10">
-                   {isAuthenticated && (user?.photoURL || user?.gender) ? (
-                      <img
-                        src={user.photoURL || (user.gender === 'boy' ? '/assets/boy.png' : '/assets/girl.png')}
-                        alt="User"
-                        className="w-10 h-10 rounded-full object-cover"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = '/assets/boy.png';
-                        }}
-                      />
-                   ) : (
-                      <div className="p-2"><User className="w-6 h-6" /></div>
-                   )}
-                </Link>
-              </div>
-              {!isAuthenticated ? (
-                <Link
-                  href="/login"
-                  className="btn-premium w-full py-5 text-base uppercase tracking-[0.2em]"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Sign In
-                </Link>
-              ) : (
-                <div className="w-full flex flex-col gap-3">
-                  <Link
-                    href="/dashboard"
-                    className="btn-premium w-full py-5 text-base uppercase tracking-[0.2em]"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    My Dashboard
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="btn-outline w-full py-5 text-base uppercase tracking-[0.2em] text-red-400 border-red-400/20 hover:bg-red-500/10"
-                  >
-                    Logout
-                  </button>
-                </div>
-              )}
             </div>
-          </motion.div>
-          </>
+
+            <div className="h-4 w-[1px] bg-white/10"></div>
+
+            <div className="flex items-center gap-5">
+              <Link href="/wishlist" className="relative group p-2">
+                <Heart className={cn(
+                  "w-5 h-5 transition-all duration-300",
+                  wishlist.length > 0 ? "text-red-500 fill-current drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]" : "text-white/40 group-hover:text-white"
+                )} />
+                {wishlist.length > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-white text-black text-[8px] font-black flex items-center justify-center rounded-full animate-bounce">
+                    {wishlist.length}
+                  </span>
+                )}
+              </Link>
+
+              <Link
+                href="/books"
+                className="group relative flex items-center gap-2 px-6 py-3 bg-white text-black text-[10px] font-black uppercase tracking-[0.2em] rounded-xl hover:bg-[#05ffa3] transition-all duration-500 shadow-xl active:scale-95 overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-[#05ffa3] translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
+                <span className="relative z-10 flex items-center gap-2">
+                  <ShoppingBag className="w-3.5 h-3.5" /> VAULT
+                </span>
+              </Link>
+            </div>
+          </div>
+
+          {/* Mobile Menu Trigger */}
+          <div className="flex lg:hidden items-center gap-4">
+            <Link href="/wishlist" className="text-white/60">
+               <Heart className="w-5 h-5" />
+            </Link>
+            <button
+              className="w-10 h-10 flex items-center justify-center bg-white/5 border border-white/10 rounded-xl text-white"
+              onClick={() => setIsMobileMenuOpen(true)}
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+          </div>
+        </nav>
+      </header>
+
+      {/* Mobile Menu - Dark Overlay */}
+      <div
+        className={cn(
+          "fixed inset-0 z-[120] bg-black transition-all duration-700 ease-in-out lg:hidden",
+          isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
         )}
-      </AnimatePresence>
-    </header>
+      >
+        <div className="flex flex-col h-full p-8 relative">
+          {/* Animated Background Element */}
+          <div className="absolute top-1/4 right-0 w-64 h-64 bg-blue-600/20 blur-[100px] rounded-full" />
+
+          <div className="flex justify-between items-center mb-16 relative z-10">
+            <span className="text-2xl font-black tracking-tighter uppercase text-white">
+              KRISHNA<span className="text-blue-500">STORES</span>
+            </span>
+            <button
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="w-12 h-12 flex items-center justify-center bg-white/5 border border-white/10 rounded-full text-white"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+
+          <div className="flex flex-col gap-8 relative z-10">
+            {navLinks.map((link, i) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="group flex items-center justify-between"
+              >
+                 <span className={cn("text-5xl font-black uppercase tracking-tighter transition-all duration-500 group-hover:pl-4", link.color)}>
+                   {link.name}
+                 </span>
+                 <ArrowRight className="w-8 h-8 opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-500" />
+              </Link>
+            ))}
+          </div>
+
+          <div className="mt-auto pt-10 border-t border-white/10 relative z-10">
+             <Link
+                href="/books"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center justify-between w-full p-8 bg-blue-600 text-white rounded-[2rem] group shadow-2xl"
+              >
+                <span className="text-xl font-black uppercase tracking-[0.2em]">Start Shopping</span>
+                <ArrowRight className="w-6 h-6 group-hover:translate-x-3 transition-transform duration-500" />
+              </Link>
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 
 export default Navbar;
-
-const VoiceSearch = () => {
-  const [isListening, setIsListening] = useState(false);
-  const router = useRouter();
-
-  const startListening = () => {
-    if (!('webkitSpeechRecognition' in window) && !('speechRecognition' in window)) {
-      alert("Voice recognition is not supported in this browser.");
-      return;
-    }
-
-    const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).speechRecognition;
-    const recognition = new SpeechRecognition();
-
-    recognition.lang = 'en-US';
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-
-    recognition.onstart = () => {
-      setIsListening(true);
-    };
-
-    recognition.onresult = (event: any) => {
-      const transcript = event.results[0][0].transcript.toLowerCase();
-      console.log('Voice Recognition Result:', transcript);
-
-      if (transcript.includes('home')) router.push('/');
-      else if (transcript.includes('book')) router.push('/books');
-      else if (transcript.includes('game')) router.push('/games');
-      else if (transcript.includes('website')) router.push('/website-store');
-      else if (transcript.includes('about')) router.push('/about');
-      else if (transcript.includes('contact')) router.push('/contact');
-      else if (transcript.includes('cart')) (window as any).dispatchEvent(new CustomEvent('open-cart'));
-    };
-
-    recognition.onerror = (event: any) => {
-      console.error('Speech recognition error:', event.error);
-      setIsListening(false);
-    };
-
-    recognition.onend = () => {
-      setIsListening(false);
-    };
-
-    recognition.start();
-  };
-
-  return (
-    <button
-      onClick={startListening}
-      className={cn(
-        "p-2.5 rounded-full transition-all group relative",
-        isListening ? "bg-primary text-white scale-110" : "hover:bg-white/5 text-white/40 hover:text-white"
-      )}
-      title="Voice Navigation"
-    >
-      <Mic className={cn("w-5 h-5 group-hover:scale-110 transition-transform", isListening && "animate-pulse")} />
-      {isListening && (
-        <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-ping" />
-      )}
-    </button>
-  );
-};

@@ -1,10 +1,7 @@
-import GamesClient from "./GamesClient";
+"use client";
 
-export const metadata = {
-  title: "Games | Krishna Stores",
-  description: "Discover and purchase premium HTML5 games and source code at Krishna Stores.",
-};
+import { App } from "@/App";
 
 export default function GamesPage() {
-  return <GamesClient />;
+  return <App />;
 }

@@ -1,14 +1,7 @@
-import React from 'react';
-import { books } from '@/lib/data';
-import WebsiteStoreClient from './WebsiteStoreClient';
+"use client";
 
-export const metadata = {
-  title: 'Website Store | Krishna Stores',
-  description: 'Premium website source code and templates.',
-};
+import { App } from "@/App";
 
 export default function WebsiteStorePage() {
-  const websiteProducts = books.filter(book => book.category === 'Website Store');
-
-  return <WebsiteStoreClient products={websiteProducts} />;
+  return <App />;
 }

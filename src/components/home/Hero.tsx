@@ -1,175 +1,149 @@
 "use client";
 
-import Link from 'next/link';
-import React, { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Search, BookOpen, Star, ShieldCheck, Sparkles, Book as BookIcon, ArrowRight, Play, Zap, Download, UserCheck, Gamepad2 } from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
-import styles from './Hero.module.css';
-
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
+import React, { useEffect, useRef } from "react";
+import Link from "next/link";
+import { ArrowRight, ShoppingBag, Terminal, Gamepad2, Sparkles } from "lucide-react";
+import gsap from "gsap";
+import Image from "next/image";
 
 const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const floatingElementsRef = useRef<HTMLDivElement>(null);
-  const lightRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const [textIndex, setTextIndex] = useState(0);
-  const words = ["Master.", "Build.", "Play.", "Transform."];
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
+  const visualRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTextIndex((prev) => (prev + 1) % words.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
+    const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Reveal animation
-      const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
-
-      tl.from(".reveal-item", {
-        y: 100,
-        opacity: 0,
-        duration: 1.2,
-        stagger: 0.1,
-      });
-
-      // Floating icons animation
-      if (floatingElementsRef.current) {
-        gsap.to(floatingElementsRef.current.children, {
-          y: "random(-30, 30)",
-          x: "random(-15, 15)",
-          rotation: "random(-10, 10)",
-          duration: "random(3, 5)",
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-          stagger: 0.2
-        });
-      }
-
-      // Scroll Parallax
-      gsap.to(".parallax-content", {
-        y: 150,
-        opacity: 0,
-        scale: 0.95,
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top top",
-          end: "bottom center",
-          scrub: true
-        }
-      });
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!lightRef.current || !containerRef.current) return;
-    const { left, top } = containerRef.current.getBoundingClientRect();
-    const x = e.clientX - left;
-    const y = e.clientY - top;
-
-    gsap.to(lightRef.current, {
-      x,
-      y,
-      duration: 1.5,
-      ease: "power3.out"
+    tl.from(headingRef.current, {
+      y: 100,
+      opacity: 0,
+      duration: 1.2,
+      skewY: 7,
     });
-  };
+
+    tl.from(textRef.current, {
+      y: 40,
+      opacity: 0,
+      duration: 1,
+    }, "-=0.8");
+
+    tl.from(ctaRef.current, {
+      y: 40,
+      opacity: 0,
+      duration: 1,
+    }, "-=0.8");
+
+    tl.from(visualRef.current?.querySelectorAll(".hero-card"), {
+      x: 100,
+      opacity: 0,
+      rotate: 15,
+      duration: 1.5,
+      stagger: 0.2,
+    }, "-=1.2");
+
+    // Parallax effect on mouse move
+    const handleMouseMove = (e: MouseEvent) => {
+      const { clientX, clientY } = e;
+      const xPos = (clientX / window.innerWidth - 0.5) * 40;
+      const yPos = (clientY / window.innerHeight - 0.5) * 40;
+
+      gsap.to(".hero-parallax", {
+        x: xPos,
+        y: yPos,
+        duration: 1.5,
+        ease: "power2.out",
+      });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
   return (
-    <section
-      ref={containerRef}
-      onMouseMove={handleMouseMove}
-      className={styles.heroSection}
-    >
-      <div className={styles.meshBackground} />
-      <div className={styles.gridOverlay} />
-
-      {/* Interactive Spotlight */}
-      <div
-        ref={lightRef}
-        className={styles.spotlight}
-        style={{ left: 0, top: 0 }} // Managed by GSAP
-      />
-
-      {/* Floating Decorative Elements */}
-      <div ref={floatingElementsRef} className="absolute inset-0 pointer-events-none z-0 overflow-hidden hidden md:block">
-        <div className="absolute top-1/4 left-[8%] opacity-20"><BookIcon className="w-14 h-14 text-indigo-500 rotate-12" /></div>
-        <div className="absolute top-1/3 right-[12%] opacity-10"><Gamepad2 className="w-24 h-24 text-purple-500 -rotate-12" /></div>
-        <div className="absolute bottom-1/4 left-1/4 opacity-15"><BookIcon className="w-20 h-20 text-white rotate-45" /></div>
-        <div className="absolute top-24 left-1/2 opacity-10"><Gamepad2 className="w-12 h-12 text-indigo-500 -rotate-45" /></div>
-        <div className="absolute bottom-20 right-1/3 opacity-10"><Sparkles className="w-16 h-16 text-purple-500" /></div>
+    <section ref={containerRef} className="relative min-h-screen flex flex-col justify-center pt-32 pb-20 overflow-hidden bg-[#050505]">
+      {/* Animated RGB Background Blobs */}
+      <div className="absolute top-0 left-0 w-full h-full -z-10 pointer-events-none opacity-20">
+        <div className="hero-parallax absolute top-[5%] right-[5%] w-[50vw] h-[50vw] bg-blue-600/30 rounded-full blur-[160px] animate-pulse" />
+        <div className="hero-parallax absolute bottom-[5%] left-[5%] w-[45vw] h-[45vw] bg-purple-600/30 rounded-full blur-[160px] animation-delay-2000" />
+        <div className="hero-parallax absolute top-[30%] left-[35%] w-[35vw] h-[35vw] bg-[#05ffa3]/20 rounded-full blur-[160px]" />
       </div>
 
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="parallax-content flex flex-col items-center text-center max-w-5xl mx-auto">
-
-          <div className={`${styles.badge} reveal-item group`}>
-            <div className="w-2 h-2 rounded-full bg-purple-500 animate-ping" />
-            <span className={styles.gradientText} style={{ fontSize: '0.75rem', fontWeight: 900 }}>Krishna Stores: Premium Marketplace</span>
-            <ArrowRight className="w-4 h-4 text-white/40 group-hover:translate-x-1 transition-transform" />
-          </div>
-
-          <h1
-            ref={titleRef}
-            className={`${styles.heroTitle} reveal-item`}
-          >
-            <div className="relative inline-block min-w-[280px] md:min-w-[500px]">
-              <AnimatePresence mode="wait">
-                <motion.span
-                  key={textIndex}
-                  initial={{ y: 80, opacity: 0, skewY: 10 }}
-                  animate={{ y: 0, opacity: 1, skewY: 0 }}
-                  exit={{ y: -80, opacity: 0, skewY: -10 }}
-                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                  className={`${styles.gradientText} block py-2`}
-                >
-                  {words[textIndex]}
-                </motion.span>
-              </AnimatePresence>
+      <div className="container mx-auto px-6 max-w-7xl">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div className="relative z-10">
+            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/5 border border-white/10 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-10 backdrop-blur-xl">
+              <Sparkles className="w-3.5 h-3.5 text-[#05ffa3]" />
+              Elite Asset Protocol: Active
             </div>
-          </h1>
 
-          <p className="reveal-item text-lg md:text-2xl text-white/40 mb-14 max-w-3xl leading-relaxed font-medium px-4">
-            Handcrafted premium eBooks and high-fidelity HTML5 games. Master professional skills or source the perfect components for your next project.
-          </p>
+            <h1 ref={headingRef} className="text-[clamp(3.5rem,9vw,7.5rem)] font-black text-white leading-[0.85] tracking-tighter mb-10 uppercase">
+              REDEFINE YOUR <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-[#05ffa3] animate-gradient-x">
+                DIGITAL EDGE.
+              </span>
+            </h1>
 
-          <div className="reveal-item flex flex-col sm:flex-row gap-5 w-full max-w-lg mb-24 px-4">
-            <Link href="/books" className={styles.btnPremium + " flex-1"}>
-              eBook Store
-              <BookOpen className="w-4 h-4 group-hover:scale-110 transition-transform" />
-            </Link>
-            <Link href="/games" className="flex-1 flex items-center justify-center gap-3 px-8 py-4 rounded-full border border-white/10 bg-white/5 text-sm font-bold hover:bg-white/10 transition-all uppercase tracking-widest text-white">
-              Game Store
-              <Gamepad2 className="w-4 h-4 group-hover:rotate-12 transition-transform" />
-            </Link>
+            <div ref={textRef} className="max-w-xl mb-14">
+              <p className="text-xl md:text-2xl text-slate-400 font-medium leading-relaxed">
+                Premium eBooks for architects, AAA-tier source code, and high-performance web engineering.
+                <span className="text-white"> Engineered for the elite.</span>
+              </p>
+            </div>
+
+            <div ref={ctaRef} className="flex flex-wrap items-center gap-6">
+              <Link
+                href="/books"
+                className="group relative flex items-center gap-3 px-12 py-6 bg-white text-black text-[10px] font-black uppercase tracking-[0.3em] rounded-2xl hover:bg-[#05ffa3] hover:text-black transition-all duration-500 shadow-[0_0_40px_rgba(5,255,163,0.2)] active:scale-95"
+              >
+                <ShoppingBag className="w-4 h-4" /> Initialize Vault
+              </Link>
+
+              <div className="flex items-center gap-4 text-slate-500">
+                <div className="flex -space-x-3">
+                  {[1,2,3,4].map(i => (
+                    <div key={i} className="w-10 h-10 rounded-full border-2 border-[#050505] bg-slate-800 flex items-center justify-center text-[10px] font-bold overflow-hidden">
+                      <Image src={`https://i.pravatar.cc/100?img=${i+10}`} alt="User" width={40} height={40} />
+                    </div>
+                  ))}
+                </div>
+                <span className="text-[10px] font-black uppercase tracking-widest">Join 2k+ Creators</span>
+              </div>
+            </div>
           </div>
 
-          <div className="reveal-item grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-8 border-t border-white/5 pt-16 w-full max-w-6xl">
-            {[
-              { label: 'Marketplace', value: 'Live', icon: Sparkles, color: 'text-indigo-500' },
-              { label: 'Instant Download', value: 'Now', icon: Download, color: 'text-emerald-500' },
-              { label: 'Source Code', value: 'Full', icon: Zap, color: 'text-purple-500' },
-              { label: 'Beginner Friendly', value: 'Yes', icon: UserCheck, color: 'text-amber-500' },
-              { label: 'Categories', value: 'Multi', icon: BookOpen, color: 'text-blue-500' },
-              { label: 'Checkout', value: 'Secure', icon: ShieldCheck, color: 'text-orange-500' },
-            ].map((stat, i) => (
-              <div key={i} className={styles.statCard}>
-                <div className={styles.statIcon}>
-                  <stat.icon className={`w-5 h-5 ${stat.color}`} />
+          {/* Visual Showcase - Floating RGB Cards */}
+          <div ref={visualRef} className="relative h-[600px] hidden lg:flex items-center justify-center">
+            <div className="relative w-full max-w-[500px] h-full perspective-1000">
+              {/* Main Card */}
+              <div className="hero-card absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] aspect-[3/4] rounded-[2.5rem] bg-dark-card p-3 rgb-border shadow-2xl z-20">
+                <div className="relative w-full h-full rounded-[2rem] overflow-hidden">
+                   <Image src="/assets/android-react-native-2026.png" alt="Featured" fill className="object-cover" />
+                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                   <div className="absolute bottom-6 left-6 right-6">
+                      <div className="px-3 py-1 bg-blue-600 rounded-full text-[8px] font-black uppercase tracking-widest inline-block mb-2">Bestseller</div>
+                      <h4 className="text-white font-black uppercase tracking-tighter text-xl">React Native 2026</h4>
+                   </div>
                 </div>
-                <span className="text-2xl font-black text-white mb-1 tracking-tighter">{stat.value}</span>
-                <span className="text-[9px] font-black text-white/20 uppercase tracking-[0.2em]">{stat.label}</span>
               </div>
-            ))}
+
+              {/* Floating Element: Web */}
+              <div className="hero-card absolute top-[10%] right-[-5%] w-[200px] aspect-square rounded-[2rem] bg-dark-card p-2 border-emerald-500/30 border shadow-2xl z-30 backdrop-blur-xl">
+                 <div className="w-full h-full rounded-[1.5rem] bg-emerald-500/10 flex flex-col items-center justify-center gap-3">
+                    <Terminal className="w-8 h-8 text-emerald-400" />
+                    <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Web Projects</span>
+                 </div>
+              </div>
+
+              {/* Floating Element: Game */}
+              <div className="hero-card absolute bottom-[10%] left-[-5%] w-[180px] aspect-square rounded-[2rem] bg-dark-card p-2 border-purple-500/30 border shadow-2xl z-10 backdrop-blur-xl">
+                 <div className="w-full h-full rounded-[1.5rem] bg-purple-500/10 flex flex-col items-center justify-center gap-3">
+                    <Gamepad2 className="w-8 h-8 text-purple-400" />
+                    <span className="text-[10px] font-black text-purple-400 uppercase tracking-widest">Game Source</span>
+                 </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

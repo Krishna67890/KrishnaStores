@@ -1,42 +1,54 @@
-# dependencies
-/node_modules
-/.pnp
+# Dependencies
+node_modules/
+.pnp
 .pnp.js
 
-# testing
-/coverage
+# Build output
+dist/
+build/
+.next/
+out/
+/assets/
 
-# next.js
-/.next/
-/out/
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
+# Logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
 
-# local env files
-.env*.local
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
 
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
-# IDE
+# IDE/editor files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
 .idea/
-.vscode/
 *.swp
 *.swo
 
-# Project specific
-/assets/
+# Temporary files
+*.tmp
+*.temp
+.cache/
+.temp/
+
+# Vite
+.vite/
+
+# Important folder specific rules (ensure KrishnaStores logo.png is ALWAYS tracked by Git)
+public/important/temp/
+public/important/cache/
+public/important/generated/
+public/important/*.tmp
+!public/important/KrishnaStores logo.png
