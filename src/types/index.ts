@@ -7,7 +7,12 @@ import {
 
 export type { ProductCategory, ProductDetails, CategoryFilter };
 
-export interface Product extends StoreProduct {
+export interface Product extends Partial<StoreProduct> {
+  id: string;
+  slug: string;
+  title: string;
+  category: ProductCategory;
+  description: string;
   // Legacy fields for compatibility during transition
   price?: number;
   discountPrice?: number;
