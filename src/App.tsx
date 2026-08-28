@@ -275,10 +275,16 @@ export const App: React.FC = () => {
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
                   <div>
                     <span style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.08em', color: 'var(--primary)', textTransform: 'uppercase' }}>
-                      EXPLORE CATALOG
+                      {activeCategory === 'roblox' || activeCategory === 'game'
+                        ? "All Games BY Krishna Ajaysing Patil but now we are adding Roblox Games by Krishna Ajaysing Patil"
+                        : "EXPLORE CATALOG"}
                     </span>
                     <h2 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-main)', marginTop: '0.25rem' }}>
-                      ALL PRODUCTS ({filteredProducts.length})
+                      {activeCategory === 'all' ? 'ALL PRODUCTS' :
+                       activeCategory === 'book' ? 'BOOKSTORE' :
+                       activeCategory === 'game' ? 'OFFLINE GAMES' :
+                       activeCategory === 'roblox' ? 'ONLINE ROBLOX GAMES' :
+                       activeCategory === 'web' ? 'WEBSTORE' : 'PRODUCTS'} ({filteredProducts.length})
                     </h2>
                   </div>
 
@@ -288,7 +294,8 @@ export const App: React.FC = () => {
                       {[
                         { key: 'all', label: 'ALL PRODUCTS', count: PRODUCTS.length },
                         { key: 'book', label: 'BOOKSTORE', count: PRODUCTS.filter((p) => p.category === 'book').length },
-                        { key: 'game', label: 'GAMESTORE', count: PRODUCTS.filter((p) => p.category === 'game').length },
+                        { key: 'game', label: 'OFFLINE GAMES', count: PRODUCTS.filter((p) => p.category === 'game').length },
+                        { key: 'roblox', label: 'ONLINE GAMES', count: PRODUCTS.filter((p) => p.category === 'roblox').length },
                         { key: 'web', label: 'WEBSTORE', count: PRODUCTS.filter((p) => p.category === 'web').length },
                       ].map((pill) => (
                         <button

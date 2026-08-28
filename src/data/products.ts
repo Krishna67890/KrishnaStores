@@ -799,11 +799,257 @@ export const PRODUCTS: Product[] = [
     isBestseller: true,
     isNew: true,
     publishedDate: '2026'
+  },
+
+  // -------------------------------------------------------------
+  // 9. ROBLOX — EXPLORE THE WORLD (FREE)
+  // -------------------------------------------------------------
+  {
+    id: 'roblox-explore-world',
+    slug: 'explore-the-world-roblox',
+    number: '09',
+    title: '🌍 EXPLORE THE WORLD',
+    subtitle: 'Roblox Adventure Game by Krishna Patil',
+    category: 'roblox',
+    categoryLabel: 'ROBLOX ONLINE',
+    priceINR: 0,
+    priceDisplay: 'FREE TO PLAY',
+    image: '/assets/Games/Explore World.png',
+    coverImage: '/assets/Games/Explore World.png',
+    gallery: [
+      '/assets/Games/Explore World.png',
+      '/assets/Games/Explore World 2.png',
+      '/assets/Games/Explore World 3.png'
+    ],
+    images: [
+      '/assets/Games/Explore World.png',
+      '/assets/Games/Explore World 2.png',
+      '/assets/Games/Explore World 3.png'
+    ],
+    shortDescription: 'Embark on an epic journey across diverse landscapes. A beautifully crafted Roblox experience featuring discovery and adventure.',
+    valueProp: 'Immersive Roblox adventure experience by Krishna Patil.',
+    description: 'Explore the World is a high-fidelity Roblox adventure game where players can discover hidden secrets, complete quests, and enjoy stunning vistas across multiple biomes.',
+    benefits: [
+      { number: '01', title: 'Epic Exploration', desc: 'Discover a vast world filled with unique environments.' },
+      { number: '02', title: 'Community Play', desc: 'Join thousands of players in a shared online universe.' },
+      { number: '03', title: 'Dynamic Events', desc: 'Participate in time-limited seasonal events and challenges.' },
+      { number: '04', title: 'Advanced Mechanics', desc: 'Smooth controls and engaging gameplay loops designed for all ages.' }
+    ],
+    youMightWantThisIf: [
+      'You love open-world exploration games on Roblox',
+      'You are looking for a high-quality adventure experience',
+      'You enjoy discovering secrets and completing quests'
+    ],
+    audience: [
+      { title: 'Roblox Players', desc: 'Gamers looking for premium exploration content.' },
+      { title: 'Adventure Fans', desc: 'Players who enjoy world-building and discovery.' }
+    ],
+    whatYouGet: [
+      'Instant access to the Roblox game',
+      'Exclusive in-game badges for KrishnaStore fans',
+      'Regular content updates'
+    ],
+    whatMakesItUseful: [
+      'A professionally designed Roblox world with deep lore and exploration mechanics.'
+    ],
+    beforeYouBuy: [
+      'Requires a Roblox account and the Roblox player installed.',
+      'This is a free-to-play online experience.'
+    ],
+    isRightForYou: {
+      goodFit: [
+        'Fans of adventure and exploration games.'
+      ],
+      mayNotBe: [
+        'If you prefer competitive shooter-style games only.'
+      ]
+    },
+    details: {
+      type: 'Online Game',
+      category: 'Roblox / Adventure',
+      edition: 'Free to Play',
+      delivery: 'Instant Roblox Link',
+      purchasePlatform: 'Roblox'
+    },
+    gumroadUrl: 'https://www.roblox.com/games/16555963621/EXPLORE-THE-WORLD',
+    buyLink: 'https://www.roblox.com/games/16555963621/EXPLORE-THE-WORLD',
+    demoLink: 'https://www.roblox.com/games/16555963621/EXPLORE-THE-WORLD',
+    tags: ['games', 'roblox', 'online', 'adventure', 'krishna'],
+    developer: 'Krishna Ajaysing Patil',
+    platform: 'Roblox',
+    genre: 'Adventure / Exploration',
+    publishedDate: '2024',
+    hoursSaved: 'Infinite Fun',
+    estimatedValue: 'Premium Experience'
+  },
+
+  // -------------------------------------------------------------
+  // 10. ROBLOX — POWER JUMP CHALLENGE (FREE)
+  // -------------------------------------------------------------
+  {
+    id: 'roblox-power-jump',
+    slug: 'power-jump-challenge-roblox',
+    number: '10',
+    title: '⚡ Power Jump Challenge',
+    subtitle: 'Roblox Parkour & Skill Game',
+    category: 'roblox',
+    categoryLabel: 'ROBLOX ONLINE',
+    priceINR: 0,
+    priceDisplay: 'FREE TO PLAY',
+    image: '/assets/Games/Power Jump.png',
+    coverImage: '/assets/Games/Power Jump.png',
+    gallery: [
+      '/assets/Games/Power Jump.png',
+      '/assets/Games/Power Jump 2.png',
+      '/assets/Games/Power Jump Win.png'
+    ],
+    images: [
+      '/assets/Games/Power Jump.png',
+      '/assets/Games/Power Jump 2.png',
+      '/assets/Games/Power Jump Win.png'
+    ],
+    shortDescription: 'Test your reflexes and timing in this high-energy Roblox obstacle course. Can you reach the end?',
+    valueProp: 'Competitive Roblox Parkour challenge.',
+    description: 'Power Jump Challenge is an intense Obby (obstacle course) that tests your precision and speed. With multiple levels of increasing difficulty, it is the ultimate test for parkour fans.',
+    benefits: [
+      { number: '01', title: 'Reflex Testing', desc: 'Sharpen your timing and movement precision.' },
+      { number: '02', title: 'Global Leaderboards', desc: 'Compete with players worldwide for the fastest completion time.' },
+      { number: '03', title: 'Vibrant Design', desc: 'Enjoy high-energy visuals and sound effects.' },
+      { number: '04', title: 'Unlockable Rewards', desc: 'Earn skins and trails as you conquer harder levels.' }
+    ],
+    youMightWantThisIf: [
+      'You enjoy challenging parkour games',
+      'You want to test your gaming skills and speed',
+      'You like competing for high scores'
+    ],
+    audience: [
+      { title: 'Skill Gamers', desc: 'Players who enjoy mastering movement mechanics.' },
+      { title: 'Obby Enthusiasts', desc: 'Roblox fans who love obstacle courses.' }
+    ],
+    whatYouGet: [
+      'Access to all challenge levels',
+      'Participation in seasonal leaderboards',
+      'Multiplayer racing modes'
+    ],
+    whatMakesItUseful: [
+      'Highly addictive and rewarding skill-based gameplay.'
+    ],
+    beforeYouBuy: [
+      'Roblox account required.',
+      'Works on mobile, tablet, and PC.'
+    ],
+    isRightForYou: {
+      goodFit: [
+        'Players looking for a fast-paced skill challenge.'
+      ],
+      mayNotBe: [
+        'If you find difficult platforming frustrating.'
+      ]
+    },
+    details: {
+      type: 'Online Game',
+      category: 'Roblox / Obby',
+      edition: 'Free to Play',
+      delivery: 'Instant Roblox Link',
+      purchasePlatform: 'Roblox'
+    },
+    gumroadUrl: 'https://www.roblox.com/games/131814858703149/Power-Jump-Challenge',
+    buyLink: 'https://www.roblox.com/games/131814858703149/Power-Jump-Challenge',
+    demoLink: 'https://www.roblox.com/games/131814858703149/Power-Jump-Challenge',
+    tags: ['games', 'roblox', 'online', 'parkour', 'skill'],
+    developer: 'Krishna Ajaysing Patil',
+    platform: 'Roblox',
+    genre: 'Obby / Parkour',
+    publishedDate: '2024',
+    hoursSaved: 'Speedrun Ready',
+    estimatedValue: 'Skill Challenge'
+  },
+
+  // -------------------------------------------------------------
+  // 11. ROBLOX — OBBY ADVENTURE PARKOUR (FREE)
+  // -------------------------------------------------------------
+  {
+    id: 'roblox-obby-adventure',
+    slug: 'obby-adventure-parkour-roblox',
+    number: '11',
+    title: '🏃 Obby Adventure Parkour',
+    subtitle: 'Classic Roblox Obby Experience',
+    category: 'roblox',
+    categoryLabel: 'ROBLOX ONLINE',
+    priceINR: 0,
+    priceDisplay: 'FREE TO PLAY',
+    image: '/assets/Games/Obby Adventure.png',
+    coverImage: '/assets/Games/Obby Adventure.png',
+    gallery: [
+      '/assets/Games/Obby Adventure.png',
+      '/assets/Games/Obby Adventure 1.png',
+      '/assets/Games/Obby Adventure pourkour.png'
+    ],
+    images: [
+      '/assets/Games/Obby Adventure.png',
+      '/assets/Games/Obby Adventure 1.png',
+      '/assets/Games/Obby Adventure pourkour.png'
+    ],
+    shortDescription: 'A fun and engaging parkour adventure designed for players of all skill levels. Jump, climb, and slide through creative levels.',
+    valueProp: 'Fun and creative Roblox Obby for all ages.',
+    description: 'Obby Adventure Parkour offers a balanced mix of platforming challenges and creative world design. Perfect for relaxing gameplay or racing with friends.',
+    benefits: [
+      { number: '01', title: 'Creative Levels', desc: 'Play through unique, artistically designed stages.' },
+      { number: '02', title: 'Friendly Gameplay', desc: 'Accessible to beginners while still fun for pros.' },
+      { number: '03', title: 'Social Integration', desc: 'Easy to invite and play with friends.' },
+      { number: '04', title: 'Frequent Updates', desc: 'New stages added regularly based on community feedback.' }
+    ],
+    youMightWantThisIf: [
+      'You want a fun, lighthearted parkour experience',
+      'You enjoy playing with friends in a creative environment',
+      'You are new to Roblox Obbies'
+    ],
+    audience: [
+      { title: 'Casual Gamers', desc: 'Players looking for fun, non-stressful gameplay.' },
+      { title: 'Family & Friends', desc: 'Great for playing together in groups.' }
+    ],
+    whatYouGet: [
+      'Full access to the adventure map',
+      'Friend-party support',
+      'Progress saving features'
+    ],
+    whatMakesItUseful: [
+      'Provides hours of entertainment with a focus on fun and creativity.'
+    ],
+    beforeYouBuy: [
+      'Roblox account required.',
+      'Optimized for all Roblox-supported devices.'
+    ],
+    isRightForYou: {
+      goodFit: [
+        'Anyone looking for a fun time on Roblox.'
+      ],
+      mayNotBe: [
+        'If you are looking for an extremely difficult, hardcore challenge.'
+      ]
+    },
+    details: {
+      type: 'Online Game',
+      category: 'Roblox / Adventure',
+      edition: 'Free to Play',
+      delivery: 'Instant Roblox Link',
+      purchasePlatform: 'Roblox'
+    },
+    gumroadUrl: 'https://www.roblox.com/games/103997615677142/Obby-Adventure-parkour',
+    buyLink: 'https://www.roblox.com/games/103997615677142/Obby-Adventure-parkour',
+    demoLink: 'https://www.roblox.com/games/103997615677142/Obby-Adventure-parkour',
+    tags: ['games', 'roblox', 'online', 'parkour', 'adventure'],
+    developer: 'Krishna Ajaysing Patil',
+    platform: 'Roblox',
+    genre: 'Obby / Parkour',
+    publishedDate: '2024',
+    hoursSaved: 'Endless Adventure',
+    estimatedValue: 'Creative Fun'
   }
 ];
 
-if (PRODUCTS.length !== 8) {
-  console.warn(`KrishnaStores catalog error: expected 8 products, found ${PRODUCTS.length}`);
+if (PRODUCTS.length !== 11) {
+  console.warn(`KrishnaStores catalog error: expected 11 products, found ${PRODUCTS.length}`);
 }
 
 export const products = PRODUCTS;
