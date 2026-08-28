@@ -1,4 +1,4 @@
-export type ProductCategory = 'book' | 'game' | 'web' | 'Programming' | 'Self-Help' | 'Website Store' | 'Elite' | 'AI' | 'Development' | 'Security' | 'Career' | 'Cloud' | 'Tools';
+export type ProductCategory = 'book' | 'game' | 'web' | 'roblox' | 'Programming' | 'Self-Help' | 'Website Store' | 'Elite' | 'AI' | 'Development' | 'Security' | 'Career' | 'Cloud' | 'Tools';
 
 export interface ProductDetails {
   type: string;

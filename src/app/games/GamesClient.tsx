@@ -8,15 +8,19 @@ import { games } from '@/lib/data';
 
 const GamesClient = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedGenre, setSelectedGenre] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
-  const genres = ["All", ...Array.from(new Set(games.map((g) => g.genre)))];
+  const categories = ["All", "Offline Games", "Roblox Online"];
 
   const filteredGames = games.filter((game) => {
     const matchesSearch = game.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          (game.tags || []).some((tag: string) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-    const matchesGenre = selectedGenre === "All" || game.genre === selectedGenre;
-    return matchesSearch && matchesGenre;
+
+    const matchesCategory = selectedCategory === "All" ||
+                           (selectedCategory === "Offline Games" && game.category === "game") ||
+                           (selectedCategory === "Roblox Online" && game.category === "roblox");
+
+    return matchesSearch && matchesCategory;
   });
 
   return (
@@ -58,7 +62,7 @@ const GamesClient = () => {
               transition={{ delay: 0.2 }}
               className="text-xl text-white/50 font-medium leading-relaxed"
             >
-              Explore our collection of premium HTML5 games. From retro-inspired builders to addictive puzzles, get instant access to the source code and source assets.
+              All Games BY Krishna Ajaysing Patil but now we are adding Roblox Games by Krishna Ajaysing Patil. Explore our collection of premium HTML5 games and immersive Roblox experiences.
             </motion.p>
           </div>
 
@@ -83,17 +87,17 @@ const GamesClient = () => {
 
         {/* Filters */}
         <div className="flex flex-wrap gap-3 mb-12">
-          {genres.map((genre) => (
+          {categories.map((cat) => (
             <button
-              key={genre}
-              onClick={() => setSelectedGenre(genre)}
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
               className={`px-6 py-2.5 rounded-full text-sm font-black uppercase tracking-widest transition-all ${
-                selectedGenre === genre
+                selectedCategory === cat
                 ? 'bg-primary text-white shadow-xl shadow-primary/20'
                 : 'bg-white/5 text-white/40 hover:bg-white/10 border border-white/5'
               }`}
             >
-              {genre}
+              {cat}
             </button>
           ))}
         </div>

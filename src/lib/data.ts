@@ -281,6 +281,108 @@ export const games: Game[] = [
     requirements: [
       "Modern Browser with WebGL"
     ]
+  },
+
+  // 7. EXPLORE THE WORLD
+  {
+    id: "explore-the-world-roblox",
+    slug: "explore-the-world-roblox",
+    title: "🌍 EXPLORE THE WORLD",
+    subtitle: "Roblox Adventure Game by Krishna Patil",
+    developer: "Krishna Ajaysing Patil",
+    platform: "Roblox",
+    genre: "Adventure / Exploration",
+    price: 0,
+    discountPrice: 0,
+    buyLink: "https://www.roblox.com/games/16555963621/EXPLORE-THE-WORLD",
+    description: "Embark on an epic journey across diverse landscapes in EXPLORE THE WORLD. A beautifully crafted Roblox experience featuring discovery and adventure.",
+    coverImage: "/assets/games/Explore World.png",
+    images: [
+      "/assets/games/Explore World.png",
+      "/assets/games/Explore World 2.png",
+      "/assets/games/Explore World 3.png"
+    ],
+    category: "roblox",
+    tags: ["games", "roblox", "adventure", "exploration", "krishna"],
+    features: [
+      "Immersive Worlds",
+      "Multiplayer Exploration",
+      "Dynamic Environments"
+    ],
+    whatsIncluded: [
+      "Free to Play on Roblox"
+    ],
+    requirements: [
+      "Roblox Player"
+    ]
+  },
+
+  // 8. Power Jump Challenge
+  {
+    id: "power-jump-challenge-roblox",
+    slug: "power-jump-challenge-roblox",
+    title: "⚡ Power Jump Challenge",
+    subtitle: "Roblox Parkour & Skill Game",
+    developer: "Krishna Ajaysing Patil",
+    platform: "Roblox",
+    genre: "Obby / Parkour",
+    price: 0,
+    discountPrice: 0,
+    buyLink: "https://www.roblox.com/games/131814858703149/Power-Jump-Challenge",
+    description: "Test your reflexes and timing in the Power Jump Challenge. Can you reach the end of this high-energy Roblox obstacle course?",
+    coverImage: "/assets/games/Power Jump.png",
+    images: [
+      "/assets/games/Power Jump.png",
+      "/assets/games/Power Jump 2.png",
+      "/assets/games/Power Jump Win.png"
+    ],
+    category: "roblox",
+    tags: ["games", "roblox", "parkour", "obby", "challenge"],
+    features: [
+      "Challenging Obstacles",
+      "Speedrunning Mechanics",
+      "Competitive Leaderboards"
+    ],
+    whatsIncluded: [
+      "Free to Play on Roblox"
+    ],
+    requirements: [
+      "Roblox Player"
+    ]
+  },
+
+  // 9. Obby Adventure Parkour
+  {
+    id: "obby-adventure-parkour-roblox",
+    slug: "obby-adventure-parkour-roblox",
+    title: "🏃 Obby Adventure Parkour",
+    subtitle: "Classic Roblox Obby Experience",
+    developer: "Krishna Ajaysing Patil",
+    platform: "Roblox",
+    genre: "Obby / Parkour",
+    price: 0,
+    discountPrice: 0,
+    buyLink: "https://www.roblox.com/games/103997615677142/Obby-Adventure-parkour",
+    description: "A fun and engaging parkour adventure designed for players of all skill levels. Jump, climb, and slide through creative levels in this Roblox Obby.",
+    coverImage: "/assets/games/Obby Adventure.png",
+    images: [
+      "/assets/games/Obby Adventure.png",
+      "/assets/games/Obby Adventure 1.png",
+      "/assets/games/Obby Adventure pourkour.png"
+    ],
+    category: "roblox",
+    tags: ["games", "roblox", "parkour", "obby", "adventure"],
+    features: [
+      "Creative Level Design",
+      "Accessible Gameplay",
+      "Fun for All Ages"
+    ],
+    whatsIncluded: [
+      "Free to Play on Roblox"
+    ],
+    requirements: [
+      "Roblox Player"
+    ]
   }
 ];
 
