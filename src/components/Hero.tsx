@@ -115,8 +115,8 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick }) => {
             marginBottom: '1.25rem'
           }}
         >
-          KRISHNAELITE.<br />
-          <span style={{ color: 'var(--primary)' }}>03 FLAGSHIP BOOKS.</span>
+          KRISHNA STORES.<br />
+          <span style={{ color: 'var(--primary)' }}>LEARN • PLAY • BUILD.</span>
         </h1>
 
         <p
@@ -129,9 +129,9 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick }) => {
             lineHeight: 1.5
           }}
         >
-          ₹2,096 Elite Mastery Bundle Value Anchored<br />
+          11 Premium Digital Products & Online Experiences<br />
           <span style={{ fontSize: '0.95rem', color: 'var(--text-muted)', fontWeight: 600 }}>
-            Krishna Ajaysing Rajput | Krishna Patil Rajput — 100% Authentic Digital Roadmaps
+            Curated by Krishna Patil Rajput
           </span>
         </p>
 

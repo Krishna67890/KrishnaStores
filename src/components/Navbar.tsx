@@ -57,8 +57,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}
         >
           <img
-            src="/important/KrishnaStoreslogo.png"
-            alt="KrishnaElite"
+            src="/important/KrishnaStores logo.png"
+            alt="KRISHNA STORES"
             className="krishna-logo"
           />
         </a>
@@ -91,7 +91,35 @@ export const Navbar: React.FC<NavbarProps> = ({
               transition: 'color 0.15s'
             }}
           >
-            <BookOpen size={16} /> Elite Mastery (03)
+            <BookOpen size={16} /> Bookstore (04)
+          </button>
+          <button
+            onClick={() => handleNavClick('roblox')}
+            style={{
+              fontSize: '0.9rem',
+              fontWeight: activeCategory === 'roblox' ? 700 : 600,
+              color: activeCategory === 'roblox' ? 'var(--primary)' : 'var(--text-muted)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              transition: 'color 0.15s'
+            }}
+          >
+            <Gamepad2 size={16} /> Games (03)
+          </button>
+          <button
+            onClick={() => handleNavClick('web')}
+            style={{
+              fontSize: '0.9rem',
+              fontWeight: activeCategory === 'web' ? 700 : 600,
+              color: activeCategory === 'web' ? 'var(--primary)' : 'var(--text-muted)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              transition: 'color 0.15s'
+            }}
+          >
+            <Code2 size={16} /> Web Dev (02)
           </button>
           <button
             onClick={() => handleNavClick('about')}
@@ -249,7 +277,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               gap: '10px'
             }}
           >
-            <Layers size={18} /> KrishnaElite Home
+            <Layers size={18} /> Home
           </button>
           <button
             onClick={() => handleNavClick('book')}
@@ -263,7 +291,35 @@ export const Navbar: React.FC<NavbarProps> = ({
               gap: '10px'
             }}
           >
-            <BookOpen size={18} /> Elite Mastery (03)
+            <BookOpen size={18} /> Bookstore (04)
+          </button>
+          <button
+            onClick={() => handleNavClick('roblox')}
+            style={{
+              padding: '10px 0',
+              fontSize: '1rem',
+              fontWeight: activeCategory === 'roblox' ? 700 : 600,
+              color: activeCategory === 'roblox' ? 'var(--primary)' : 'var(--text-main)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px'
+            }}
+          >
+            <Gamepad2 size={18} /> Games (03)
+          </button>
+          <button
+            onClick={() => handleNavClick('web')}
+            style={{
+              padding: '10px 0',
+              fontSize: '1rem',
+              fontWeight: activeCategory === 'web' ? 700 : 600,
+              color: activeCategory === 'web' ? 'var(--primary)' : 'var(--text-main)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px'
+            }}
+          >
+            <Code2 size={18} /> Webstore (02)
           </button>
           <button
             onClick={() => handleNavClick('about')}
@@ -277,7 +333,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               gap: '10px'
             }}
           >
-            <Info size={18} /> ABOUT THE CREATORS
+            <Info size={18} /> About
           </button>
           <button
             onClick={() => {

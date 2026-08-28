@@ -14,15 +14,26 @@ export const PRODUCTS: Product[] = [
     categoryLabel: 'EBOOK',
     priceINR: 75,
     priceDisplay: '₹75',
-    image: '/assets/web-roadmap-1.png',
-    coverImage: '/assets/web-roadmap-1.png',
+    image: '/assets/Digital Guide Thumbnail.png',
+    coverImage: '/assets/Digital Guide Thumbnail.png',
     gallery: [
-      '/assets/web-roadmap-1.png',
-      '/assets/web-roadmap-2.png'
+      '/assets/Digital Guide Thumbnail.png',
+      '/assets/Digital Guide 1.png',
+      '/assets/Digital Guide 2.png',
+      '/assets/Digital Guide 3.png',
+      '/assets/Digital Guide 4.png',
+      '/assets/Digital Guide 5.png',
+      '/assets/Digital Guide 6.png',
+      '/assets/Digital Guide 7.png'
     ],
     images: [
-      '/assets/web-roadmap-1.png',
-      '/assets/web-roadmap-2.png'
+      '/assets/Digital Guide 1.png',
+      '/assets/Digital Guide 2.png',
+      '/assets/Digital Guide 3.png',
+      '/assets/Digital Guide 4.png',
+      '/assets/Digital Guide 5.png',
+      '/assets/Digital Guide 6.png',
+      '/assets/Digital Guide 7.png'
     ],
     shortDescription: 'Essential digital security, privacy, and online protection handbook for developers and digital creators.',
     valueProp: 'Essential digital security and privacy handbook.',
@@ -109,8 +120,8 @@ export const PRODUCTS: Product[] = [
     categoryLabel: 'DEVELOPER GUIDE',
     priceINR: 299,
     priceDisplay: '₹299',
-    image: '/assets/android-native-2026.png',
-    coverImage: '/assets/android-native-2026.png',
+    image: '/assets/Android Native 2026 Thumbnail.png',
+    coverImage: '/assets/Android Native 2026 Thumbnail.png',
     gallery: [
       '/assets/Android Native 2026 Thumbnail.png',
       '/assets/Android Native React 1.png',
@@ -121,7 +132,6 @@ export const PRODUCTS: Product[] = [
     images: [
       '/assets/Android Native React 1.png',
       '/assets/Android Native React 2.png',
-      '/assets/android-native-2026.png',
       '/assets/android-react-1.png',
       '/assets/android-react-2.png'
     ],
@@ -321,8 +331,8 @@ export const PRODUCTS: Product[] = [
     categoryLabel: 'DEVELOPER GUIDE',
     priceINR: 94,
     priceDisplay: '₹94',
-    image: '/assets/web-dev-roadmap-2026.png',
-    coverImage: '/assets/web-dev-roadmap-2026.png',
+    image: '/assets/Web Development Fundamentals & Advanced Concepts (2026 Edition) Thumbnail.png',
+    coverImage: '/assets/Web Development Fundamentals & Advanced Concepts (2026 Edition) Thumbnail.png',
     gallery: [
       '/assets/Web Development Fundamentals & Advanced Concepts (2026 Edition) Thumbnail.png',
       '/assets/Web devlopment roadmap 1.png',
@@ -333,7 +343,6 @@ export const PRODUCTS: Product[] = [
     images: [
       '/assets/Web devlopment roadmap 1.png',
       '/assets/Web Devlopment Roadmap 2.png',
-      '/assets/web-dev-roadmap-2026.png',
       '/assets/web-roadmap-1.png',
       '/assets/web-roadmap-2.png'
     ],
