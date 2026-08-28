@@ -295,12 +295,19 @@ export const games: Game[] = [
     price: 0,
     discountPrice: 0,
     buyLink: "https://www.roblox.com/games/16555963621/EXPLORE-THE-WORLD",
-    description: "Embark on an epic journey across diverse landscapes in EXPLORE THE WORLD. A beautifully crafted Roblox experience featuring discovery and adventure.",
-    coverImage: "/assets/games/Explore World.png",
+    description: `Explore World
+
+Enter a vast world and begin your journey. Travel across different areas, explore the environment, and discover places you have never seen before.
+
+Take your time and explore the world.
+
+Developer: Krishna Patil Rajput
+Krishna Ajaysing Patil`,
+    coverImage: "/assets/Explore World.png",
     images: [
-      "/assets/games/Explore World.png",
-      "/assets/games/Explore World 2.png",
-      "/assets/games/Explore World 3.png"
+      "/assets/Explore World.png",
+      "/assets/Explore World 2.png",
+      "/assets/Explore World 3.png"
     ],
     category: "roblox",
     tags: ["games", "roblox", "adventure", "exploration", "krishna"],
@@ -329,12 +336,31 @@ export const games: Game[] = [
     price: 0,
     discountPrice: 0,
     buyLink: "https://www.roblox.com/games/131814858703149/Power-Jump-Challenge",
-    description: "Test your reflexes and timing in the Power Jump Challenge. Can you reach the end of this high-energy Roblox obstacle course?",
-    coverImage: "/assets/games/Power Jump.png",
+    description: `Power Jump Challenge
+
+How high can you jump?
+
+Start your journey and build your Jump Power as you play! Jump across challenging platforms, overcome obstacles, reach the goal, and become the ultimate jumper!
+
+FEATURES
+Jump Power increases over time
+Challenging Obby stages
+Reach the goal to win
+Skip Stage option
+Mobile-friendly gameplay
+More stages coming soon!
+
+Can you make it to the finish?
+
+Like & Favorite the game if you enjoy it!
+
+Developed by Krishna Patil Rajput
+Developer: Krishna Ajaysing Patil`,
+    coverImage: "/assets/Power Jump.png",
     images: [
-      "/assets/games/Power Jump.png",
-      "/assets/games/Power Jump 2.png",
-      "/assets/games/Power Jump Win.png"
+      "/assets/Power Jump.png",
+      "/assets/Power Jump 2.png",
+      "/assets/Power Jump Win.png"
     ],
     category: "roblox",
     tags: ["games", "roblox", "parkour", "obby", "challenge"],
@@ -363,12 +389,32 @@ export const games: Game[] = [
     price: 0,
     discountPrice: 0,
     buyLink: "https://www.roblox.com/games/103997615677142/Obby-Adventure-parkour",
-    description: "A fun and engaging parkour adventure designed for players of all skill levels. Jump, climb, and slide through creative levels in this Roblox Obby.",
-    coverImage: "/assets/games/Obby Adventure.png",
+    description: `🏆 Welcome to Ultimate Obby Challenge!
+
+Think you can reach the finish line? Test your jumping, timing, and parkour skills across challenging stages!
+
+🚩 Checkpoints
+🧱 Tricky Platforms
+⚡ Challenging Obstacles
+🏃 Fast-Paced Parkour
+🏆 Multiple Stages
+
+Challenge your friends, beat the stages, and see who can make it furthest!
+
+Can you complete the ultimate obby? 🔥
+
+❤️ Like the game
+⭐ Favorite the experience
+👥 Invite your friends
+
+👨‍💻 Developer: Krishna Patil Rajput
+By Krishna Ajaysing Patil`,
+    coverImage: "/assets/Obby Adventure.png",
     images: [
-      "/assets/games/Obby Adventure.png",
-      "/assets/games/Obby Adventure 1.png",
-      "/assets/games/Obby Adventure pourkour.png"
+      "/assets/Obby Adventure.png",
+      "/assets/Obby Adventure 1.png",
+      "/assets/Obby Adventure pourkour.png",
+      "/assets/Obby adventure Paourkour.png"
     ],
     category: "roblox",
     tags: ["games", "roblox", "parkour", "obby", "adventure"],
@@ -383,11 +429,9 @@ export const games: Game[] = [
     requirements: [
       "Roblox Player"
     ]
-  }
-];
+  },
 
-export const webProducts = [
-  // 7. Little Learners Hub
+  // 10. Little Learners Hub
   {
     id: "little-learners-hub",
     slug: "little-learners-hub",
@@ -402,12 +446,17 @@ export const webProducts = [
       "/assets/Little-Learners-Hub 1.png",
       "/assets/Little-Learners-Hub 2.png"
     ],
-    category: "Website Store",
+    category: "web",
     tags: ["web", "react", "edtech", "source-code"],
-    buyLink: "https://krishnapatilrajput.gumroad.com/l/littlelearnershub"
+    buyLink: "https://krishnapatilrajput.gumroad.com/l/littlelearnershub",
+    developer: "Krishna Patil Rajput",
+    platform: "Web Application",
+    features: ["Phonics & Alphabet Soundboard", "Interactive Math Quizzes", "Child-Friendly UI/UX"],
+    whatsIncluded: ["Full React + Tailwind Source Code", "Audio & Graphic Assets Pack"],
+    requirements: ["Node.js", "Text Editor"]
   },
 
-  // 8. LinkedIn Clone
+  // 11. LinkedIn Clone
   {
     id: "linkedin-clone-react",
     slug: "linkedin-clone-react",
@@ -424,11 +473,20 @@ export const webProducts = [
       "/assets/Linked in 4.png",
       "/assets/Linked in 5.png"
     ],
-    category: "Website Store",
+    category: "web",
     tags: ["web", "react", "full-stack", "social-network", "source-code"],
-    buyLink: "https://krishnapatilrajput.gumroad.com/l/linkedin-clone-react"
+    buyLink: "https://krishnapatilrajput.gumroad.com/l/linkedin-clone-react",
+    developer: "Krishna Patil Rajput",
+    platform: "React / Node / Firebase",
+    features: ["Real-time Feed", "Post Media Uploads", "Connection Requests"],
+    whatsIncluded: ["Frontend & Backend Source Code", "Deployment Guide"],
+    requirements: ["Firebase Account", "Node.js"]
   }
+
+
 ];
+
+export const webProducts = [];
 
 export const bundles = [
   {

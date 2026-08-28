@@ -823,17 +823,17 @@ export const PRODUCTS: Product[] = [
     categoryLabel: 'ROBLOX ONLINE (16+)',
     priceINR: 0,
     priceDisplay: 'FREE TO PLAY',
-    image: '/assets/Games/Explore World.png',
-    coverImage: '/assets/Games/Explore World.png',
+    image: '/assets/Explore World.png',
+    coverImage: '/assets/Explore World.png',
     gallery: [
-      '/assets/Games/Explore World.png',
-      '/assets/Games/Explore World 2.png',
-      '/assets/Games/Explore World 3.png'
+      '/assets/Explore World.png',
+      '/assets/Explore World 2.png',
+      '/assets/Explore World 3.png'
     ],
     images: [
-      '/assets/Games/Explore World.png',
-      '/assets/Games/Explore World 2.png',
-      '/assets/Games/Explore World 3.png'
+      '/assets/Explore World.png',
+      '/assets/Explore World 2.png',
+      '/assets/Explore World 3.png'
     ],
     shortDescription: 'Explore a vast world and begin your journey across different areas and environments.',
     valueProp: 'Immersive Roblox adventure experience by Krishna Patil.',
@@ -887,9 +887,7 @@ Krishna Ajaysing Patil`,
       delivery: 'Instant Roblox Link',
       purchasePlatform: 'Roblox'
     },
-    gumroadUrl: 'https://www.roblox.com/games/16555963621/EXPLORE-THE-WORLD',
     buyLink: 'https://www.roblox.com/games/16555963621/EXPLORE-THE-WORLD',
-    demoLink: 'https://www.roblox.com/games/16555963621/EXPLORE-THE-WORLD',
     tags: ['games', 'roblox', 'online', 'adventure', 'krishna'],
     developer: 'Krishna Ajaysing Patil',
     platform: 'Roblox',
@@ -912,17 +910,17 @@ Krishna Ajaysing Patil`,
     categoryLabel: 'ROBLOX ONLINE (16+)',
     priceINR: 0,
     priceDisplay: 'FREE TO PLAY',
-    image: '/assets/Games/Power Jump.png',
-    coverImage: '/assets/Games/Power Jump.png',
+    image: '/assets/Power Jump.png',
+    coverImage: '/assets/Power Jump.png',
     gallery: [
-      '/assets/Games/Power Jump.png',
-      '/assets/Games/Power Jump 2.png',
-      '/assets/Games/Power Jump Win.png'
+      '/assets/Power Jump.png',
+      '/assets/Power Jump 2.png',
+      '/assets/Power Jump Win.png'
     ],
     images: [
-      '/assets/Games/Power Jump.png',
-      '/assets/Games/Power Jump 2.png',
-      '/assets/Games/Power Jump Win.png'
+      '/assets/Power Jump.png',
+      '/assets/Power Jump 2.png',
+      '/assets/Power Jump Win.png'
     ],
     shortDescription: 'How high can you jump? Build your power and conquer challenging platforms in this intense Obby.',
     valueProp: 'Competitive Roblox Parkour challenge.',
@@ -988,9 +986,7 @@ Developer: Krishna Ajaysing Patil`,
       delivery: 'Instant Roblox Link',
       purchasePlatform: 'Roblox'
     },
-    gumroadUrl: 'https://www.roblox.com/games/131814858703149/Power-Jump-Challenge',
     buyLink: 'https://www.roblox.com/games/131814858703149/Power-Jump-Challenge',
-    demoLink: 'https://www.roblox.com/games/131814858703149/Power-Jump-Challenge',
     tags: ['games', 'roblox', 'online', 'parkour', 'skill'],
     developer: 'Krishna Ajaysing Patil',
     platform: 'Roblox',
@@ -1013,19 +1009,19 @@ Developer: Krishna Ajaysing Patil`,
     categoryLabel: 'ROBLOX ONLINE (16+)',
     priceINR: 0,
     priceDisplay: 'FREE TO PLAY',
-    image: '/assets/Games/Obby Adventure.png',
-    coverImage: '/assets/Games/Obby Adventure.png',
+    image: '/assets/Obby Adventure.png',
+    coverImage: '/assets/Obby Adventure.png',
     gallery: [
-      '/assets/Games/Obby Adventure.png',
-      '/assets/Games/Obby Adventure 1.png',
-      '/assets/Games/Obby Adventure pourkour.png',
-      '/assets/Games/Obby adventure Paourkour.png'
+      '/assets/Obby Adventure.png',
+      '/assets/Obby Adventure 1.png',
+      '/assets/Obby Adventure pourkour.png',
+      '/assets/Obby adventure Paourkour.png'
     ],
     images: [
-      '/assets/Games/Obby Adventure.png',
-      '/assets/Games/Obby Adventure 1.png',
-      '/assets/Games/Obby Adventure pourkour.png',
-      '/assets/Games/Obby adventure Paourkour.png'
+      '/assets/Obby Adventure.png',
+      '/assets/Obby Adventure 1.png',
+      '/assets/Obby Adventure pourkour.png',
+      '/assets/Obby adventure Paourkour.png'
     ],
     shortDescription: 'Test your jumping, timing, and parkour skills across challenging stages! Can you reach the finish line?',
     valueProp: 'Fun and creative Roblox Obby for all ages.',
@@ -1091,9 +1087,7 @@ By Krishna Ajaysing Patil`,
       delivery: 'Instant Roblox Link',
       purchasePlatform: 'Roblox'
     },
-    gumroadUrl: 'https://www.roblox.com/games/103997615677142/Obby-Adventure-parkour',
     buyLink: 'https://www.roblox.com/games/103997615677142/Obby-Adventure-parkour',
-    demoLink: 'https://www.roblox.com/games/103997615677142/Obby-Adventure-parkour',
     tags: ['games', 'roblox', 'online', 'parkour', 'adventure'],
     developer: 'Krishna Ajaysing Patil',
     platform: 'Roblox',
