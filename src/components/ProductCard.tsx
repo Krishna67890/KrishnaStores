@@ -250,7 +250,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               {product.priceDisplay}
             </span>
             <span style={{ fontSize: '0.65rem', fontWeight: 700, color: 'var(--accent-emerald)' }}>
-              ✓ Instant Access
+              {product.category === 'roblox' ? '✓ Play Instantly' : '✓ Instant Access'}
             </span>
           </div>
 
@@ -264,7 +264,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               gap: '4px'
             }}
           >
-            BUY NOW <ArrowRight size={14} style={{ transform: isHovered ? 'translateX(3px)' : 'translateX(0)', transition: 'transform 0.2s' }} />
+            {product.category === 'roblox' ? 'VIEW ON ROBLOX' : 'BUY NOW'} <ArrowRight size={14} style={{ transform: isHovered ? 'translateX(3px)' : 'translateX(0)', transition: 'transform 0.2s' }} />
           </span>
         </div>
       </div>

@@ -135,8 +135,9 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
   const isBook = product.category === 'book';
   const isGame = product.category === 'game';
   const isWeb = product.category === 'web';
+  const isRoblox = product.category === 'roblox';
 
-  const categoryName = isBook ? 'Bookstore' : isGame ? 'Gamestore' : 'Webstore';
+  const categoryName = isBook ? 'Bookstore' : isGame ? 'Gamestore' : isWeb ? 'Webstore' : 'Roblox Games';
 
   // Primary Purchase Link (Gumroad default, itch.io secondary if available)
   const primaryPurchaseUrl = product.gumroadUrl || product.buyLink;
@@ -153,24 +154,34 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
   // Dynamic FAQs
   const productFaqs = [
     {
-      q: `Is this a physical ${isBook ? 'book' : isGame ? 'game' : 'product'}?`,
-      a: `No. This is a 100% digital product. No physical package will be shipped.`
+      q: isRoblox ? `Is this a physical game?` : `Is this a physical ${isBook ? 'book' : isGame ? 'game' : 'product'}?`,
+      a: isRoblox
+        ? `No. This is an online Roblox game experience. You play it directly on the Roblox platform.`
+        : `No. This is a 100% digital product. No physical package will be shipped.`
     },
     {
-      q: 'Where do I complete my purchase?',
-      a: `Your purchase is securely processed and fulfilled through ${product.itchUrl ? 'official Gumroad or itch.io' : 'official Gumroad'} storefronts.`
+      q: isRoblox ? 'Where can I play this game?' : 'Where do I complete my purchase?',
+      a: isRoblox
+        ? `You can play this game instantly on the official Roblox platform using the link provided.`
+        : `Your purchase is securely processed and fulfilled through ${product.itchUrl ? 'official Gumroad or itch.io' : 'official Gumroad'} storefronts.`
     },
     {
       q: 'How much does it cost?',
-      a: `${product.priceDisplay}. This is a one-time purchase with lifetime access and zero subscription fees.`
+      a: isRoblox
+        ? `This game is FREE to play on Roblox! Some in-game items may be available for purchase with Robux.`
+        : `${product.priceDisplay}. This is a one-time purchase with lifetime access and zero subscription fees.`
     },
     {
-      q: 'How will I receive my product after purchase?',
-      a: `Immediately after checkout, you will receive an instant download link in your email and on the checkout confirmation screen.`
+      q: isRoblox ? 'How do I start playing?' : 'How will I receive my product after purchase?',
+      a: isRoblox
+        ? `Simply click the "VIEW ON ROBLOX" button, which will take you to the official game page. Click the Play button on Roblox to launch the game.`
+        : `Immediately after checkout, you will receive an instant download link in your email and on the checkout confirmation screen.`
     },
     {
-      q: 'What format is this product delivered in?',
-      a: isBook
+      q: isRoblox ? 'What platforms is this game on?' : 'What format is this product delivered in?',
+      a: isRoblox
+        ? 'This game can be played on any device that supports Roblox, including PC, Mac, iOS, Android, and Xbox.'
+        : isBook
         ? 'Delivered as a high-resolution PDF digital book suitable for reading on phone, tablet, or desktop.'
         : isGame
         ? 'Delivered as a ZIP archive containing all HTML5/WebGL source code files, graphics, and sound assets.'
@@ -232,7 +243,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
               className="btn-primary"
               style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem', gap: '6px' }}
             >
-              BUY NOW → <ExternalLink size={14} />
+              {isRoblox ? 'VIEW ON ROBLOX' : 'BUY NOW'} → <ExternalLink size={14} />
             </a>
           </div>
         </div>
@@ -376,7 +387,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
               <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
                 <div>
                   <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-muted)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                    ONE-TIME PURCHASE
+                    {isRoblox ? 'GAME STATUS' : 'ONE-TIME PURCHASE'}
                   </span>
                   <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--text-main)', lineHeight: 1.1 }}>
                     {product.priceDisplay}
@@ -395,10 +406,10 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
 
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', fontSize: '0.825rem', fontWeight: 600, color: 'var(--text-muted)', paddingTop: '0.5rem', borderTop: '1px solid var(--border-color)' }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--accent-emerald)' }}>
-                  <CheckCircle2 size={15} /> 100% Digital Product
+                  <CheckCircle2 size={15} /> {isRoblox ? 'Playable on Roblox' : '100% Digital Product'}
                 </span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <Zap size={15} color="var(--primary)" /> Instant Access via Gumroad
+                  <Zap size={15} color="var(--primary)" /> {isRoblox ? 'Play Instantly' : 'Instant Access via Gumroad'}
                 </span>
               </div>
             </div>
@@ -412,7 +423,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                 className="btn-primary"
                 style={{ width: '100%', padding: '1rem 1.5rem', fontSize: '1.1rem', fontWeight: 800, justifyContent: 'center', gap: '8px' }}
               >
-                BUY NOW → <ExternalLink size={18} />
+                {isRoblox ? 'VIEW ON ROBLOX' : 'BUY NOW'} → <ExternalLink size={18} />
               </a>
 
               {secondaryPurchaseUrl && (
@@ -453,10 +464,10 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
         <section className="gsap-detail-item" style={{ marginBottom: '4rem', backgroundColor: 'var(--bg-secondary)', borderRadius: '24px', padding: '2.5rem', border: '1px solid var(--border-color)' }}>
           <div style={{ textAlign: 'center', maxWidth: '650px', margin: '0 auto 2.25rem auto' }}>
             <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-              PRODUCT BENEFIT BREAKDOWN
+              {isRoblox ? 'GAME BENEFIT BREAKDOWN' : 'PRODUCT BENEFIT BREAKDOWN'}
             </span>
             <h2 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-main)', marginTop: '0.25rem' }}>
-              WHY SHOULD YOU BUY THIS?
+              {isRoblox ? 'WHY SHOULD YOU PLAY THIS?' : 'WHY SHOULD YOU BUY THIS?'}
             </h2>
           </div>
 
@@ -660,15 +671,15 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                 </tr>
                 <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
                   <td style={{ padding: '1rem 1.25rem', fontWeight: 700, color: 'var(--text-muted)' }}>Price</td>
-                  <td style={{ padding: '1rem 1.25rem', fontWeight: 800, color: 'var(--text-main)' }}>{product.priceDisplay} (One-Time)</td>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight: 800, color: 'var(--text-main)' }}>{product.priceDisplay} {isRoblox ? '' : '(One-Time)'}</td>
                 </tr>
                 <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
-                  <td style={{ padding: '1rem 1.25rem', fontWeight: 700, color: 'var(--text-muted)' }}>Purchase Platform</td>
-                  <td style={{ padding: '1rem 1.25rem', fontWeight: 700, color: 'var(--primary)' }}>{product.details.purchasePlatform || 'Gumroad'}</td>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight: 700, color: 'var(--text-muted)' }}>{isRoblox ? 'Game Platform' : 'Purchase Platform'}</td>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight: 700, color: 'var(--primary)' }}>{product.details.purchasePlatform || (isRoblox ? 'Roblox' : 'Gumroad')}</td>
                 </tr>
                 <tr>
-                  <td style={{ padding: '1rem 1.25rem', fontWeight: 700, color: 'var(--text-muted)' }}>Physical product shipped?</td>
-                  <td style={{ padding: '1rem 1.25rem', fontWeight: 700, color: 'var(--text-main)' }}>No — Instant digital download</td>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight: 700, color: 'var(--text-muted)' }}>{isRoblox ? 'Online Multiplayer?' : 'Physical product shipped?'}</td>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight: 700, color: 'var(--text-main)' }}>{isRoblox ? 'Yes — Play with friends' : 'No — Instant digital download'}</td>
                 </tr>
               </tbody>
             </table>
@@ -823,7 +834,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '0.85rem' }}>
             <Info size={22} color="#D97706" />
             <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#92400E' }}>
-              BEFORE YOU BUY — TRANSPARENT DETAILS
+              {isRoblox ? 'BEFORE YOU PLAY — KEY DETAILS' : 'BEFORE YOU BUY — TRANSPARENT DETAILS'}
             </h3>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
@@ -881,7 +892,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
           }}
         >
           <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#38BDF8', letterSpacing: '0.1em' }}>
-            WHERE WILL I BUY IT?
+            {isRoblox ? 'WHERE CAN I PLAY IT?' : 'WHERE WILL I BUY IT?'}
           </span>
           <h2 style={{ fontSize: '2.25rem', fontWeight: 900, margin: '0.5rem 0 1rem 0' }}>
             {product.title}
@@ -898,10 +909,10 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
               className="btn-primary"
               style={{ padding: '1rem 2.5rem', fontSize: '1.1rem', backgroundColor: '#2563EB', gap: '8px' }}
             >
-              BUY ON GUMROAD ↗ <ExternalLink size={18} />
+              {isRoblox ? 'VIEW ON ROBLOX' : 'BUY ON GUMROAD'} ↗ <ExternalLink size={18} />
             </a>
 
-            {secondaryPurchaseUrl && (
+            {secondaryPurchaseUrl && !isRoblox && (
               <a
                 href={secondaryPurchaseUrl}
                 target="_blank"
@@ -914,7 +925,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
             )}
           </div>
           <p style={{ fontSize: '0.85rem', color: '#94A3B8', marginTop: '1.5rem' }}>
-            Secure payment & instant digital delivery via official platform checkout.
+            {isRoblox ? 'Play instantly on the official Roblox platform.' : 'Secure payment & instant digital delivery via official platform checkout.'}
           </p>
         </section>
 
@@ -980,10 +991,10 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
         {/* 34. STILL HAVE QUESTIONS? (FINAL CTA) */}
         <section className="gsap-detail-item" style={{ marginBottom: '4rem', backgroundColor: 'var(--bg-secondary)', borderRadius: '20px', padding: '2.5rem', border: '1px solid var(--border-color)', textAlign: 'center' }}>
           <h3 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '0.5rem' }}>
-            STILL HAVE QUESTIONS?
+            {isRoblox ? 'READY TO PLAY?' : 'STILL HAVE QUESTIONS?'}
           </h3>
           <p style={{ fontSize: '0.925rem', color: 'var(--text-muted)', maxWidth: '550px', margin: '0 auto 1.5rem auto' }}>
-            Explore the product details above or visit the official purchase platform for complete product information.
+            {isRoblox ? 'Join thousands of players in the game today. Click below to start your adventure on Roblox.' : 'Explore the product details above or visit the official purchase platform for complete product information.'}
           </p>
           <a
             href={primaryPurchaseUrl}
@@ -992,7 +1003,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
             className="btn-primary"
             style={{ padding: '0.85rem 2rem', fontSize: '1rem', display: 'inline-flex', gap: '8px' }}
           >
-            VIEW PURCHASE PAGE → <ExternalLink size={16} />
+            {isRoblox ? 'PLAY ON ROBLOX' : 'VIEW PURCHASE PAGE'} → <ExternalLink size={16} />
           </a>
         </section>
 
@@ -1142,7 +1153,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
           className="btn-primary"
           style={{ padding: '0.7rem 1.75rem', fontSize: '0.95rem', fontWeight: 800 }}
         >
-          BUY NOW →
+          {isRoblox ? 'VIEW ON ROBLOX' : 'BUY NOW'} →
         </a>
       </div>
 

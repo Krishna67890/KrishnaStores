@@ -811,7 +811,7 @@ export const PRODUCTS: Product[] = [
     title: '🌍 EXPLORE THE WORLD',
     subtitle: 'Roblox Adventure Game by Krishna Patil',
     category: 'roblox',
-    categoryLabel: 'ROBLOX ONLINE',
+    categoryLabel: 'ROBLOX ONLINE (16+)',
     priceINR: 0,
     priceDisplay: 'FREE TO PLAY',
     image: '/assets/Games/Explore World.png',
@@ -826,9 +826,16 @@ export const PRODUCTS: Product[] = [
       '/assets/Games/Explore World 2.png',
       '/assets/Games/Explore World 3.png'
     ],
-    shortDescription: 'Embark on an epic journey across diverse landscapes. A beautifully crafted Roblox experience featuring discovery and adventure.',
+    shortDescription: 'Explore a vast world and begin your journey across different areas and environments.',
     valueProp: 'Immersive Roblox adventure experience by Krishna Patil.',
-    description: 'Explore the World is a high-fidelity Roblox adventure game where players can discover hidden secrets, complete quests, and enjoy stunning vistas across multiple biomes.',
+    description: `Explore World
+
+Enter a vast world and begin your journey. Travel across different areas, explore the environment, and discover places you have never seen before.
+
+Take your time and explore the world.
+
+Developer: Krishna Patil Rajput
+Krishna Ajaysing Patil`,
     benefits: [
       { number: '01', title: 'Epic Exploration', desc: 'Discover a vast world filled with unique environments.' },
       { number: '02', title: 'Community Play', desc: 'Join thousands of players in a shared online universe.' },
@@ -893,7 +900,7 @@ export const PRODUCTS: Product[] = [
     title: '⚡ Power Jump Challenge',
     subtitle: 'Roblox Parkour & Skill Game',
     category: 'roblox',
-    categoryLabel: 'ROBLOX ONLINE',
+    categoryLabel: 'ROBLOX ONLINE (16+)',
     priceINR: 0,
     priceDisplay: 'FREE TO PLAY',
     image: '/assets/Games/Power Jump.png',
@@ -908,9 +915,28 @@ export const PRODUCTS: Product[] = [
       '/assets/Games/Power Jump 2.png',
       '/assets/Games/Power Jump Win.png'
     ],
-    shortDescription: 'Test your reflexes and timing in this high-energy Roblox obstacle course. Can you reach the end?',
+    shortDescription: 'How high can you jump? Build your power and conquer challenging platforms in this intense Obby.',
     valueProp: 'Competitive Roblox Parkour challenge.',
-    description: 'Power Jump Challenge is an intense Obby (obstacle course) that tests your precision and speed. With multiple levels of increasing difficulty, it is the ultimate test for parkour fans.',
+    description: `Power Jump Challenge
+
+How high can you jump?
+
+Start your journey and build your Jump Power as you play! Jump across challenging platforms, overcome obstacles, reach the goal, and become the ultimate jumper!
+
+FEATURES
+Jump Power increases over time
+Challenging Obby stages
+Reach the goal to win
+Skip Stage option
+Mobile-friendly gameplay
+More stages coming soon!
+
+Can you make it to the finish?
+
+Like & Favorite the game if you enjoy it!
+
+Developed by Krishna Patil Rajput
+Developer: Krishna Ajaysing Patil`,
     benefits: [
       { number: '01', title: 'Reflex Testing', desc: 'Sharpen your timing and movement precision.' },
       { number: '02', title: 'Global Leaderboards', desc: 'Compete with players worldwide for the fastest completion time.' },
@@ -975,7 +1001,7 @@ export const PRODUCTS: Product[] = [
     title: '🏃 Obby Adventure Parkour',
     subtitle: 'Classic Roblox Obby Experience',
     category: 'roblox',
-    categoryLabel: 'ROBLOX ONLINE',
+    categoryLabel: 'ROBLOX ONLINE (16+)',
     priceINR: 0,
     priceDisplay: 'FREE TO PLAY',
     image: '/assets/Games/Obby Adventure.png',
@@ -983,16 +1009,37 @@ export const PRODUCTS: Product[] = [
     gallery: [
       '/assets/Games/Obby Adventure.png',
       '/assets/Games/Obby Adventure 1.png',
-      '/assets/Games/Obby Adventure pourkour.png'
+      '/assets/Games/Obby Adventure pourkour.png',
+      '/assets/Games/Obby adventure Paourkour.png'
     ],
     images: [
       '/assets/Games/Obby Adventure.png',
       '/assets/Games/Obby Adventure 1.png',
-      '/assets/Games/Obby Adventure pourkour.png'
+      '/assets/Games/Obby Adventure pourkour.png',
+      '/assets/Games/Obby adventure Paourkour.png'
     ],
-    shortDescription: 'A fun and engaging parkour adventure designed for players of all skill levels. Jump, climb, and slide through creative levels.',
+    shortDescription: 'Test your jumping, timing, and parkour skills across challenging stages! Can you reach the finish line?',
     valueProp: 'Fun and creative Roblox Obby for all ages.',
-    description: 'Obby Adventure Parkour offers a balanced mix of platforming challenges and creative world design. Perfect for relaxing gameplay or racing with friends.',
+    description: `🏆 Welcome to Ultimate Obby Challenge!
+
+Think you can reach the finish line? Test your jumping, timing, and parkour skills across challenging stages!
+
+🚩 Checkpoints
+🧱 Tricky Platforms
+⚡ Challenging Obstacles
+🏃 Fast-Paced Parkour
+🏆 Multiple Stages
+
+Challenge your friends, beat the stages, and see who can make it furthest!
+
+Can you complete the ultimate obby? 🔥
+
+❤️ Like the game
+⭐ Favorite the experience
+👥 Invite your friends
+
+👨‍💻 Developer: Krishna Patil Rajput
+By Krishna Ajaysing Patil`,
     benefits: [
       { number: '01', title: 'Creative Levels', desc: 'Play through unique, artistically designed stages.' },
       { number: '02', title: 'Friendly Gameplay', desc: 'Accessible to beginners while still fun for pros.' },
