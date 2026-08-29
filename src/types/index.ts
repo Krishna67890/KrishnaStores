@@ -19,6 +19,7 @@ export interface Product extends Partial<StoreProduct> {
   coverImage?: string;
   buyLink?: string;
   demoLink?: string;
+  youtubeUrl?: string;
   aiVoice?: string;
   whyWritten?: string;
   images?: string[];
@@ -52,6 +53,7 @@ export interface Game extends Product {
   requirements: string[];
   genre: string;
   images?: string[];
+  youtubeUrl?: string;
 }
 
 export interface User {

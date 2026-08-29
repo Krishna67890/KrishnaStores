@@ -48,6 +48,7 @@ export interface Product {
   coverImage?: string;
   buyLink?: string;
   demoLink?: string;
+  youtubeUrl?: string;
   images?: string[];
   developer?: string;
   platform?: string;

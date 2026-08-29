@@ -39,6 +39,7 @@ try {
   console.log('Starting asset copy...');
   copyFiles(assetsDir, publicAssetsDir);
   copyFiles(gamesAssetsDir, publicAssetsDir);
+  copyFiles(gamesAssetsDir, path.join(publicAssetsDir, 'Games'));
   console.log('Asset copy complete.');
 } catch (error) {
   console.error('❌ Error copying assets:', error.message);

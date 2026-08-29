@@ -32,6 +32,30 @@ try {
   if (!found) {
     console.warn('⚠️ Warning: Logo not found in assets/ folder.');
   }
+
+  // Copy assets and assets/Games to public/assets and public/assets/Games
+  const assetsDir = path.resolve(rootDir, 'assets');
+  const gamesAssetsDir = path.resolve(rootDir, 'assets/Games');
+  const publicAssetsDir = path.resolve(rootDir, 'public/assets');
+  const publicGamesAssetsDir = path.resolve(rootDir, 'public/assets/Games');
+
+  function copyFolderFiles(srcDir, destDir) {
+    if (!fs.existsSync(srcDir)) return;
+    if (!fs.existsSync(destDir)) fs.mkdirSync(destDir, { recursive: true });
+    const files = fs.readdirSync(srcDir);
+    for (const file of files) {
+      const srcPath = path.join(srcDir, file);
+      const destPath = path.join(destDir, file);
+      if (!fs.lstatSync(srcPath).isDirectory()) {
+        fs.copyFileSync(srcPath, destPath);
+      }
+    }
+  }
+
+  copyFolderFiles(assetsDir, publicAssetsDir);
+  copyFolderFiles(gamesAssetsDir, publicAssetsDir);
+  copyFolderFiles(gamesAssetsDir, publicGamesAssetsDir);
+  console.log('✓ Copied Games assets to public/assets/Games/');
 } catch (error) {
   console.error('❌ Error in copy-logo script:', error.message);
 }

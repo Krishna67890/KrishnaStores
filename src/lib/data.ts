@@ -295,7 +295,8 @@ export const games: Game[] = [
     price: 0,
     discountPrice: 0,
     buyLink: "https://www.roblox.com/games/16555963621/EXPLORE-THE-WORLD",
-    description: `Explore World
+    description: `Description
+Explore World
 
 Enter a vast world and begin your journey. Travel across different areas, explore the environment, and discover places you have never seen before.
 
@@ -303,11 +304,11 @@ Take your time and explore the world.
 
 Developer: Krishna Patil Rajput
 Krishna Ajaysing Patil`,
-    coverImage: "/assets/Explore World.png",
+    coverImage: "/assets/Games/Explore World.png",
     images: [
-      "/assets/Explore World.png",
-      "/assets/Explore World 2.png",
-      "/assets/Explore World 3.png"
+      "/assets/Games/Explore World.png",
+      "/assets/Games/Explore World 2.png",
+      "/assets/Games/Explore World 3.png"
     ],
     category: "roblox",
     tags: ["games", "roblox", "adventure", "exploration", "krishna"],
@@ -338,9 +339,9 @@ Krishna Ajaysing Patil`,
     buyLink: "https://www.roblox.com/games/131814858703149/Power-Jump-Challenge",
     description: `Power Jump Challenge
 
-How high can you jump?
+How high can you jump? 
 
-Start your journey and build your Jump Power as you play! Jump across challenging platforms, overcome obstacles, reach the goal, and become the ultimate jumper!
+Start your journey and build your Jump Power as you play! Jump across challenging platforms, overcome obstacles, reach the goal, and become the ultimate jumper! 
 
 FEATURES
 Jump Power increases over time
@@ -356,11 +357,11 @@ Like & Favorite the game if you enjoy it!
 
 Developed by Krishna Patil Rajput
 Developer: Krishna Ajaysing Patil`,
-    coverImage: "/assets/Power Jump.png",
+    coverImage: "/assets/Games/Power Jump.png",
     images: [
-      "/assets/Power Jump.png",
-      "/assets/Power Jump 2.png",
-      "/assets/Power Jump Win.png"
+      "/assets/Games/Power Jump.png",
+      "/assets/Games/Power Jump 2.png",
+      "/assets/Games/Power Jump Win.png"
     ],
     category: "roblox",
     tags: ["games", "roblox", "parkour", "obby", "challenge"],
@@ -389,7 +390,8 @@ Developer: Krishna Ajaysing Patil`,
     price: 0,
     discountPrice: 0,
     buyLink: "https://www.roblox.com/games/103997615677142/Obby-Adventure-parkour",
-    description: `🏆 Welcome to Ultimate Obby Challenge!
+    youtubeUrl: "https://youtu.be/sIULNwd_dMY",
+    description: `Welcome to Ultimate Obby Challenge!
 
 Think you can reach the finish line? Test your jumping, timing, and parkour skills across challenging stages!
 
@@ -409,12 +411,12 @@ Can you complete the ultimate obby? 🔥
 
 👨‍💻 Developer: Krishna Patil Rajput
 By Krishna Ajaysing Patil`,
-    coverImage: "/assets/Obby Adventure.png",
+    coverImage: "/assets/Games/Obby Adventure.png",
     images: [
-      "/assets/Obby Adventure.png",
-      "/assets/Obby Adventure 1.png",
-      "/assets/Obby Adventure pourkour.png",
-      "/assets/Obby adventure Paourkour.png"
+      "/assets/Games/Obby Adventure.png",
+      "/assets/Games/Obby Adventure 1.png",
+      "/assets/Games/Obby Adventure pourkour.png",
+      "/assets/Games/Obby adventure Paourkour.png"
     ],
     category: "roblox",
     tags: ["games", "roblox", "parkour", "obby", "adventure"],

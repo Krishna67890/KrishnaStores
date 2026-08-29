@@ -19,6 +19,19 @@ interface GameDetailClientProps {
 
 export default function GameDetailClient({ game }: GameDetailClientProps) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const isRoblox = game.category === 'roblox' || game.platform === 'Roblox';
+
+  const getYouTubeEmbedUrl = (url?: string) => {
+    if (!url) return null;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    if (match && match[2].length === 11) {
+      return `https://www.youtube.com/embed/${match[2]}`;
+    }
+    return url;
+  };
+
   return (
     <div className="pt-32 pb-20 min-h-screen bg-[#030303] relative overflow-hidden">
       {/* Dynamic Background Elements */}
@@ -72,7 +85,7 @@ export default function GameDetailClient({ game }: GameDetailClientProps) {
                 >
                   <ExternalLink className="w-6 h-6 group-hover:scale-110 transition-transform" />
                   <span className="text-lg font-black uppercase tracking-tighter">
-                    Buy Now • {formatPrice((game.discountPrice || game.price) ?? 0)}
+                    {isRoblox ? 'PLAY ON ROBLOX • FREE' : `Buy Now • ${formatPrice((game.discountPrice || game.price) ?? 0)}`}
                   </span>
                 </a>
                 <button className="w-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors">
@@ -83,10 +96,10 @@ export default function GameDetailClient({ game }: GameDetailClientProps) {
               {/* Quick Specs */}
               <div className="grid grid-cols-2 gap-4 mb-10">
                 {[
-                  { icon: Terminal, label: "Language", value: "JavaScript" },
+                  { icon: Terminal, label: "Language", value: isRoblox ? "Lua / Roblox" : "JavaScript" },
                   { icon: Globe, label: "Platform", value: game.platform },
-                  { icon: Cpu, label: "Engine", value: "HTML5/CSS" },
-                  { icon: Share2, label: "Source", value: "Full Code" }
+                  { icon: Cpu, label: "Engine", value: isRoblox ? "Roblox Engine" : "HTML5/CSS" },
+                  { icon: Share2, label: "Access", value: isRoblox ? "Free Online" : "Full Code" }
                 ].map((spec, i: number) => (
                   <div key={i} className="p-5 rounded-2xl bg-white/5 border border-white/10">
                     <spec.icon className="w-5 h-5 text-primary mb-3" />
@@ -98,15 +111,20 @@ export default function GameDetailClient({ game }: GameDetailClientProps) {
 
               <div className="p-8 rounded-3xl bg-primary/10 border border-primary/20">
                 <h4 className="text-xs font-black uppercase tracking-widest text-primary mb-6 flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4" /> Why Source Code?
+                  <ShieldCheck className="w-4 h-4" /> {isRoblox ? 'Roblox Experience' : 'Why Source Code?'}
                 </h4>
                 <ul className="space-y-4">
-                  {[
+                  {(isRoblox ? [
+                    "Free to Play online on Roblox",
+                    "Play on PC, Mobile, and Console",
+                    "Created by Krishna Patil",
+                    "Regular game updates & events"
+                  ] : [
                     "100% Ownership of files",
                     "Perfect for Learning & Portfolio",
                     "Easy to customize & reskin",
                     "No monthly subscription fees"
-                  ].map((item: string, i: number) => (
+                  ]).map((item: string, i: number) => (
                     <li key={i} className="flex items-center gap-3 text-sm font-bold text-white/70">
                       <CheckCircle2 className="w-4 h-4 text-primary" /> {item}
                     </li>
@@ -178,6 +196,24 @@ export default function GameDetailClient({ game }: GameDetailClientProps) {
                   ))}
                 </div>
               </div>
+
+              {/* Gameplay Video */}
+              {game.youtubeUrl && (
+                <div className="mb-16">
+                  <h2 className="text-3xl font-black mb-10 italic uppercase flex items-center gap-4 text-white">
+                    <Play className="w-6 h-6 text-primary fill-primary" /> Gameplay Video
+                  </h2>
+                  <div className="rounded-[2.5rem] overflow-hidden border border-white/10 aspect-video shadow-2xl bg-black">
+                    <iframe
+                      src={getYouTubeEmbedUrl(game.youtubeUrl) || ''}
+                      title={`${game.title} Video`}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="w-full h-full border-0"
+                    />
+                  </div>
+                </div>
+              )}
 
               {/* Game Screenshots Gallery */}
               {game.images && game.images.length > 0 && (

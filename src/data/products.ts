@@ -802,8 +802,6 @@ export const PRODUCTS: Product[] = [
     discountPrice: 957,
     rating: 5.0,
     reviewsCount: 142,
-    pages: 'Full Stack App',
-    language: 'English',
     format: ['Source Code', 'React', 'Node/Firebase'],
     isBestseller: true,
     isNew: true,
@@ -823,21 +821,22 @@ export const PRODUCTS: Product[] = [
     categoryLabel: 'ROBLOX ONLINE (16+)',
     priceINR: 0,
     priceDisplay: 'FREE TO PLAY',
-    image: '/assets/Explore World.png',
-    coverImage: '/assets/Explore World.png',
+    image: '/assets/Games/Explore World.png',
+    coverImage: '/assets/Games/Explore World.png',
     gallery: [
-      '/assets/Explore World.png',
-      '/assets/Explore World 2.png',
-      '/assets/Explore World 3.png'
+      '/assets/Games/Explore World.png',
+      '/assets/Games/Explore World 2.png',
+      '/assets/Games/Explore World 3.png'
     ],
     images: [
-      '/assets/Explore World.png',
-      '/assets/Explore World 2.png',
-      '/assets/Explore World 3.png'
+      '/assets/Games/Explore World.png',
+      '/assets/Games/Explore World 2.png',
+      '/assets/Games/Explore World 3.png'
     ],
     shortDescription: 'Explore a vast world and begin your journey across different areas and environments.',
     valueProp: 'Immersive Roblox adventure experience by Krishna Patil.',
-    description: `Explore World
+    description: `Description
+Explore World
 
 Enter a vast world and begin your journey. Travel across different areas, explore the environment, and discover places you have never seen before.
 
@@ -894,7 +893,7 @@ Krishna Ajaysing Patil`,
     genre: 'Adventure / Exploration',
     publishedDate: '2024',
     hoursSaved: 'Infinite Fun',
-    estimatedValue: 'Premium Experience'
+    estimatedValue: 'Free Experience'
   },
 
   // -------------------------------------------------------------
@@ -910,25 +909,25 @@ Krishna Ajaysing Patil`,
     categoryLabel: 'ROBLOX ONLINE (16+)',
     priceINR: 0,
     priceDisplay: 'FREE TO PLAY',
-    image: '/assets/Power Jump.png',
-    coverImage: '/assets/Power Jump.png',
+    image: '/assets/Games/Power Jump.png',
+    coverImage: '/assets/Games/Power Jump.png',
     gallery: [
-      '/assets/Power Jump.png',
-      '/assets/Power Jump 2.png',
-      '/assets/Power Jump Win.png'
+      '/assets/Games/Power Jump.png',
+      '/assets/Games/Power Jump 2.png',
+      '/assets/Games/Power Jump Win.png'
     ],
     images: [
-      '/assets/Power Jump.png',
-      '/assets/Power Jump 2.png',
-      '/assets/Power Jump Win.png'
+      '/assets/Games/Power Jump.png',
+      '/assets/Games/Power Jump 2.png',
+      '/assets/Games/Power Jump Win.png'
     ],
     shortDescription: 'How high can you jump? Build your power and conquer challenging platforms in this intense Obby.',
     valueProp: 'Competitive Roblox Parkour challenge.',
     description: `Power Jump Challenge
 
-How high can you jump?
+How high can you jump? 
 
-Start your journey and build your Jump Power as you play! Jump across challenging platforms, overcome obstacles, reach the goal, and become the ultimate jumper!
+Start your journey and build your Jump Power as you play! Jump across challenging platforms, overcome obstacles, reach the goal, and become the ultimate jumper! 
 
 FEATURES
 Jump Power increases over time
@@ -993,7 +992,7 @@ Developer: Krishna Ajaysing Patil`,
     genre: 'Obby / Parkour',
     publishedDate: '2024',
     hoursSaved: 'Speedrun Ready',
-    estimatedValue: 'Skill Challenge'
+    estimatedValue: 'Free Experience'
   },
 
   // -------------------------------------------------------------
@@ -1009,23 +1008,24 @@ Developer: Krishna Ajaysing Patil`,
     categoryLabel: 'ROBLOX ONLINE (16+)',
     priceINR: 0,
     priceDisplay: 'FREE TO PLAY',
-    image: '/assets/Obby Adventure.png',
-    coverImage: '/assets/Obby Adventure.png',
+    image: '/assets/Games/Obby Adventure.png',
+    coverImage: '/assets/Games/Obby Adventure.png',
     gallery: [
-      '/assets/Obby Adventure.png',
-      '/assets/Obby Adventure 1.png',
-      '/assets/Obby Adventure pourkour.png',
-      '/assets/Obby adventure Paourkour.png'
+      '/assets/Games/Obby Adventure.png',
+      '/assets/Games/Obby Adventure 1.png',
+      '/assets/Games/Obby Adventure pourkour.png',
+      '/assets/Games/Obby adventure Paourkour.png'
     ],
     images: [
-      '/assets/Obby Adventure.png',
-      '/assets/Obby Adventure 1.png',
-      '/assets/Obby Adventure pourkour.png',
-      '/assets/Obby adventure Paourkour.png'
+      '/assets/Games/Obby Adventure.png',
+      '/assets/Games/Obby Adventure 1.png',
+      '/assets/Games/Obby Adventure pourkour.png',
+      '/assets/Games/Obby adventure Paourkour.png'
     ],
+    youtubeUrl: 'https://youtu.be/sIULNwd_dMY',
     shortDescription: 'Test your jumping, timing, and parkour skills across challenging stages! Can you reach the finish line?',
     valueProp: 'Fun and creative Roblox Obby for all ages.',
-    description: `🏆 Welcome to Ultimate Obby Challenge!
+    description: `Welcome to Ultimate Obby Challenge!
 
 Think you can reach the finish line? Test your jumping, timing, and parkour skills across challenging stages!
 
@@ -1094,7 +1094,7 @@ By Krishna Ajaysing Patil`,
     genre: 'Obby / Parkour',
     publishedDate: '2024',
     hoursSaved: 'Endless Adventure',
-    estimatedValue: 'Creative Fun'
+    estimatedValue: 'Free Experience'
   }
 ];
 

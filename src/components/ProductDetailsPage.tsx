@@ -137,6 +137,16 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
   const isWeb = product.category === 'web';
   const isRoblox = product.category === 'roblox';
 
+  const getYouTubeEmbedUrl = (url?: string) => {
+    if (!url) return null;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    if (match && match[2].length === 11) {
+      return `https://www.youtube.com/embed/${match[2]}`;
+    }
+    return url;
+  };
+
   const categoryName = isBook ? 'Bookstore' : isGame ? 'Gamestore' : isWeb ? 'Webstore' : 'Roblox Games';
 
   // Primary Purchase Link (Gumroad default, itch.io secondary if available)
@@ -528,6 +538,42 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
             )}
           </div>
         </section>
+
+        {/* GAMEPLAY VIDEO SECTION */}
+        {product.youtubeUrl && (
+          <section className="gsap-detail-item" style={{ marginBottom: '4rem' }}>
+            <h2 style={{ fontSize: '1.65rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              🎬 GAMEPLAY VIDEO
+            </h2>
+            <div
+              style={{
+                position: 'relative',
+                paddingBottom: '56.25%',
+                height: 0,
+                overflow: 'hidden',
+                borderRadius: '20px',
+                border: '1px solid var(--border-color)',
+                backgroundColor: 'var(--bg-secondary)',
+                boxShadow: 'var(--shadow-card)'
+              }}
+            >
+              <iframe
+                src={getYouTubeEmbedUrl(product.youtubeUrl) || ''}
+                title={`${product.title} Gameplay Video`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  border: 0
+                }}
+              />
+            </div>
+          </section>
+        )}
 
         {/* 9. "WHY YOU MIGHT LIKE THIS" SECTION */}
         <section className="gsap-detail-item" style={{ marginBottom: '4rem' }}>
