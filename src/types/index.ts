@@ -51,7 +51,7 @@ export interface Game extends Product {
   features: string[];
   whatsIncluded: string[];
   requirements: string[];
-  genre: string;
+  genre?: string;
   images?: string[];
   youtubeUrl?: string;
 }

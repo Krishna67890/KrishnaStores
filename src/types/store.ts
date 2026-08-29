@@ -38,7 +38,7 @@ export interface Product {
     mayNotBe: string[];
   };
   details: ProductDetails;
-  gumroadUrl: string;
+  gumroadUrl?: string;
   itchUrl?: string;
   tags: string[];
   featured?: boolean;
