@@ -1,43 +1,29 @@
-import { useState, useEffect } from 'react';
+import { useAuthStore } from '@/store/useAuthStore';
 import { auth, db } from '@/lib/firebase';
-import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
-import { User } from '@/types';
+import { signOut, sendPasswordResetEmail } from 'firebase/auth';
 
 export function useAuth() {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { user, isAuthenticated, loading, setUser, setLoading, logout: storeLogout } = useAuthStore();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        // Fetch additional user data from Firestore
-        const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
-        if (userDoc.exists()) {
-          setUser({
-            uid: firebaseUser.uid,
-            email: firebaseUser.email!,
-            displayName: firebaseUser.displayName || 'User',
-            photoURL: firebaseUser.photoURL || undefined,
-            role: userDoc.data().role || 'user',
-          });
-        } else {
-          // Fallback if doc doesn't exist yet
-          setUser({
-            uid: firebaseUser.uid,
-            email: firebaseUser.email!,
-            displayName: firebaseUser.displayName || 'User',
-            role: 'user',
-          });
-        }
-      } else {
-        setUser(null);
-      }
-      setLoading(false);
-    });
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      storeLogout();
+    } catch (error) {
+      console.error('Logout error:', error);
+      storeLogout();
+    }
+  };
 
-    return () => unsubscribe();
-  }, []);
+  const handleResetPassword = async (email: string) => {
+    return sendPasswordResetEmail(auth, email);
+  };
 
-  return { user, loading };
+  return {
+    user,
+    isAuthenticated,
+    loading,
+    logout: handleLogout,
+    resetPassword: handleResetPassword
+  };
 }

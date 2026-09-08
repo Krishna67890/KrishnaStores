@@ -143,17 +143,24 @@ const ProductCard = ({ product, className }: ProductCardProps) => {
             >
               <ArrowUpRight className="w-4 h-4" />
             </Link>
-            <a
-              href={product.gumroadUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (product.category === 'personal') {
+                  // Trigger Razorpay logic (should be handled in ProductDetailsPage or a hook)
+                  window.location.href = `/products/${product.slug}?checkout=true`;
+                } else if (product.gumroadUrl) {
+                  window.open(product.gumroadUrl, "_blank", "noopener,noreferrer");
+                }
+              }}
               className={cn(
                 "flex items-center gap-2 px-5 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all shadow-lg active:scale-95",
                 "bg-blue-600 text-white hover:bg-blue-500 shadow-blue-900/20"
               )}
             >
-              GET <ExternalLink className="w-3 h-3" />
-            </a>
+              BUY NOW <ArrowUpRight className="w-3 h-3" />
+            </button>
           </div>
         </div>
       </div>

@@ -14,13 +14,20 @@ import { Product, CategoryFilter } from './types/store';
 import { Search, RotateCcw } from 'lucide-react';
 import gsap from 'gsap';
 
-export const App: React.FC = () => {
+import AuthProvider from './components/auth/AuthProvider';
+import LoginPage from './app/login/page';
+import RegisterPage from './app/register/page';
+import ForgotPasswordPage from './app/forgot-password/page';
+import AccountPage from './app/account/page';
+
+export const AppContent: React.FC = () => {
   const [mounted, setMounted] = useState(false);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [wishlistIds, setWishlistIds] = useState<string[]>([]);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [wishlistOpen, setWishlistOpen] = useState(false);
 
+  const [currentPath, setCurrentPath] = useState<string>('/');
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -32,8 +39,10 @@ export const App: React.FC = () => {
   // 1. Mount effect: load theme & wishlist from localStorage safely on client side
   useEffect(() => {
     setMounted(true);
+    if (typeof window !== 'undefined') {
+      setCurrentPath(window.location.pathname);
+    }
     try {
-      // Load saved theme
       const savedTheme = localStorage.getItem('krishnastores_theme') as 'light' | 'dark' | null;
       if (savedTheme) {
         setTheme(savedTheme);
@@ -45,7 +54,6 @@ export const App: React.FC = () => {
         document.documentElement.setAttribute('data-theme', 'light');
       }
 
-      // Load saved wishlist
       const savedWishlist = localStorage.getItem('krishnastores_wishlist');
       if (savedWishlist) {
         setWishlistIds(JSON.parse(savedWishlist));
@@ -77,11 +85,17 @@ export const App: React.FC = () => {
     }
   }, [wishlistIds, mounted]);
 
-  // 4. Handle URL Hash & Route Navigation (e.g. /products/[slug] or #product-slug or #about or /about)
+  // 4. Handle URL Hash & Route Navigation
   useEffect(() => {
     const handleHashAndRoute = () => {
       const path = window.location.pathname;
       const hash = window.location.hash.replace('#', '');
+      setCurrentPath(path);
+
+      if (path === '/login' || path === '/register' || path === '/forgot-password' || path.startsWith('/account')) {
+        setSelectedProduct(null);
+        return;
+      }
 
       if (path === '/about' || hash === 'about') {
         setActiveCategory('about');
@@ -89,7 +103,6 @@ export const App: React.FC = () => {
         return;
       }
 
-      // Check pathname for /products/[slug], /book/[slug], /game/[slug], /website-store/[slug]
       const matchProductPath = path.match(/^\/(?:products|book|game|website-store)\/([^/]+)/);
       if (matchProductPath && matchProductPath[1]) {
         const slug = matchProductPath[1];
@@ -112,6 +125,7 @@ export const App: React.FC = () => {
       if (hash === 'books' || hash === 'book') setActiveCategory('book');
       else if (hash === 'games' || hash === 'game') setActiveCategory('game');
       else if (hash === 'web') setActiveCategory('web');
+      else if (hash === 'personal' || hash === 'personal-store') setActiveCategory('personal');
       else if (hash === 'all') setActiveCategory('all');
     };
 
@@ -160,7 +174,6 @@ export const App: React.FC = () => {
     );
   }, [filteredProducts]);
 
-  // Toggle Wishlist handler
   const handleToggleWishlist = (product: Product, e: React.MouseEvent) => {
     e.stopPropagation();
     if (wishlistIds.includes(product.id)) {
@@ -188,6 +201,7 @@ export const App: React.FC = () => {
       window.history.pushState(null, '', '/');
     }
     window.location.hash = '';
+    setCurrentPath('/');
   };
 
   const handleCategorySelect = (category: CategoryFilter) => {
@@ -197,6 +211,7 @@ export const App: React.FC = () => {
       window.history.pushState(null, '', category === 'all' ? '/' : `#${category}`);
     }
     window.location.hash = category;
+    setCurrentPath('/');
     if (category !== 'about' && catalogRef.current) {
       catalogRef.current.scrollIntoView({ behavior: 'smooth' });
     } else {
@@ -209,6 +224,193 @@ export const App: React.FC = () => {
   }, [wishlistIds]);
 
   const featuredProduct = PRODUCTS.find((p) => p.featured) || PRODUCTS[1];
+
+  const renderMainView = () => {
+    if (currentPath === '/login') {
+      return <LoginPage />;
+    }
+    if (currentPath === '/register') {
+      return <RegisterPage />;
+    }
+    if (currentPath === '/forgot-password') {
+      return <ForgotPasswordPage />;
+    }
+    if (currentPath.startsWith('/account')) {
+      return <AccountPage />;
+    }
+
+    if (selectedProduct) {
+      return (
+        <ProductDetailsPage
+          product={selectedProduct}
+          allProducts={PRODUCTS}
+          isWishlisted={wishlistIds.includes(selectedProduct.id)}
+          onToggleWishlist={handleToggleWishlist}
+          onSelectProduct={handleSelectProduct}
+          onBackToStore={handleBackToStore}
+          onSelectCategory={handleCategorySelect}
+        />
+      );
+    }
+
+    if (activeCategory === 'about') {
+      return (
+        <AboutPage
+          onSelectProduct={handleSelectProduct}
+          onSelectCategory={handleCategorySelect}
+        />
+      );
+    }
+
+    return (
+      <>
+        {/* Storefront Hero */}
+        <Hero
+          onExploreClick={() => {
+            if (catalogRef.current) {
+              catalogRef.current.scrollIntoView({ behavior: 'smooth' });
+            }
+          }}
+        />
+
+        {/* Shop By Purpose */}
+        <ShopByPurpose onSelectCategory={handleCategorySelect} />
+
+        {/* Featured Product Spotlight */}
+        <FeaturedProduct
+          product={featuredProduct}
+          isWishlisted={wishlistIds.includes(featuredProduct.id)}
+          onToggleWishlist={handleToggleWishlist}
+          onSelectProduct={handleSelectProduct}
+        />
+
+        {/* Main Product Catalog Index */}
+        <section ref={catalogRef} style={{ padding: '3.5rem 0 4.5rem 0', backgroundColor: 'var(--bg-main)' }}>
+          <div className="container">
+            {/* Section Header & Category Filter Tabs */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
+              <div>
+                <span style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.08em', color: 'var(--primary)', textTransform: 'uppercase' }}>
+                  {activeCategory === 'roblox' || activeCategory === 'game'
+                    ? "All Games BY Krishna Ajaysing Patil but now we are adding Roblox Games by Krishna Ajaysing Patil"
+                    : "EXPLORE CATALOG"}
+                </span>
+                <h2 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-main)', marginTop: '0.25rem' }}>
+                  {activeCategory === 'all' ? 'ALL PRODUCTS' :
+                   activeCategory === 'book' ? 'BOOKSTORE' :
+                   activeCategory === 'game' ? 'OFFLINE GAMES' :
+                   activeCategory === 'roblox' ? 'ONLINE ROBLOX GAMES' :
+                   activeCategory === 'web' ? 'WEBSTORE' : 'PRODUCTS'} ({filteredProducts.length})
+                </h2>
+              </div>
+
+              {/* Filter Pills & Sorting */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                  {[
+                    { key: 'all', label: 'ALL PRODUCTS', count: PRODUCTS.length },
+                    { key: 'book', label: 'BOOKSTORE', count: PRODUCTS.filter((p) => p.category === 'book').length },
+                    { key: 'game', label: 'OFFLINE GAMES', count: PRODUCTS.filter((p) => p.category === 'game').length },
+                    { key: 'roblox', label: 'ONLINE GAMES', count: PRODUCTS.filter((p) => p.category === 'roblox').length },
+                    { key: 'web', label: 'WEBSTORE', count: PRODUCTS.filter((p) => p.category === 'web').length },
+                    { key: 'personal', label: 'PERSONAL STORE', count: PRODUCTS.filter((p) => p.category === 'personal').length },
+                  ].map((pill) => (
+                    <button
+                      key={pill.key}
+                      onClick={() => handleCategorySelect(pill.key as CategoryFilter)}
+                      style={{
+                        padding: '0.5rem 1rem',
+                        borderRadius: '9999px',
+                        fontSize: '0.85rem',
+                        fontWeight: 700,
+                        backgroundColor: activeCategory === pill.key ? 'var(--primary)' : 'var(--bg-secondary)',
+                        color: activeCategory === pill.key ? '#FFFFFF' : 'var(--text-muted)',
+                        border: '1px solid',
+                        borderColor: activeCategory === pill.key ? 'var(--primary)' : 'var(--border-color)',
+                        transition: 'all 0.2s',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {pill.label} ({pill.count < 10 ? `0${pill.count}` : pill.count})
+                    </button>
+                  ))}
+                </div>
+
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as any)}
+                  aria-label="Sort products"
+                  style={{
+                    padding: '0.5rem 1rem',
+                    borderRadius: '9999px',
+                    fontSize: '0.85rem',
+                    fontWeight: 700,
+                    backgroundColor: 'var(--bg-secondary)',
+                    color: 'var(--text-main)',
+                    border: '1px solid var(--border-color)',
+                    cursor: 'pointer',
+                    outline: 'none'
+                  }}
+                >
+                  <option value="recommended">Recommended</option>
+                  <option value="price-low">Price: Low → High</option>
+                  <option value="price-high">Price: High → Low</option>
+                  <option value="name">A → Z</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Product Grid */}
+            {filteredProducts.length === 0 ? (
+              <div
+                style={{
+                  textAlign: 'center',
+                  padding: '4rem 1rem',
+                  backgroundColor: 'var(--bg-secondary)',
+                  borderRadius: '16px',
+                  border: '1px solid var(--border-color)'
+                }}
+              >
+                <Search size={48} color="var(--text-muted)" style={{ marginBottom: '1rem' }} />
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)' }}>NO PRODUCT FOUND</h3>
+                <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', margin: '0.5rem 0 1.5rem 0' }}>
+                  No matching products for "{searchQuery}".
+                </p>
+                <button
+                  onClick={() => {
+                    setSearchQuery('');
+                    setActiveCategory('all');
+                  }}
+                  className="btn-primary"
+                >
+                  <RotateCcw size={16} /> RESET STORE
+                </button>
+              </div>
+            ) : (
+              <div
+                ref={gridRef}
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+                  gap: '1.75rem'
+                }}
+              >
+                {filteredProducts.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    isWishlisted={wishlistIds.includes(product.id)}
+                    onToggleWishlist={handleToggleWishlist}
+                    onSelectProduct={handleSelectProduct}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      </>
+    );
+  };
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--bg-main)', color: 'var(--text-main)' }}>
@@ -231,168 +433,7 @@ export const App: React.FC = () => {
 
       {/* Main View Router */}
       <main style={{ flex: 1 }}>
-        {selectedProduct ? (
-          <ProductDetailsPage
-            product={selectedProduct}
-            allProducts={PRODUCTS}
-            isWishlisted={wishlistIds.includes(selectedProduct.id)}
-            onToggleWishlist={handleToggleWishlist}
-            onSelectProduct={handleSelectProduct}
-            onBackToStore={handleBackToStore}
-            onSelectCategory={handleCategorySelect}
-          />
-        ) : activeCategory === 'about' ? (
-          <AboutPage
-            onSelectProduct={handleSelectProduct}
-            onSelectCategory={handleCategorySelect}
-          />
-        ) : (
-          <>
-            {/* Storefront Hero */}
-            <Hero
-              onExploreClick={() => {
-                if (catalogRef.current) {
-                  catalogRef.current.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
-            />
-
-            {/* Shop By Purpose */}
-            <ShopByPurpose onSelectCategory={handleCategorySelect} />
-
-            {/* Featured Product Spotlight */}
-            <FeaturedProduct
-              product={featuredProduct}
-              isWishlisted={wishlistIds.includes(featuredProduct.id)}
-              onToggleWishlist={handleToggleWishlist}
-              onSelectProduct={handleSelectProduct}
-            />
-
-            {/* Main Product Catalog Index */}
-            <section ref={catalogRef} style={{ padding: '3.5rem 0 4.5rem 0', backgroundColor: 'var(--bg-main)' }}>
-              <div className="container">
-                {/* Section Header & Category Filter Tabs */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
-                  <div>
-                    <span style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.08em', color: 'var(--primary)', textTransform: 'uppercase' }}>
-                      {activeCategory === 'roblox' || activeCategory === 'game'
-                        ? "All Games BY Krishna Ajaysing Patil but now we are adding Roblox Games by Krishna Ajaysing Patil"
-                        : "EXPLORE CATALOG"}
-                    </span>
-                    <h2 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-main)', marginTop: '0.25rem' }}>
-                      {activeCategory === 'all' ? 'ALL PRODUCTS' :
-                       activeCategory === 'book' ? 'BOOKSTORE' :
-                       activeCategory === 'game' ? 'OFFLINE GAMES' :
-                       activeCategory === 'roblox' ? 'ONLINE ROBLOX GAMES' :
-                       activeCategory === 'web' ? 'WEBSTORE' : 'PRODUCTS'} ({filteredProducts.length})
-                    </h2>
-                  </div>
-
-                  {/* Filter Pills & Sorting */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                      {[
-                        { key: 'all', label: 'ALL PRODUCTS', count: PRODUCTS.length },
-                        { key: 'book', label: 'BOOKSTORE', count: PRODUCTS.filter((p) => p.category === 'book').length },
-                        { key: 'game', label: 'OFFLINE GAMES', count: PRODUCTS.filter((p) => p.category === 'game').length },
-                        { key: 'roblox', label: 'ONLINE GAMES', count: PRODUCTS.filter((p) => p.category === 'roblox').length },
-                        { key: 'web', label: 'WEBSTORE', count: PRODUCTS.filter((p) => p.category === 'web').length },
-                      ].map((pill) => (
-                        <button
-                          key={pill.key}
-                          onClick={() => handleCategorySelect(pill.key as CategoryFilter)}
-                          style={{
-                            padding: '0.5rem 1rem',
-                            borderRadius: '9999px',
-                            fontSize: '0.85rem',
-                            fontWeight: 700,
-                            backgroundColor: activeCategory === pill.key ? 'var(--primary)' : 'var(--bg-secondary)',
-                            color: activeCategory === pill.key ? '#FFFFFF' : 'var(--text-muted)',
-                            border: '1px solid',
-                            borderColor: activeCategory === pill.key ? 'var(--primary)' : 'var(--border-color)',
-                            transition: 'all 0.2s',
-                            cursor: 'pointer'
-                          }}
-                        >
-                          {pill.label} ({pill.count < 10 ? `0${pill.count}` : pill.count})
-                        </button>
-                      ))}
-                    </div>
-
-                    <select
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value as any)}
-                      aria-label="Sort products"
-                      style={{
-                        padding: '0.5rem 1rem',
-                        borderRadius: '9999px',
-                        fontSize: '0.85rem',
-                        fontWeight: 700,
-                        backgroundColor: 'var(--bg-secondary)',
-                        color: 'var(--text-main)',
-                        border: '1px solid var(--border-color)',
-                        cursor: 'pointer',
-                        outline: 'none'
-                      }}
-                    >
-                      <option value="recommended">Recommended</option>
-                      <option value="price-low">Price: Low → High</option>
-                      <option value="price-high">Price: High → Low</option>
-                      <option value="name">A → Z</option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* Product Grid */}
-                {filteredProducts.length === 0 ? (
-                  <div
-                    style={{
-                      textAlign: 'center',
-                      padding: '4rem 1rem',
-                      backgroundColor: 'var(--bg-secondary)',
-                      borderRadius: '16px',
-                      border: '1px solid var(--border-color)'
-                    }}
-                  >
-                    <Search size={48} color="var(--text-muted)" style={{ marginBottom: '1rem' }} />
-                    <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)' }}>NO PRODUCT FOUND</h3>
-                    <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', margin: '0.5rem 0 1.5rem 0' }}>
-                      No matching products for "{searchQuery}".
-                    </p>
-                    <button
-                      onClick={() => {
-                        setSearchQuery('');
-                        setActiveCategory('all');
-                      }}
-                      className="btn-primary"
-                    >
-                      <RotateCcw size={16} /> RESET STORE
-                    </button>
-                  </div>
-                ) : (
-                  <div
-                    ref={gridRef}
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-                      gap: '1.75rem'
-                    }}
-                  >
-                    {filteredProducts.map((product) => (
-                      <ProductCard
-                        key={product.id}
-                        product={product}
-                        isWishlisted={wishlistIds.includes(product.id)}
-                        onToggleWishlist={handleToggleWishlist}
-                        onSelectProduct={handleSelectProduct}
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
-            </section>
-          </>
-        )}
+        {renderMainView()}
       </main>
 
       {/* Wishlist Drawer */}
@@ -414,5 +455,13 @@ export const App: React.FC = () => {
       {/* Footer */}
       <Footer />
     </div>
+  );
+};
+
+export const App: React.FC = () => {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 };

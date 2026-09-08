@@ -1095,11 +1095,100 @@ By Krishna Ajaysing Patil`,
     publishedDate: '2024',
     hoursSaved: 'Endless Adventure',
     estimatedValue: 'Free Experience'
+  },
+
+  // -------------------------------------------------------------
+  // 12. PERSONALSTORE — INDIAN FLAG ANIMATION (₹1)
+  // -------------------------------------------------------------
+  {
+    id: 'indian-flag-animation',
+    slug: 'indian-flag-animation',
+    number: '12',
+    title: '🇮🇳 Indian Flag Animation',
+    subtitle: 'Premium Animated Indian Flag HTML Experience',
+    category: 'personal',
+    categoryLabel: 'PREMIUM ASSET',
+    priceINR: 1,
+    priceDisplay: '₹1',
+    image: '/assets/flag.png',
+    coverImage: '/assets/flag.png',
+    gallery: [
+      '/assets/flag.png'
+    ],
+    images: [
+      '/assets/flag.png'
+    ],
+    shortDescription: 'A high-quality, standalone HTML/CSS/JS Indian Flag animation with realistic waving effects, cloth simulation, and interactive wind control.',
+    valueProp: 'Premium animated Indian Flag HTML experience.',
+    description: 'Elevate your digital presence with this advanced Indian Flag animation. Created by Krishna Patil Rajput, this standalone product features 24 spokes Ashoka Chakra, cloth-like movement, wind simulation, and GPU-optimized rendering.',
+    benefits: [
+      { number: '01', title: 'Realistic Waving Effect', desc: 'Advanced CSS/JS cloth simulation for natural movement.' },
+      { number: '02', title: 'Interactive Controls', desc: 'Real-time wind strength adjustment and fullscreen mode.' },
+      { number: '03', title: 'Self-Contained Product', desc: 'Single HTML file with all CSS and JS included for easy deployment.' },
+      { number: '04', title: 'High Performance', desc: 'GPU-friendly animations ensuring 60FPS even on mobile devices.' }
+    ],
+    youMightWantThisIf: [
+      'You want a premium digital asset for national celebrations',
+      'You are a developer looking for advanced CSS animation examples',
+      'You want to support Indian digital creators'
+    ],
+    audience: [
+      { title: 'Digital Creators', desc: 'Anyone looking for a high-quality national flag asset.' },
+      { title: 'Web Developers', desc: 'Coders interested in advanced animation techniques.' }
+    ],
+    whatYouGet: [
+      'Standalone Indian Flag HTML Product',
+      'Full Source Code (HTML/CSS/JS)',
+      'Lifetime Access & Updates',
+      'Commercial License for Personal Use'
+    ],
+    whatMakesItUseful: [
+      'Ready to use out of the box with zero external dependencies.'
+    ],
+    beforeYouBuy: [
+      'Digital download fulfilled via KrishnaStores Secure System.',
+      'Requires a web browser to view the animation.'
+    ],
+    isRightForYou: {
+      goodFit: [
+        'You value high-quality, patriotic digital art.',
+        'You want a lightweight, professional flag animation.'
+      ],
+      mayNotBe: [
+        'If you expect a physical fabric flag.'
+      ]
+    },
+    details: {
+      type: 'Digital Asset',
+      category: 'HTML Animation',
+      edition: 'Elite Edition',
+      delivery: 'Instant Secure Download',
+      purchasePlatform: 'KrishnaStores'
+    },
+    buyLink: '/personal-store/indian-flag-animation',
+    demoLink: '/personal-store/indian-flag-animation/preview',
+    tags: ['personal', 'animation', 'html', 'india', 'flag'],
+    author: 'Krishna Patil Rajput',
+    publisher: 'Krishna Patil Rajput',
+    price: 1,
+    discountPrice: 1,
+    rating: 5.0,
+    reviewsCount: 0,
+    format: ['HTML'],
+    isBestseller: true,
+    isNew: true,
+    publishedDate: '2026',
+    learnings: ['Advanced CSS Animations', 'Vexillology-accurate design', 'JavaScript Physics Simulation'],
+    features: ['Cloth Simulation', 'Interactive Wind', '24-Spoke Chakra'],
+    whatsIncluded: ['Elite Flag HTML File', 'Setup Instructions'],
+    requirements: ['Any Modern Web Browser'],
+    estimatedValue: '₹499 Value',
+    whyBuyNow: 'Get this premium ₹499 value asset for just ₹1 today.'
   }
 ];
 
-if (PRODUCTS.length !== 11) {
-  console.warn(`KrishnaStores catalog error: expected 11 products, found ${PRODUCTS.length}`);
+if (PRODUCTS.length !== 12) {
+  console.warn(`KrishnaStores catalog error: expected 12 products, found ${PRODUCTS.length}`);
 }
 
 export const products = PRODUCTS;

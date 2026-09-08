@@ -2,96 +2,147 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { BookOpen, Mail, ArrowRight, ChevronLeft } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Mail, ArrowRight, CheckCircle2, KeyRound, ArrowLeft, LockKeyhole, ShieldCheck } from 'lucide-react';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 
 const ForgotPasswordPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
-  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [isSent, setIsSent] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email.trim() || !email.includes('@')) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+
     setIsLoading(true);
     setError('');
 
-    // Mock password reset for local auth
-    setTimeout(() => {
+    try {
+      await sendPasswordResetEmail(auth, email);
       setIsSent(true);
+    } catch (err: any) {
+      console.error("Password reset error:", err);
+      if (err.code === 'auth/user-not-found') {
+        setError('No account found with this email address.');
+      } else {
+        setError('Failed to send reset email. Please verify your email and try again.');
+      }
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
-    <div className="min-h-screen pt-32 pb-20 flex flex-col items-center justify-center px-6 relative overflow-hidden">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px] -z-10" />
+    <div className="auth-wrapper">
+      {/* Background Soft Glow Spotlight */}
+      <div className="auth-glow-spotlight" />
 
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md"
+        initial={{ opacity: 0, y: 20, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+        className="w-full max-w-md mx-auto relative z-10 px-4"
       >
-        <div className="text-center mb-10">
-          <Link href="/login" className="inline-flex items-center gap-2 mb-6 text-white/40 hover:text-white transition-colors">
-            <ChevronLeft className="w-4 h-4" /> Back to Login
-          </Link>
-          <h1 className="text-3xl font-bold font-display mb-2">Reset Password</h1>
-          <p className="text-white/60">We'll send you a link to reset your password</p>
-        </div>
-
-        <div className="glass-card p-8">
-          {isSent ? (
-            <div className="text-center py-4">
-              <div className="w-16 h-16 bg-success/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Mail className="w-8 h-8 text-success" />
-              </div>
-              <h2 className="text-xl font-bold mb-2">Check your email</h2>
-              <p className="text-white/60 mb-8">We have sent a password reset link to <span className="text-white">{email}</span></p>
-              <button
-                onClick={() => setIsSent(false)}
-                className="btn-outline w-full py-3"
-              >
-                Try another email
-              </button>
+        <div className="auth-card-box">
+          
+          <div className="auth-header">
+            <div 
+              className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 border shadow-sm"
+              style={{
+                backgroundColor: 'var(--primary-light)',
+                color: 'var(--primary)',
+                borderColor: 'var(--border-color)'
+              }}
+            >
+              <KeyRound size={26} />
             </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {error && (
-                <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 text-sm">
-                  {error}
-                </div>
-              )}
-              <div>
-                <label className="block text-sm font-medium text-white/70 mb-2">Email Address</label>
-                <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30" />
-                  <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="name@example.com"
-                    className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-12 pr-4 focus:outline-none focus:border-primary/50 transition-colors"
-                  />
-                </div>
-              </div>
+            <h1 className="auth-header-title">Reset Password</h1>
+            <p className="auth-header-sub">Enter your email address to receive recovery link</p>
+          </div>
 
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full btn-premium py-4 flex items-center justify-center gap-2 group"
+          {isSent ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="text-center py-4"
+            >
+              <div className="w-14 h-14 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-emerald-500/20 text-emerald-500">
+                <CheckCircle2 size={30} />
+              </div>
+              <h3 className="text-lg font-extrabold mb-2" style={{ color: 'var(--text-main)' }}>Check your inbox</h3>
+              <p className="text-xs mb-6 leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+                We've sent password reset instructions to <br />
+                <span className="font-extrabold text-sm" style={{ color: 'var(--text-main)' }}>{email}</span>
+              </p>
+              <Link
+                href="/login"
+                className="auth-submit-btn block text-center"
               >
-                {isLoading ? (
-                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                ) : (
-                  <>
-                    Send Reset Link <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </>
+                Back to Sign In
+              </Link>
+            </motion.div>
+          ) : (
+            <>
+              <AnimatePresence>
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className="mb-6 p-4 rounded-2xl text-xs font-semibold leading-relaxed flex items-start gap-2.5 border bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20"
+                  >
+                    <span className="text-base shrink-0">⚠️</span>
+                    <span>{error}</span>
+                  </motion.div>
                 )}
-              </button>
-            </form>
+              </AnimatePresence>
+
+              <form onSubmit={handleSubmit}>
+                <div className="auth-form-group">
+                  <label className="auth-label">Email Address</label>
+                  <div className="auth-input-wrapper">
+                    <Mail className="auth-input-icon" size={16} />
+                    <input
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="name@example.com"
+                      className="auth-input"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="auth-submit-btn"
+                >
+                  {isLoading ? (
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    <>
+                      Send Recovery Email <ArrowRight size={16} />
+                    </>
+                  )}
+                </button>
+              </form>
+            </>
           )}
+
+          <div className="auth-footer flex items-center justify-between">
+            <Link href="/login" className="inline-flex items-center gap-1.5 font-bold hover:underline" style={{ color: 'var(--text-main)' }}>
+              <ArrowLeft size={14} /> Back to Sign In
+            </Link>
+            <span className="flex items-center gap-1"><LockKeyhole size={12} style={{ color: 'var(--primary)' }} /> SSL Protected</span>
+          </div>
+
         </div>
       </motion.div>
     </div>

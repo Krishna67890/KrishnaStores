@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Heart, ArrowRight, Clock } from 'lucide-react';
+import { Heart, ArrowRight, Clock, Camera } from 'lucide-react';
 import { Product } from '../types/store';
 import gsap from 'gsap';
 
@@ -17,8 +17,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   onSelectProduct
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [cardImageIndex, setCardImageIndex] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
+
+  const galleryImages = product.gallery && product.gallery.length > 0 ? product.gallery : [product.image];
 
   useEffect(() => {
     if (!cardRef.current) return;
@@ -38,6 +41,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         });
       }
     } else {
+      setCardImageIndex(0);
       gsap.to(cardRef.current, {
         y: 0,
         scale: 1,
@@ -86,17 +90,43 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       >
         <img
           ref={imageRef}
-          src={product.image}
+          src={galleryImages[cardImageIndex] || product.image}
           alt={product.title}
           style={{
             position: 'absolute',
             inset: 0,
             width: '100%',
             height: '100%',
-            objectFit: 'cover'
+            objectFit: 'cover',
+            transition: 'opacity 0.2s ease'
           }}
           loading="lazy"
         />
+
+        {/* Gallery Photo Count Badge */}
+        {galleryImages.length > 1 && (
+          <div
+            style={{
+              position: 'absolute',
+              top: '12px',
+              left: '12px',
+              zIndex: 10,
+              backgroundColor: 'rgba(15, 23, 42, 0.82)',
+              backdropFilter: 'blur(6px)',
+              color: '#FFFFFF',
+              fontSize: '0.68rem',
+              fontWeight: 800,
+              padding: '4px 9px',
+              borderRadius: '9999px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              border: '1px solid rgba(255, 255, 255, 0.15)'
+            }}
+          >
+            <Camera size={11} color="#38BDF8" /> {galleryImages.length} Photos
+          </div>
+        )}
 
         {/* Hours Saved / Value Pill Badge */}
         {product.hoursSaved && (

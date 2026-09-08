@@ -13,9 +13,12 @@ out/
 # Environment files
 .env
 .env.local
-.env.development.local
+.env.development
+.env.production
 .env.test.local
-.env.production.local
+.env.*.local
+service-account.json
+firebase-adminsdk*.json
 
 # Logs
 *.log
@@ -45,6 +48,12 @@ desktop.ini
 
 # Vite
 .vite/
+
+# Private Products
+private-products/
+secure-products/
+*.pem
+*.key
 
 # Important folder specific rules (ensure KrishnaStoreslogo.png is ALWAYS tracked by Git)
 public/important/temp/

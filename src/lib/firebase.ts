@@ -4,38 +4,55 @@ import { Firestore, getFirestore } from "firebase/firestore";
 import { FirebaseStorage, getStorage } from "firebase/storage";
 import { getAnalytics, isSupported, Analytics } from "firebase/analytics";
 
+const apiKey = import.meta.env.VITE_FIREBASE_API_KEY;
+const authDomain = import.meta.env.VITE_FIREBASE_AUTH_DOMAIN;
+const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID;
+const storageBucket = import.meta.env.VITE_FIREBASE_STORAGE_BUCKET;
+const messagingSenderId = import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID;
+const appId = import.meta.env.VITE_FIREBASE_APP_ID;
+const measurementId = import.meta.env.VITE_FIREBASE_MEASUREMENT_ID;
+
+const isConfigValid = Boolean(apiKey && authDomain && projectId);
+
+if (!isConfigValid && import.meta.env.DEV) {
+  console.warn("⚠️ Firebase configuration is incomplete. Check your .env file for VITE_FIREBASE_* variables.");
+}
+
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "mock-key",
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "mock-domain.firebaseapp.com",
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "mock-project",
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "mock-bucket.appspot.com",
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "mock-sender",
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "mock-app",
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || "mock-measurement"
+  apiKey: apiKey || "mock-key",
+  authDomain: authDomain || "mock-domain.firebaseapp.com",
+  projectId: projectId || "mock-project",
+  storageBucket: storageBucket || "mock-bucket.appspot.com",
+  messagingSenderId: messagingSenderId || "mock-sender",
+  appId: appId || "mock-app",
+  measurementId: measurementId || "mock-measurement"
 };
 
-// Initialize Firebase only if API key is provided
 let app: FirebaseApp;
 let auth: Auth;
 let db: Firestore;
 let storage: FirebaseStorage;
 
-if (process.env.NEXT_PUBLIC_FIREBASE_API_KEY && process.env.NEXT_PUBLIC_FIREBASE_API_KEY !== "mock-key") {
+if (isConfigValid) {
   app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
   auth = getAuth(app);
   db = getFirestore(app);
   storage = getStorage(app);
 } else {
-  // Mock implementations to satisfy TypeScript during build
-  app = {} as FirebaseApp;
-  auth = { onAuthStateChanged: (cb: any) => cb(null) } as Auth;
-  db = {} as Firestore;
-  storage = {} as FirebaseStorage;
+  // Graceful fallback for mock mode
+  app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  db = getFirestore(app);
+  storage = getStorage(app);
 }
 
 export const initAnalytics = async (): Promise<Analytics | null> => {
-  if (typeof window !== "undefined" && await isSupported() && app.options?.apiKey !== "mock-key") {
-    return getAnalytics(app);
+  try {
+    if (typeof window !== "undefined" && measurementId && await isSupported()) {
+      return getAnalytics(app);
+    }
+  } catch (err) {
+    console.warn("Firebase Analytics could not be initialized:", err);
   }
   return null;
 };

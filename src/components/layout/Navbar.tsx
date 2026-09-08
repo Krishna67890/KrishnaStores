@@ -6,6 +6,7 @@ import { Search, Menu, X, ArrowRight, Heart, ShoppingBag, Sparkles } from "lucid
 import gsap from "gsap";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/store/useStore";
+import { useAuthStore } from "@/store/useAuthStore";
 import { products } from "@/data/products";
 import { Product } from "@/types/store";
 import { useRouter } from "next/navigation";
@@ -55,8 +56,11 @@ const Navbar = () => {
   }, []);
 
   const navLinks = [
-    { name: "Elite Mastery (03)", href: "/books", color: "text-blue-400" },
-    { name: "About The Creators", href: "/about", color: "text-slate-400" },
+    { name: "Books", href: "/books", color: "text-blue-400" },
+    { name: "Games", href: "/games", color: "text-orange-400" },
+    { name: "Web", href: "/web", color: "text-emerald-400" },
+    { name: "Personal", href: "/personal-store", color: "text-purple-400" },
+    { name: "About", href: "/about", color: "text-slate-400" },
   ];
 
   return (

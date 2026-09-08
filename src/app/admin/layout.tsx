@@ -28,7 +28,7 @@ export default function AdminLayout({
     { label: 'Dashboard', icon: LayoutDashboard, href: '/admin' },
     { label: 'My Books', icon: BookOpen, href: '/admin/books' },
     { label: 'Orders', icon: ShoppingBag, href: '/admin/orders' },
-    { label: 'Customers', icon: Users, href: '/admin/customers' },
+    { label: 'Community', icon: Users, href: '/admin/community' },
     { label: 'Settings', icon: Settings, href: '/admin/settings' },
   ];
 

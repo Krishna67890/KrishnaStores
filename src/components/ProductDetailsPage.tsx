@@ -12,6 +12,7 @@ import {
   Gamepad2,
   Code2,
   ChevronRight,
+  ChevronLeft,
   Zap,
   Clock,
   Award,
@@ -20,11 +21,22 @@ import {
   Layers,
   ShoppingBag,
   ArrowRight,
-  FileText
+  FileText,
+  Loader2,
+  Maximize2,
+  X,
+  Camera
 } from 'lucide-react';
 import { Product, CategoryFilter } from '../types/store';
 import { ProductCard } from './ProductCard';
 import gsap from 'gsap';
+import { useCheckout } from '../hooks/useCheckout';
+import { useAuthStore } from '../store/useAuthStore';
+import { db } from '../lib/firebase';
+import {
+  collection, addDoc, serverTimestamp, query, where, getDocs,
+  orderBy, updateDoc, doc, getDoc
+} from 'firebase/firestore';
 
 interface ProductDetailsPageProps {
   product: Product;
@@ -36,6 +48,31 @@ interface ProductDetailsPageProps {
   onSelectCategory: (category: CategoryFilter) => void;
 }
 
+// --- Local Types ---
+interface Review {
+  id: string;
+  userId: string;
+  userDisplayName: string;
+  userPhotoURL: string;
+  rating: number;
+  title: string;
+  comment: string;
+  verifiedPurchase: boolean;
+  createdAt: any;
+  status: 'pending' | 'approved' | 'rejected';
+}
+
+interface ProductComment {
+  id: string;
+  userId: string;
+  userDisplayName: string;
+  userPhotoURL: string;
+  text: string;
+  createdAt: any;
+  replies?: ProductComment[];
+  parentCommentId?: string;
+}
+
 export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
   product,
   allProducts,
@@ -45,19 +82,228 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
   onBackToStore,
   onSelectCategory
 }) => {
+  const { user, isAuthenticated } = useAuthStore();
   const [activeImage, setActiveImage] = useState(product.image);
   const [showStickyBar, setShowStickyBar] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
   const [recentlyViewed, setRecentlyViewed] = useState<Product[]>([]);
 
+  // Advanced Photo Lightbox State
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+
+  const galleryList = product.gallery && product.gallery.length > 0 ? product.gallery : [product.image];
+
+  // Keyboard navigation for Lightbox
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!isLightboxOpen) return;
+      if (e.key === 'Escape') setIsLightboxOpen(false);
+      if (e.key === 'ArrowRight') setLightboxIndex((prev) => (prev + 1) % galleryList.length);
+      if (e.key === 'ArrowLeft') setLightboxIndex((prev) => (prev - 1 + galleryList.length) % galleryList.length);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isLightboxOpen, galleryList.length]);
+
+  const { initiateCheckout, isLoading } = useCheckout();
+
+  // Reviews & Comments State
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [comments, setComments] = useState<ProductComment[]>([]);
+  const [userReview, setUserReview] = useState<Partial<Review>>({ rating: 5, title: '', comment: '' });
+  const [newComment, setNewComment] = useState('');
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false);
+  const [isSubmittingComment, setIsSubmittingComment] = useState(false);
+  const [activeTab, setActiveTab] = useState<'details' | 'reviews' | 'community' | 'suggestions'>('details');
+  const [stats, setStats] = useState({ avgRating: product.rating || 0, totalReviews: product.reviewsCount || 0 });
+
   const detailsRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const mainImageRef = useRef<HTMLImageElement>(null);
+
+  // Fetch reviews and comments on mount
+  useEffect(() => {
+    if (db.app?.options?.apiKey !== "mock-key") {
+      fetchReviews();
+      fetchComments();
+    }
+  }, [product.id]);
+
+  const fetchReviews = async () => {
+    try {
+      let snap;
+      try {
+        const q = query(
+          collection(db, 'reviews'),
+          where('productId', '==', product.id),
+          where('status', '==', 'approved'),
+          orderBy('createdAt', 'desc')
+        );
+        snap = await getDocs(q);
+      } catch (err) {
+        // Fallback for missing compound index
+        const fallbackQ = query(
+          collection(db, 'reviews'),
+          where('productId', '==', product.id)
+        );
+        snap = await getDocs(fallbackQ);
+      }
+      const data = snap.docs
+        .map(doc => ({ id: doc.id, ...doc.data() } as Review))
+        .filter(r => r.status === 'approved' || !r.status);
+      setReviews(data);
+
+      if (data.length > 0) {
+        const sum = data.reduce((acc, r) => acc + r.rating, 0);
+        setStats({ avgRating: parseFloat((sum / data.length).toFixed(1)), totalReviews: data.length });
+      }
+    } catch (e) { console.error("Error fetching reviews", e); }
+  };
+
+  const fetchComments = async () => {
+    try {
+      let snap;
+      try {
+        const q = query(
+          collection(db, 'products', product.id, 'comments'),
+          orderBy('createdAt', 'desc')
+        );
+        snap = await getDocs(q);
+      } catch (err) {
+        const fallbackQ = collection(db, 'products', product.id, 'comments');
+        snap = await getDocs(fallbackQ);
+      }
+      const allComments = snap.docs.map(doc => ({ id: doc.id, ...doc.data() } as ProductComment));
+
+      const roots = allComments.filter(c => !c.parentCommentId);
+      const withReplies = roots.map(root => ({
+        ...root,
+        replies: allComments.filter(c => c.parentCommentId === root.id).reverse()
+      }));
+      setComments(withReplies);
+    } catch (e) { console.error("Error fetching comments", e); }
+  };
+
+  const handleSubmitReview = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isAuthenticated || !user) {
+      alert("Please login to submit a review.");
+      return;
+    }
+    if (!userReview.rating || userReview.rating < 1 || userReview.rating > 5) return;
+
+    setIsSubmittingReview(true);
+    try {
+      const q = query(
+        collection(db, 'reviews'),
+        where('productId', '==', product.id),
+        where('userId', '==', user.uid)
+      );
+      const existing = await getDocs(q);
+
+      let isVerified = false;
+      try {
+        const orderQ = query(
+          collection(db, 'orders'),
+          where('userId', '==', user.uid),
+          where('productId', '==', product.id)
+        );
+        const orderSnap = await getDocs(orderQ);
+        if (!orderSnap.empty) {
+          isVerified = true;
+        }
+      } catch (err) {
+        console.warn("Verified purchase check failed:", err);
+      }
+
+      const reviewData = {
+        productId: product.id,
+        userId: user.uid,
+        userDisplayName: user.displayName,
+        userPhotoURL: user.photoURL || '',
+        rating: userReview.rating,
+        title: userReview.title,
+        comment: userReview.comment,
+        verifiedPurchase: isVerified,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+        status: 'approved'
+      };
+
+      if (!existing.empty) {
+        await updateDoc(doc(db, 'reviews', existing.docs[0].id), {
+          ...reviewData,
+          createdAt: existing.docs[0].data().createdAt
+        });
+      } else {
+        await addDoc(collection(db, 'reviews'), reviewData);
+      }
+
+      setUserReview({ rating: 5, title: '', comment: '' });
+      fetchReviews();
+      alert("Thank you! Your review has been submitted.");
+    } catch (e) {
+      console.error(e);
+      alert("Failed to submit review.");
+    } finally {
+      setIsSubmittingReview(false);
+    }
+  };
+
+  const handleSubmitComment = async (e: React.FormEvent, parentId?: string) => {
+    e.preventDefault();
+    if (!isAuthenticated || !user) {
+      alert("Please login to comment.");
+      return;
+    }
+    if (!newComment.trim()) return;
+
+    setIsSubmittingComment(true);
+    try {
+      await addDoc(collection(db, 'products', product.id, 'comments'), {
+        userId: user.uid,
+        userDisplayName: user.displayName,
+        userPhotoURL: user.photoURL || '',
+        text: newComment,
+        parentCommentId: parentId || null,
+        createdAt: serverTimestamp(),
+      });
+      setNewComment('');
+      fetchComments();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsSubmittingComment(false);
+    }
+  };
+
+  const handleBuyNow = async () => {
+    if (!isAuthenticated) {
+      window.location.href = '/login';
+      return;
+    }
+
+    if (product.category === 'personal') {
+      initiateCheckout(product);
+    } else if (product.gumroadUrl) {
+      window.open(product.gumroadUrl, '_blank');
+    }
+  };
 
   // 1. On product change: reset state, scroll to top, load recently viewed & animate
   useEffect(() => {
     setActiveImage(product.image);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Auto-trigger checkout if query param exists
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('checkout') === 'true' && product.category === 'personal') {
+      initiateCheckout(product);
+      // Clean up URL
+      const newUrl = window.location.pathname + window.location.hash;
+      window.history.replaceState({}, '', newUrl);
+    }
 
     // Track recently viewed in localStorage
     try {
@@ -149,9 +395,9 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
 
   const categoryName = isBook ? 'Bookstore' : isGame ? 'Gamestore' : isWeb ? 'Webstore' : 'Roblox Games';
 
-  // Primary Purchase Link (Gumroad default, itch.io secondary if available)
+  // Primary Purchase Link
+  const isPersonalStore = product.category === 'personal';
   const primaryPurchaseUrl = product.gumroadUrl || product.buyLink;
-  const secondaryPurchaseUrl = product.itchUrl || product.demoLink;
 
   // Recommendations: same category + matching tags
   const relatedProducts = allProducts
@@ -246,15 +492,26 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <a
-              href={primaryPurchaseUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-primary"
-              style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem', gap: '6px' }}
-            >
-              {isRoblox ? 'VIEW ON ROBLOX' : 'BUY NOW'} → <ExternalLink size={14} />
-            </a>
+            {isPersonalStore ? (
+              <button
+                disabled={isLoading}
+                onClick={() => initiateCheckout(product)}
+                className="btn-primary"
+                style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem', gap: '6px' }}
+              >
+                {isLoading ? <Loader2 className="animate-spin" size={14} /> : 'BUY NOW'} →
+              </button>
+            ) : (
+              <a
+                href={primaryPurchaseUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary"
+                style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem', gap: '6px' }}
+              >
+                {isRoblox ? 'VIEW ON ROBLOX' : 'BUY NOW'} → <ExternalLink size={14} />
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -307,6 +564,11 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
           {/* 21. PRODUCT IMAGE GALLERY (55%) */}
           <div className="gsap-detail-item">
             <div
+              onClick={() => {
+                const idx = galleryList.indexOf(activeImage);
+                setLightboxIndex(idx >= 0 ? idx : 0);
+                setIsLightboxOpen(true);
+              }}
               style={{
                 borderRadius: '20px',
                 border: '1px solid var(--border-color)',
@@ -317,7 +579,9 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                 justifyContent: 'center',
                 marginBottom: '1.25rem',
                 minHeight: '380px',
-                boxShadow: 'var(--shadow-card)'
+                boxShadow: 'var(--shadow-card)',
+                position: 'relative',
+                cursor: 'zoom-in'
               }}
             >
               <img
@@ -332,20 +596,68 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                   boxShadow: '0 12px 32px rgba(0,0,0,0.08)'
                 }}
               />
+
+              {/* Floating Fullscreen Zoom Overlay Badge */}
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '16px',
+                  right: '16px',
+                  backgroundColor: 'rgba(15, 23, 42, 0.85)',
+                  backdropFilter: 'blur(8px)',
+                  color: '#FFFFFF',
+                  fontSize: '0.75rem',
+                  fontWeight: 800,
+                  padding: '6px 12px',
+                  borderRadius: '9999px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+                }}
+              >
+                <Maximize2 size={13} /> Fullscreen Zoom
+              </div>
+
+              {/* Floating Photo Count Badge */}
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: '16px',
+                  left: '16px',
+                  backgroundColor: 'rgba(15, 23, 42, 0.85)',
+                  backdropFilter: 'blur(8px)',
+                  color: '#FFFFFF',
+                  fontSize: '0.75rem',
+                  fontWeight: 800,
+                  padding: '6px 12px',
+                  borderRadius: '9999px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  border: '1px solid rgba(255, 255, 255, 0.2)'
+                }}
+              >
+                <Camera size={13} color="#38BDF8" /> Photo {(galleryList.indexOf(activeImage) >= 0 ? galleryList.indexOf(activeImage) : 0) + 1} of {galleryList.length}
+              </div>
             </div>
 
             {/* Clickable Thumbnails */}
-            {product.gallery && product.gallery.length > 1 && (
+            {galleryList.length > 1 && (
               <div style={{ display: 'flex', gap: '12px', overflowX: 'auto', paddingBottom: '6px' }}>
-                {product.gallery.map((img, idx) => (
+                {galleryList.map((img, idx) => (
                   <button
                     key={idx}
-                    onClick={() => handleThumbnailClick(img)}
+                    onClick={() => {
+                      handleThumbnailClick(img);
+                      setLightboxIndex(idx);
+                    }}
                     style={{
                       width: '76px',
                       height: '76px',
                       borderRadius: '12px',
-                      border: activeImage === img ? '2px solid var(--primary)' : '1px solid var(--border-color)',
+                      border: activeImage === img ? '2.5px solid var(--primary)' : '1px solid var(--border-color)',
                       padding: '4px',
                       backgroundColor: 'var(--bg-secondary)',
                       cursor: 'pointer',
@@ -426,25 +738,24 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
 
             {/* 6 & 7. PRIMARY & SECONDARY CTAS */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '0.25rem' }}>
-              <a
-                href={primaryPurchaseUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary"
-                style={{ width: '100%', padding: '1rem 1.5rem', fontSize: '1.1rem', fontWeight: 800, justifyContent: 'center', gap: '8px' }}
-              >
-                {isRoblox ? 'VIEW ON ROBLOX' : 'BUY NOW'} → <ExternalLink size={18} />
-              </a>
-
-              {secondaryPurchaseUrl && (
+              {isPersonalStore ? (
+                <button
+                  disabled={isLoading}
+                  onClick={() => initiateCheckout(product)}
+                  className="btn-primary"
+                  style={{ width: '100%', padding: '1rem 1.5rem', fontSize: '1.1rem', fontWeight: 800, justifyContent: 'center', gap: '8px' }}
+                >
+                  {isLoading ? <Loader2 className="animate-spin" size={18} /> : 'BUY NOW'} →
+                </button>
+              ) : (
                 <a
-                  href={secondaryPurchaseUrl}
+                  href={primaryPurchaseUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-secondary"
-                  style={{ width: '100%', padding: '0.8rem 1.5rem', fontSize: '0.95rem', justifyContent: 'center', gap: '8px' }}
+                  className="btn-primary"
+                  style={{ width: '100%', padding: '1rem 1.5rem', fontSize: '1.1rem', fontWeight: 800, justifyContent: 'center', gap: '8px' }}
                 >
-                  VIEW ON ITCH.IO ↗ <ExternalLink size={16} />
+                  {isRoblox ? 'VIEW ON ROBLOX' : 'BUY NOW'} → <ExternalLink size={18} />
                 </a>
               )}
 
@@ -948,25 +1259,24 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'center', gap: '1.25rem', flexWrap: 'wrap' }}>
-            <a
-              href={primaryPurchaseUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-primary"
-              style={{ padding: '1rem 2.5rem', fontSize: '1.1rem', backgroundColor: '#2563EB', gap: '8px' }}
-            >
-              {isRoblox ? 'VIEW ON ROBLOX' : 'BUY ON GUMROAD'} ↗ <ExternalLink size={18} />
-            </a>
-
-            {secondaryPurchaseUrl && !isRoblox && (
+            {isPersonalStore ? (
+              <button
+                disabled={isLoading}
+                onClick={() => initiateCheckout(product)}
+                className="btn-primary"
+                style={{ padding: '1rem 2.5rem', fontSize: '1.1rem', backgroundColor: '#2563EB', gap: '8px' }}
+              >
+                {isLoading ? <Loader2 className="animate-spin" size={18} /> : 'BUY NOW SECURELY'} →
+              </button>
+            ) : (
               <a
-                href={secondaryPurchaseUrl}
+                href={primaryPurchaseUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-secondary"
-                style={{ padding: '1rem 2.5rem', fontSize: '1.1rem', color: '#FFFFFF', borderColor: '#334155', gap: '8px' }}
+                className="btn-primary"
+                style={{ padding: '1rem 2.5rem', fontSize: '1.1rem', backgroundColor: '#2563EB', gap: '8px' }}
               >
-                BUY ON ITCH.IO ↗ <ExternalLink size={18} />
+                {isRoblox ? 'VIEW ON ROBLOX' : 'BUY ON GUMROAD'} ↗ <ExternalLink size={18} />
               </a>
             )}
           </div>
@@ -1042,15 +1352,26 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
           <p style={{ fontSize: '0.925rem', color: 'var(--text-muted)', maxWidth: '550px', margin: '0 auto 1.5rem auto' }}>
             {isRoblox ? 'Join thousands of players in the game today. Click below to start your adventure on Roblox.' : 'Explore the product details above or visit the official purchase platform for complete product information.'}
           </p>
-          <a
-            href={primaryPurchaseUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-primary"
-            style={{ padding: '0.85rem 2rem', fontSize: '1rem', display: 'inline-flex', gap: '8px' }}
-          >
-            {isRoblox ? 'PLAY ON ROBLOX' : 'VIEW PURCHASE PAGE'} → <ExternalLink size={16} />
-          </a>
+          {isPersonalStore ? (
+            <button
+              disabled={isLoading}
+              onClick={() => initiateCheckout(product)}
+              className="btn-primary"
+              style={{ padding: '0.85rem 2rem', fontSize: '1rem', display: 'inline-flex', gap: '8px' }}
+            >
+              {isLoading ? <Loader2 className="animate-spin" size={16} /> : 'BUY NOW'} →
+            </button>
+          ) : (
+            <a
+              href={primaryPurchaseUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary"
+              style={{ padding: '0.85rem 2rem', fontSize: '1rem', display: 'inline-flex', gap: '8px' }}
+            >
+              {isRoblox ? 'PLAY ON ROBLOX' : 'VIEW PURCHASE PAGE'} → <ExternalLink size={16} />
+            </a>
+          )}
         </section>
 
         {/* 29. "COMPARE YOUR OPTIONS" MATRIX */}
@@ -1192,16 +1513,188 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
           <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', display: 'block', fontWeight: 700, textTransform: 'uppercase' }}>PRICE</span>
           <span style={{ fontSize: '1.25rem', fontWeight: 900, color: 'var(--text-main)' }}>{product.priceDisplay}</span>
         </div>
-        <a
-          href={primaryPurchaseUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn-primary"
-          style={{ padding: '0.7rem 1.75rem', fontSize: '0.95rem', fontWeight: 800 }}
-        >
-          {isRoblox ? 'VIEW ON ROBLOX' : 'BUY NOW'} →
-        </a>
+        {isPersonalStore ? (
+          <button
+            disabled={isLoading}
+            onClick={() => initiateCheckout(product)}
+            className="btn-primary"
+            style={{ padding: '0.7rem 1.75rem', fontSize: '0.95rem', fontWeight: 800 }}
+          >
+            {isLoading ? <Loader2 className="animate-spin" size={14} /> : 'BUY NOW'} →
+          </button>
+        ) : (
+          <a
+            href={primaryPurchaseUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary"
+            style={{ padding: '0.7rem 1.75rem', fontSize: '0.95rem', fontWeight: 800 }}
+          >
+            {isRoblox ? 'VIEW ON ROBLOX' : 'BUY NOW'} →
+          </a>
+        )}
       </div>
+
+      {/* 39. ADVANCED FULLSCREEN PHOTO LIGHTBOX MODAL */}
+      {isLightboxOpen && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 99999,
+            backgroundColor: 'rgba(5, 8, 17, 0.96)',
+            backdropFilter: 'blur(16px)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '1.5rem',
+            color: '#FFFFFF'
+          }}
+          onClick={() => setIsLightboxOpen(false)}
+        >
+          {/* Top Header Controls Bar */}
+          <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 10 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Camera size={18} color="#38BDF8" />
+              <span style={{ fontSize: '0.9rem', fontWeight: 800 }}>{product.title}</span>
+              <span style={{ fontSize: '0.8rem', color: '#94A3B8' }}>({lightboxIndex + 1} of {galleryList.length})</span>
+            </div>
+
+            <button
+              onClick={() => setIsLightboxOpen(false)}
+              style={{
+                width: '40px',
+                height: '40px',
+                borderRadius: '50%',
+                backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                color: '#FFFFFF',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                border: '1px solid rgba(255, 255, 255, 0.2)'
+              }}
+            >
+              <X size={20} />
+            </button>
+          </div>
+
+          {/* Main Fullscreen Image Display with Arrow Navigation */}
+          <div
+            style={{
+              position: 'relative',
+              flex: 1,
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '1rem 0'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {galleryList.length > 1 && (
+              <button
+                onClick={() => setLightboxIndex((prev) => (prev - 1 + galleryList.length) % galleryList.length)}
+                style={{
+                  position: 'absolute',
+                  left: '20px',
+                  zIndex: 10,
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '50%',
+                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                  backdropFilter: 'blur(8px)',
+                  color: '#FFFFFF',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  border: '1px solid rgba(255, 255, 255, 0.2)'
+                }}
+              >
+                <ChevronLeft size={24} />
+              </button>
+            )}
+
+            <img
+              src={galleryList[lightboxIndex]}
+              alt={product.title}
+              style={{
+                maxWidth: '90vw',
+                maxHeight: '75vh',
+                objectFit: 'contain',
+                borderRadius: '16px',
+                boxShadow: '0 25px 60px rgba(0,0,0,0.6)'
+              }}
+            />
+
+            {galleryList.length > 1 && (
+              <button
+                onClick={() => setLightboxIndex((prev) => (prev + 1) % galleryList.length)}
+                style={{
+                  position: 'absolute',
+                  right: '20px',
+                  zIndex: 10,
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '50%',
+                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                  backdropFilter: 'blur(8px)',
+                  color: '#FFFFFF',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  border: '1px solid rgba(255, 255, 255, 0.2)'
+                }}
+              >
+                <ChevronRight size={24} />
+              </button>
+            )}
+          </div>
+
+          {/* Bottom Thumbnail Strip */}
+          {galleryList.length > 1 && (
+            <div
+              style={{
+                display: 'flex',
+                gap: '12px',
+                overflowX: 'auto',
+                padding: '8px 16px',
+                backgroundColor: 'rgba(15, 23, 42, 0.85)',
+                borderRadius: '20px',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                maxWidth: '90vw'
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {galleryList.map((img, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    setLightboxIndex(idx);
+                    setActiveImage(img);
+                  }}
+                  style={{
+                    width: '60px',
+                    height: '60px',
+                    borderRadius: '10px',
+                    border: lightboxIndex === idx ? '2.5px solid #38BDF8' : '1px solid rgba(255, 255, 255, 0.2)',
+                    padding: '2px',
+                    backgroundColor: '#0F172A',
+                    cursor: 'pointer',
+                    overflow: 'hidden',
+                    flexShrink: 0
+                  }}
+                >
+                  <img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '6px' }} />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       <style>{`
         @media (max-width: 768px) {
