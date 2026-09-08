@@ -16,6 +16,8 @@ const isConfigValid = Boolean(apiKey && authDomain && projectId);
 
 if (!isConfigValid && import.meta.env.DEV) {
   console.warn("⚠️ Firebase configuration is incomplete. Check your .env file for VITE_FIREBASE_* variables.");
+} else if (import.meta.env.DEV) {
+  console.log("Firebase Auth Domain:", authDomain);
 }
 
 const firebaseConfig = {
