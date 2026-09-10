@@ -1,5 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Heart, ArrowRight, Clock, Camera } from 'lucide-react';
+import {
+  Heart,
+  ArrowRight,
+  Clock,
+  Camera,
+  Star
+} from 'lucide-react';
 import { Product } from '../types/store';
 import gsap from 'gsap';
 
@@ -22,6 +28,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const imageRef = useRef<HTMLImageElement>(null);
 
   const galleryImages = product.gallery && product.gallery.length > 0 ? product.gallery : [product.image];
+  const sellingPrice = product.discountPrice ?? product.priceINR;
+
+const originalPrice =
+  product.price && product.price > sellingPrice
+    ? product.price
+    : null;
+
+const discountPercentage = originalPrice
+  ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100)
+  : null;
 
   useEffect(() => {
     if (!cardRef.current) return;
@@ -209,7 +225,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               gap: '6px'
             }}
           >
-            WHY BUY? DETAILS <ArrowRight size={14} />
+           VIEW PRODUCT <ArrowRight size={14} />
           </span>
         </div>
       </div>
@@ -230,11 +246,33 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             <span className="category-badge">
               {product.categoryLabel}
             </span>
-            {product.estimatedValue && (
-              <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#D97706', backgroundColor: '#FEF3C7', padding: '2px 6px', borderRadius: '4px' }}>
-                {product.estimatedValue}
-              </span>
-            )}
+            {product.isBestseller ? (
+  <span
+    style={{
+      fontSize: '0.68rem',
+      fontWeight: 800,
+      color: '#92400E',
+      backgroundColor: '#FEF3C7',
+      padding: '4px 7px',
+      borderRadius: '5px'
+    }}
+  >
+    BESTSELLER
+  </span>
+) : product.isNew ? (
+  <span
+    style={{
+      fontSize: '0.68rem',
+      fontWeight: 800,
+      color: '#166534',
+      backgroundColor: '#DCFCE7',
+      padding: '4px 7px',
+      borderRadius: '5px'
+    }}
+  >
+    NEW
+  </span>
+) : null}
           </div>
 
           {/* Product Title */}
@@ -250,6 +288,47 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           >
             {product.title}
           </h3>
+          <div
+  style={{
+    display: 'flex',
+    alignItems: 'center',
+    gap: '5px',
+    marginBottom: '0.55rem'
+  }}
+>
+  <span
+    style={{
+      fontSize: '0.82rem',
+      fontWeight: 800,
+      color: '#B45309'
+    }}
+  >
+    {product.rating ?? 4.5}
+  </span>
+
+  <div style={{ display: 'flex', color: '#F59E0B' }}>
+    {[1, 2, 3, 4, 5].map((star) => (
+      <Star
+        key={star}
+        size={14}
+        fill={
+          star <= Math.round(product.rating ?? 4.5)
+            ? 'currentColor'
+            : 'none'
+        }
+      />
+    ))}
+  </div>
+
+  <span
+    style={{
+      color: 'var(--text-muted)',
+      fontSize: '0.75rem'
+    }}
+  >
+    ({product.reviewsCount ?? 0})
+  </span>
+</div>
 
           {/* Value Proposition */}
           <p
@@ -266,38 +345,97 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </div>
 
         {/* Card Footer */}
-        <div
-          style={{
-            paddingTop: '0.75rem',
-            borderTop: '1px solid var(--border-color)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-          }}
-        >
-          <div>
-            <span style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-main)', display: 'block', lineHeight: 1 }}>
-              {product.priceDisplay}
-            </span>
-            <span style={{ fontSize: '0.65rem', fontWeight: 700, color: 'var(--accent-emerald)' }}>
-              {product.category === 'roblox' ? '✓ Play Instantly' : '✓ Instant Access'}
-            </span>
-          </div>
+        {/** Card Footer */}
+<div
+  style={{
+    paddingTop: '0.9rem',
+    borderTop: '1px solid var(--border-color)'
+  }}
+>
+  <div
+    style={{
+      display: 'flex',
+      alignItems: 'baseline',
+      gap: '8px',
+      flexWrap: 'wrap',
+      marginBottom: '5px'
+    }}
+  >
+    <span
+      style={{
+        fontSize: '1.35rem',
+        fontWeight: 800,
+        color: 'var(--text-main)'
+      }}
+    >
+      ₹{sellingPrice.toLocaleString('en-IN')}
+    </span>
 
-          <span
-            style={{
-              fontSize: '0.85rem',
-              fontWeight: 700,
-              color: isHovered ? 'var(--primary-hover)' : 'var(--primary)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px'
-            }}
-          >
-            {product.category === 'roblox' ? 'VIEW ON ROBLOX' : 'BUY NOW'} <ArrowRight size={14} style={{ transform: isHovered ? 'translateX(3px)' : 'translateX(0)', transition: 'transform 0.2s' }} />
-          </span>
-        </div>
+    {originalPrice && (
+      <del
+        style={{
+          fontSize: '0.8rem',
+          color: 'var(--text-muted)'
+        }}
+      >
+        ₹{originalPrice.toLocaleString('en-IN')}
+      </del>
+    )}
+
+    {discountPercentage && (
+      <span
+        style={{
+          fontSize: '0.75rem',
+          fontWeight: 800,
+          color: '#168342'
+        }}
+      >
+        {discountPercentage}% off
+      </span>
+    )}
+  </div>
+
+  <p
+    style={{
+      marginBottom: '0.85rem',
+      color: '#168342',
+      fontSize: '0.72rem',
+      fontWeight: 700
+    }}
+  >
+    {product.category === 'roblox'
+      ? '✓ Play instantly'
+      : '✓ Instant digital delivery'}
+  </p>
+
+  <button
+    type="button"
+    onClick={(event) => {
+      event.stopPropagation();
+      onSelectProduct(product);
+    }}
+    style={{
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '7px',
+      padding: '0.72rem 1rem',
+      color: '#111827',
+      backgroundColor: 'var(--marketplace-accent)',
+      borderRadius: '8px',
+      fontSize: '0.82rem',
+      fontWeight: 800
+    }}
+  >
+    {product.category === 'roblox'
+      ? 'View on Roblox'
+      : 'View product'}
+
+    <ArrowRight size={15} />
+  </button>
+</div>
       </div>
     </div>
   );
-};
+}
