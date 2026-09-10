@@ -259,9 +259,9 @@ export const Navbar: React.FC<NavbarProps> = ({
         position: 'sticky',
         top: 0,
         zIndex: 8000,
-        backgroundColor: theme === 'dark' ? 'rgba(15, 23, 42, 0.92)' : 'rgba(255, 255, 255, 0.92)',
+        backgroundColor: 'var(--nav-dark)',
         backdropFilter: 'blur(10px)',
-        borderBottom: '1px solid var(--border-color)',
+        borderBottom: '3px solid var(--marketplace-accent)',
         transition: 'all 0.3s ease'
       }}
     >
@@ -277,7 +277,12 @@ export const Navbar: React.FC<NavbarProps> = ({
               onGoHome();
             }}
             aria-label="KrishnaStores home"
-            style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}
+            style={{ display: 'flex',
+  alignItems: 'center',
+  textDecoration: 'none',
+  backgroundColor: '#ffffff',
+  borderRadius: '8px',
+  padding: '4px 10px' }}
           >
             <img
               src="/important/KrishnaStores logo.png"
@@ -299,7 +304,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             style={{
               fontSize: '0.88rem',
               fontWeight: activeCategory === 'all' ? 700 : 600,
-              color: activeCategory === 'all' ? 'var(--primary)' : 'var(--text-muted)',
+              color: activeCategory === 'all' ? 'var(--primary)' : 'rgba(255, 255, 255, 0.82)',
               display: 'flex',
               alignItems: 'center',
               gap: '5px',
@@ -327,7 +332,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             style={{
               fontSize: '0.88rem',
               fontWeight: activeCategory === 'roblox' ? 700 : 600,
-              color: activeCategory === 'roblox' ? 'var(--primary)' : 'var(--text-muted)',
+              color: activeCategory === 'all'
+  ? 'var(--marketplace-accent)'
+  : 'rgba(255, 255, 255, 0.82)',
               display: 'flex',
               alignItems: 'center',
               gap: '5px',
@@ -341,7 +348,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             style={{
               fontSize: '0.88rem',
               fontWeight: activeCategory === 'web' ? 700 : 600,
-              color: activeCategory === 'web' ? 'var(--primary)' : 'var(--text-muted)',
+              color: activeCategory === 'all'
+  ? 'var(--marketplace-accent)'
+  : 'rgba(255, 255, 255, 0.82)',
               display: 'flex',
               alignItems: 'center',
               gap: '5px',
@@ -355,7 +364,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             style={{
               fontSize: '0.88rem',
               fontWeight: activeCategory === 'personal' ? 700 : 600,
-              color: activeCategory === 'personal' ? 'var(--primary)' : 'var(--text-muted)',
+              color: activeCategory === 'all'
+  ? 'var(--marketplace-accent)'
+  : 'rgba(255, 255, 255, 0.82)',
               display: 'flex',
               alignItems: 'center',
               gap: '5px',
@@ -369,7 +380,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             style={{
               fontSize: '0.88rem',
               fontWeight: activeCategory === 'about' ? 700 : 600,
-              color: activeCategory === 'about' ? 'var(--primary)' : 'var(--text-muted)',
+              color: activeCategory === 'all'
+  ? 'var(--marketplace-accent)'
+  : 'rgba(255, 255, 255, 0.82)',
               display: 'flex',
               alignItems: 'center',
               gap: '5px',
@@ -388,19 +401,19 @@ export const Navbar: React.FC<NavbarProps> = ({
               position: 'relative',
               display: 'flex',
               alignItems: 'center',
-              width: searchFocused || searchQuery ? '190px' : '140px',
+              width: searchFocused || searchQuery ? '320px' : '260px',
               transition: 'width 0.2s ease'
             }}
             className="search-input-wrapper"
           >
             <Search
-              size={15}
-              color="var(--text-muted)"
+              size={17}
+              color="#4B5563"
               style={{ position: 'absolute', left: '12px', pointerEvents: 'none' }}
             />
             <input
               type="text"
-              placeholder="Search store..."
+              placeholder="Search books, games and digital products"
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               onFocus={() => setSearchFocused(true)}
@@ -409,10 +422,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                 width: '100%',
                 padding: '0.45rem 0.75rem 0.45rem 2.2rem',
                 fontSize: '0.83rem',
-                borderRadius: '9999px',
+                borderRadius: 'px',
                 border: '1px solid var(--border-color)',
-                backgroundColor: 'var(--bg-secondary)',
-                color: 'var(--text-main)',
+                backgroundColor: '#ffffff',
+                color: '#111827',
                 outline: 'none',
                 transition: 'all 0.2s ease'
               }}
@@ -427,10 +440,10 @@ export const Navbar: React.FC<NavbarProps> = ({
               alignItems: 'center',
               gap: '6px',
               padding: '0.45rem 0.85rem',
-              borderRadius: '9999px',
+              borderRadius: '8px',
               border: '1px solid var(--border-color)',
-              backgroundColor: wishlistCount > 0 ? '#FEF2F2' : 'var(--bg-card)',
-              color: wishlistCount > 0 ? '#EF4444' : 'var(--text-muted)',
+              backgroundColor: wishlistCount > 0 ? '#FEF2F2' : '#FFFFFF',
+              color: wishlistCount > 0 ? '#EF4444' : '#374151',
               fontSize: '0.83rem',
               fontWeight: 600,
               transition: 'all 0.2s'

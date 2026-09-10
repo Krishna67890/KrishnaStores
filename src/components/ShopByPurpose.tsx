@@ -50,7 +50,7 @@ export const ShopByPurpose: React.FC<ShopByPurposeProps> = ({ onSelectCategory }
         >
           {/* Bookstore */}
           <div
-            className="gsap-purpose-card"
+            className="purpose-card"
             onClick={() => onSelectCategory('book')}
             style={{
               padding: '1.75rem',
@@ -108,7 +108,7 @@ export const ShopByPurpose: React.FC<ShopByPurposeProps> = ({ onSelectCategory }
 
           {/* Gamestore */}
           <div
-            className="gsap-purpose-card"
+            className="purpose-card"
             onClick={() => onSelectCategory('game')}
             style={{
               padding: '1.75rem',
@@ -166,7 +166,7 @@ export const ShopByPurpose: React.FC<ShopByPurposeProps> = ({ onSelectCategory }
 
           {/* Roblox Games */}
           <div
-            className="gsap-purpose-card"
+            className="purpose-card"
             onClick={() => onSelectCategory('roblox')}
             style={{
               padding: '1.75rem',
@@ -224,7 +224,7 @@ export const ShopByPurpose: React.FC<ShopByPurposeProps> = ({ onSelectCategory }
 
           {/* Webstore */}
           <div
-            className="gsap-purpose-card"
+            className="purpose-card"
             onClick={() => onSelectCategory('web')}
             style={{
               padding: '1.75rem',
@@ -282,7 +282,7 @@ export const ShopByPurpose: React.FC<ShopByPurposeProps> = ({ onSelectCategory }
 
           {/* Personal Store */}
           <div
-            className="gsap-purpose-card"
+            className="purpose-card"
             onClick={() => onSelectCategory('personal')}
             style={{
               padding: '1.75rem',
