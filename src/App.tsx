@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
+import { TrustStrip } from './components/TrustStrip';
 import { ShopByPurpose } from './components/ShopByPurpose';
 import { FeaturedProduct } from './components/FeaturedProduct';
 import { ProductCard } from './components/ProductCard';
@@ -272,6 +273,7 @@ export const AppContent: React.FC = () => {
             }
           }}
         />
+        <TrustStrip />
 
         {/* Shop By Purpose */}
         <ShopByPurpose onSelectCategory={handleCategorySelect} />
