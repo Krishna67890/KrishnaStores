@@ -499,7 +499,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             style={{
               display: 'none',
               padding: '6px',
-              color: 'var(--text-main)'
+              color: '#FFFFFF'
             }}
             className="mobile-menu-btn"
             aria-label="Toggle menu"
@@ -699,6 +699,21 @@ export const Navbar: React.FC<NavbarProps> = ({
           .mobile-menu-btn { display: block !important; }
           .search-input-wrapper { width: 130px !important; }
           .wishlist-label { display: none; }
+          .mobile-menu-btn {
+  display: flex !important;
+  flex-shrink: 0;
+  color: #FFFFFF !important;
+}
+
+.search-input-wrapper {
+  width: 100px !important;
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+.search-input-wrapper input {
+  min-width: 0;
+}
         }
       `}</style>
     </header>
