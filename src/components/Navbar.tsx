@@ -259,9 +259,9 @@ export const Navbar: React.FC<NavbarProps> = ({
         position: 'sticky',
         top: 0,
         zIndex: 8000,
-        backgroundColor: theme === 'dark' ? 'rgba(15, 23, 42, 0.92)' : 'rgba(255, 255, 255, 0.92)',
+        backgroundColor: 'var(--nav-dark)',
         backdropFilter: 'blur(10px)',
-        borderBottom: '1px solid var(--border-color)',
+        borderBottom: '3px solid var(--marketplace-accent)',
         transition: 'all 0.3s ease'
       }}
     >
@@ -277,7 +277,12 @@ export const Navbar: React.FC<NavbarProps> = ({
               onGoHome();
             }}
             aria-label="KrishnaStores home"
-            style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}
+            style={{ display: 'flex',
+  alignItems: 'center',
+  textDecoration: 'none',
+  backgroundColor: '#ffffff',
+  borderRadius: '8px',
+  padding: '4px 10px' }}
           >
             <img
               src="/important/KrishnaStores logo.png"
@@ -287,10 +292,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </a>
 
           {/* Account Control on LEFT side of navbar */}
-          <div className="desktop-account-left">
-            <UserAccountControl theme={theme} />
-          </div>
-        </div>
+          
 
         {/* Center Section: Navigation Links */}
         <nav style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }} className="desktop-nav">
@@ -299,7 +301,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             style={{
               fontSize: '0.88rem',
               fontWeight: activeCategory === 'all' ? 700 : 600,
-              color: activeCategory === 'all' ? 'var(--primary)' : 'var(--text-muted)',
+              color: activeCategory === 'all' ? 'var(--primary)' : 'rgba(255, 255, 255, 0.82)',
               display: 'flex',
               alignItems: 'center',
               gap: '5px',
@@ -327,7 +329,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             style={{
               fontSize: '0.88rem',
               fontWeight: activeCategory === 'roblox' ? 700 : 600,
-              color: activeCategory === 'roblox' ? 'var(--primary)' : 'var(--text-muted)',
+              color: activeCategory === 'all'
+  ? 'var(--marketplace-accent)'
+  : 'rgba(255, 255, 255, 0.82)',
               display: 'flex',
               alignItems: 'center',
               gap: '5px',
@@ -341,7 +345,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             style={{
               fontSize: '0.88rem',
               fontWeight: activeCategory === 'web' ? 700 : 600,
-              color: activeCategory === 'web' ? 'var(--primary)' : 'var(--text-muted)',
+              color: activeCategory === 'all'
+  ? 'var(--marketplace-accent)'
+  : 'rgba(255, 255, 255, 0.82)',
               display: 'flex',
               alignItems: 'center',
               gap: '5px',
@@ -355,7 +361,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             style={{
               fontSize: '0.88rem',
               fontWeight: activeCategory === 'personal' ? 700 : 600,
-              color: activeCategory === 'personal' ? 'var(--primary)' : 'var(--text-muted)',
+              color: activeCategory === 'all'
+  ? 'var(--marketplace-accent)'
+  : 'rgba(255, 255, 255, 0.82)',
               display: 'flex',
               alignItems: 'center',
               gap: '5px',
@@ -369,7 +377,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             style={{
               fontSize: '0.88rem',
               fontWeight: activeCategory === 'about' ? 700 : 600,
-              color: activeCategory === 'about' ? 'var(--primary)' : 'var(--text-muted)',
+              color: activeCategory === 'all'
+  ? 'var(--marketplace-accent)'
+  : 'rgba(255, 255, 255, 0.82)',
               display: 'flex',
               alignItems: 'center',
               gap: '5px',
@@ -388,19 +398,19 @@ export const Navbar: React.FC<NavbarProps> = ({
               position: 'relative',
               display: 'flex',
               alignItems: 'center',
-              width: searchFocused || searchQuery ? '190px' : '140px',
+              width: searchFocused || searchQuery ? '320px' : '260px',
               transition: 'width 0.2s ease'
             }}
             className="search-input-wrapper"
           >
             <Search
-              size={15}
-              color="var(--text-muted)"
+              size={17}
+              color="#4B5563"
               style={{ position: 'absolute', left: '12px', pointerEvents: 'none' }}
             />
             <input
               type="text"
-              placeholder="Search store..."
+              placeholder="Search books, games and digital products"
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               onFocus={() => setSearchFocused(true)}
@@ -409,16 +419,19 @@ export const Navbar: React.FC<NavbarProps> = ({
                 width: '100%',
                 padding: '0.45rem 0.75rem 0.45rem 2.2rem',
                 fontSize: '0.83rem',
-                borderRadius: '9999px',
+                borderRadius: 'px',
                 border: '1px solid var(--border-color)',
-                backgroundColor: 'var(--bg-secondary)',
-                color: 'var(--text-main)',
+                backgroundColor: '#ffffff',
+                color: '#111827',
                 outline: 'none',
                 transition: 'all 0.2s ease'
               }}
             />
           </div>
-
+<div className="desktop-account-left">
+            <UserAccountControl theme={theme} />
+          </div>
+        </div>
           {/* Wishlist Button */}
           <button
             onClick={onOpenWishlist}
@@ -427,10 +440,10 @@ export const Navbar: React.FC<NavbarProps> = ({
               alignItems: 'center',
               gap: '6px',
               padding: '0.45rem 0.85rem',
-              borderRadius: '9999px',
+              borderRadius: '8px',
               border: '1px solid var(--border-color)',
-              backgroundColor: wishlistCount > 0 ? '#FEF2F2' : 'var(--bg-card)',
-              color: wishlistCount > 0 ? '#EF4444' : 'var(--text-muted)',
+              backgroundColor: wishlistCount > 0 ? '#FEF2F2' : '#FFFFFF',
+              color: wishlistCount > 0 ? '#EF4444' : '#374151',
               fontSize: '0.83rem',
               fontWeight: 600,
               transition: 'all 0.2s'
@@ -486,7 +499,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             style={{
               display: 'none',
               padding: '6px',
-              color: 'var(--text-main)'
+              color: theme === 'dark' ? '#FFFFFF' : '#111827',
             }}
             className="mobile-menu-btn"
             aria-label="Toggle menu"
@@ -495,12 +508,94 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
         </div>
       </div>
+      {/* Desktop Marketplace Category Bar */}
+<div
+  className="marketplace-category-bar"
+  style={{
+    backgroundColor: '#232F3E',
+    borderTop: '1px solid rgba(255,255,255,0.08)'
+  }}
+>
+  <div
+    className="container"
+    style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: '1.6rem',
+      minHeight: '42px',
+      overflowX: 'auto'
+    }}
+  >
+    <button
+      onClick={() => handleNavClick('all')}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '6px',
+        color:
+          activeCategory === 'all'
+            ? 'var(--marketplace-accent)'
+            : '#FFFFFF',
+        fontSize: '0.82rem',
+        fontWeight: 700,
+        whiteSpace: 'nowrap'
+      }}
+    >
+      <Menu size={17} /> All
+    </button>
 
+    {[
+      { key: 'book', label: 'Books' },
+      { key: 'game', label: 'Offline Games' },
+      { key: 'roblox', label: 'Online Games' },
+      { key: 'web', label: 'Web Store' },
+      { key: 'personal', label: 'Personal Store' },
+      { key: 'about', label: 'About Us' }
+    ].map((item) => (
+      <button
+        key={item.key}
+        onClick={() =>
+          handleNavClick(item.key as CategoryFilter)
+        }
+        style={{
+          color:
+            activeCategory === item.key
+              ? 'var(--marketplace-accent)'
+              : 'rgba(255,255,255,0.88)',
+          fontSize: '0.82rem',
+          fontWeight:
+            activeCategory === item.key ? 800 : 600,
+          whiteSpace: 'nowrap',
+          padding: '0.65rem 0',
+          borderBottom:
+            activeCategory === item.key
+              ? '2px solid var(--marketplace-accent)'
+              : '2px solid transparent'
+        }}
+      >
+        {item.label}
+      </button>
+    ))}
+
+    <span
+      style={{
+        marginLeft: 'auto',
+        color: '#FFB340',
+        fontSize: '0.78rem',
+        fontWeight: 800,
+        whiteSpace: 'nowrap'
+      }}
+    >
+      Instant Digital Delivery
+    </span>
+  </div>
+</div>
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
         <div
           style={{
-            backgroundColor: 'var(--bg-card)',
+            backgroundColor: theme === 'dark' ? '#111827' : '#FFFFFF',
+            color: theme === 'dark' ? '#FFFFFF' : '#111827',
             borderBottom: '1px solid var(--border-color)',
             padding: '1rem 1.5rem',
             display: 'flex',
@@ -512,7 +607,16 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div style={{ paddingBottom: '10px', borderBottom: '1px solid var(--border-color)' }}>
             {isAuthenticated && user ? (
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div
+  style={{
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    gap: '10px',
+    flex: 1,
+    marginLeft: '2rem'
+  }}
+>
                   <img
                     src={user.photoURL || (user.gender === 'girl' ? '/assets/girl.png' : '/assets/boy.png')}
                     alt={user.displayName}
@@ -680,12 +784,33 @@ export const Navbar: React.FC<NavbarProps> = ({
       )}
 
       <style>{`
+      .desktop-nav {
+  display: none !important;
+}
         @media (max-width: 900px) {
+        .marketplace-category-bar {
+  display: none !important;
+}
           .desktop-nav { display: none !important; }
           .desktop-account-left { display: none !important; }
           .mobile-menu-btn { display: block !important; }
           .search-input-wrapper { width: 130px !important; }
           .wishlist-label { display: none; }
+          .mobile-menu-btn {
+  display: flex !important;
+  flex-shrink: 0;
+  color: #FFFFFF !important;
+}
+
+.search-input-wrapper {
+  width: 100px !important;
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+.search-input-wrapper input {
+  min-width: 0;
+}
         }
       `}</style>
     </header>

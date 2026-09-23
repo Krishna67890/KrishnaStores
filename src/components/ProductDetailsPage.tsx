@@ -155,9 +155,22 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
       setReviews(data);
 
       if (data.length > 0) {
-        const sum = data.reduce((acc, r) => acc + r.rating, 0);
-        setStats({ avgRating: parseFloat((sum / data.length).toFixed(1)), totalReviews: data.length });
-      }
+  const sum = data.reduce(
+    (accumulator, review) =>
+      accumulator + review.rating,
+    0
+  );
+
+  setStats({
+    avgRating: Number((sum / data.length).toFixed(1)),
+    totalReviews: data.length
+  });
+} else {
+  setStats({
+    avgRating: 0,
+    totalReviews: 0
+  });
+}
     } catch (e) { console.error("Error fetching reviews", e); }
   };
 

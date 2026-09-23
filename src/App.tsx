@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
+import { TrustStrip } from './components/TrustStrip';
 import { ShopByPurpose } from './components/ShopByPurpose';
 import { FeaturedProduct } from './components/FeaturedProduct';
 import { ProductCard } from './components/ProductCard';
@@ -272,6 +273,7 @@ export const AppContent: React.FC = () => {
             }
           }}
         />
+        <TrustStrip />
 
         {/* Shop By Purpose */}
         <ShopByPurpose onSelectCategory={handleCategorySelect} />
@@ -285,18 +287,24 @@ export const AppContent: React.FC = () => {
         />
 
         {/* Main Product Catalog Index */}
-        <section ref={catalogRef} style={{ padding: '3.5rem 0 4.5rem 0', backgroundColor: 'var(--bg-main)' }}>
+        <section
+  ref={catalogRef}
+  style={{
+    padding: '3rem 0 4.5rem',
+    backgroundColor: '#F3F4F6'
+  }}
+>
           <div className="container">
             {/* Section Header & Category Filter Tabs */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem'  }}>
               <div>
                 <span style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.08em', color: 'var(--primary)', textTransform: 'uppercase' }}>
                   {activeCategory === 'roblox' || activeCategory === 'game'
                     ? "All Games BY Krishna Ajaysing Patil but now we are adding Roblox Games by Krishna Ajaysing Patil"
-                    : "EXPLORE CATALOG"}
+                    : "KRISHNASTORES COLLECTION"}
                 </span>
                 <h2 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-main)', marginTop: '0.25rem' }}>
-                  {activeCategory === 'all' ? 'ALL PRODUCTS' :
+                  {activeCategory === 'all' ? 'Explore all products' :
                    activeCategory === 'book' ? 'BOOKSTORE' :
                    activeCategory === 'game' ? 'OFFLINE GAMES' :
                    activeCategory === 'roblox' ? 'ONLINE ROBLOX GAMES' :
@@ -352,10 +360,10 @@ export const AppContent: React.FC = () => {
                     outline: 'none'
                   }}
                 >
-                  <option value="recommended">Recommended</option>
-                  <option value="price-low">Price: Low → High</option>
-                  <option value="price-high">Price: High → Low</option>
-                  <option value="name">A → Z</option>
+                  <option value="recommended">Sort by: Recommended</option>
+                  <option value="price-low">Price: Low to High</option>
+                  <option value="price-high">Price: High to Low</option>
+                  <option value="name">A to Z</option>
                 </select>
               </div>
             </div>
@@ -391,8 +399,8 @@ export const AppContent: React.FC = () => {
                 ref={gridRef}
                 style={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-                  gap: '1.75rem'
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(245px, 1fr))',
+                  gap: '1.25rem'
                 }}
               >
                 {filteredProducts.map((product) => (
