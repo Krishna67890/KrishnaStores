@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useProductReviewStats } from '../hooks/useProductReviewStats';
 import {
   Heart,
   ArrowRight,
@@ -28,6 +29,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const imageRef = useRef<HTMLImageElement>(null);
 
   const galleryImages = product.gallery && product.gallery.length > 0 ? product.gallery : [product.image];
+  const {
+  averageRating,
+  reviewCount,
+  loading: reviewsLoading
+} = useProductReviewStats(product.id);
   const sellingPrice = product.discountPrice ?? product.priceINR;
 
 const originalPrice =
@@ -39,41 +45,47 @@ const discountPercentage = originalPrice
   ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100)
   : null;
 
-  useEffect(() => {
-    if (!cardRef.current) return;
-    if (isHovered) {
-      gsap.to(cardRef.current, {
-        y: -6,
-        scale: 1.01,
-        borderColor: 'var(--primary)',
-        duration: 0.25,
+  
+
+useEffect(() => {
+  if (!cardRef.current) return;
+
+  if (isHovered) {
+    gsap.to(cardRef.current, {
+      y: -6,
+      scale: 1.01,
+      borderColor: 'var(--primary)',
+      duration: 0.25,
+      ease: 'power2.out'
+    });
+
+    if (imageRef.current) {
+      gsap.to(imageRef.current, {
+        scale: 1.05,
+        duration: 0.35,
         ease: 'power2.out'
       });
-      if (imageRef.current) {
-        gsap.to(imageRef.current, {
-          scale: 1.05,
-          duration: 0.35,
-          ease: 'power2.out'
-        });
-      }
-    } else {
-      setCardImageIndex(0);
-      gsap.to(cardRef.current, {
-        y: 0,
-        scale: 1,
-        borderColor: 'var(--border-color)',
-        duration: 0.25,
-        ease: 'power2.out'
-      });
-      if (imageRef.current) {
-        gsap.to(imageRef.current, {
-          scale: 1,
-          duration: 0.35,
-          ease: 'power2.out'
-        });
-      }
     }
-  }, [isHovered]);
+  } else {
+    setCardImageIndex(0);
+
+    gsap.to(cardRef.current, {
+      y: 0,
+      scale: 1,
+      borderColor: 'var(--border-color)',
+      duration: 0.25,
+      ease: 'power2.out'
+    });
+
+    if (imageRef.current) {
+      gsap.to(imageRef.current, {
+        scale: 1,
+        duration: 0.35,
+        ease: 'power2.out'
+      });
+    }
+  }
+}, [isHovered]);
 
   return (
     <div
@@ -297,15 +309,18 @@ const discountPercentage = originalPrice
   }}
 >
   <span
-    style={{
-      fontSize: '0.82rem',
-      fontWeight: 800,
-      color: '#B45309'
-    }}
-  >
-    {product.rating ?? 4.5}
-  </span>
-
+  style={{
+    fontSize: '0.82rem',
+    fontWeight: 800,
+    color: '#B45309'
+  }}
+>
+  {reviewsLoading
+    ? '...'
+    : reviewCount > 0
+      ? averageRating
+      : 'New'}
+</span>
   <div style={{ display: 'flex', color: '#F59E0B' }}>
     {[1, 2, 3, 4, 5].map((star) => (
       <Star
