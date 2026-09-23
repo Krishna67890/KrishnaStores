@@ -292,10 +292,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </a>
 
           {/* Account Control on LEFT side of navbar */}
-          <div className="desktop-account-left">
-            <UserAccountControl theme={theme} />
-          </div>
-        </div>
+          
 
         {/* Center Section: Navigation Links */}
         <nav style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }} className="desktop-nav">
@@ -431,7 +428,10 @@ export const Navbar: React.FC<NavbarProps> = ({
               }}
             />
           </div>
-
+<div className="desktop-account-left">
+            <UserAccountControl theme={theme} />
+          </div>
+        </div>
           {/* Wishlist Button */}
           <button
             onClick={onOpenWishlist}
@@ -607,7 +607,16 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div style={{ paddingBottom: '10px', borderBottom: '1px solid var(--border-color)' }}>
             {isAuthenticated && user ? (
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div
+  style={{
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    gap: '10px',
+    flex: 1,
+    marginLeft: '2rem'
+  }}
+>
                   <img
                     src={user.photoURL || (user.gender === 'girl' ? '/assets/girl.png' : '/assets/boy.png')}
                     alt={user.displayName}
