@@ -499,7 +499,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             style={{
               display: 'none',
               padding: '6px',
-              color: '#FFFFFF'
+              color: theme === 'dark' ? '#FFFFFF' : '#111827',
             }}
             className="mobile-menu-btn"
             aria-label="Toggle menu"
@@ -508,12 +508,94 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
         </div>
       </div>
+      {/* Desktop Marketplace Category Bar */}
+<div
+  className="marketplace-category-bar"
+  style={{
+    backgroundColor: '#232F3E',
+    borderTop: '1px solid rgba(255,255,255,0.08)'
+  }}
+>
+  <div
+    className="container"
+    style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: '1.6rem',
+      minHeight: '42px',
+      overflowX: 'auto'
+    }}
+  >
+    <button
+      onClick={() => handleNavClick('all')}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '6px',
+        color:
+          activeCategory === 'all'
+            ? 'var(--marketplace-accent)'
+            : '#FFFFFF',
+        fontSize: '0.82rem',
+        fontWeight: 700,
+        whiteSpace: 'nowrap'
+      }}
+    >
+      <Menu size={17} /> All
+    </button>
 
+    {[
+      { key: 'book', label: 'Books' },
+      { key: 'game', label: 'Offline Games' },
+      { key: 'roblox', label: 'Online Games' },
+      { key: 'web', label: 'Web Store' },
+      { key: 'personal', label: 'Personal Store' },
+      { key: 'about', label: 'About Us' }
+    ].map((item) => (
+      <button
+        key={item.key}
+        onClick={() =>
+          handleNavClick(item.key as CategoryFilter)
+        }
+        style={{
+          color:
+            activeCategory === item.key
+              ? 'var(--marketplace-accent)'
+              : 'rgba(255,255,255,0.88)',
+          fontSize: '0.82rem',
+          fontWeight:
+            activeCategory === item.key ? 800 : 600,
+          whiteSpace: 'nowrap',
+          padding: '0.65rem 0',
+          borderBottom:
+            activeCategory === item.key
+              ? '2px solid var(--marketplace-accent)'
+              : '2px solid transparent'
+        }}
+      >
+        {item.label}
+      </button>
+    ))}
+
+    <span
+      style={{
+        marginLeft: 'auto',
+        color: '#FFB340',
+        fontSize: '0.78rem',
+        fontWeight: 800,
+        whiteSpace: 'nowrap'
+      }}
+    >
+      Instant Digital Delivery
+    </span>
+  </div>
+</div>
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
         <div
           style={{
-            backgroundColor: 'var(--bg-card)',
+            backgroundColor: theme === 'dark' ? '#111827' : '#FFFFFF',
+            color: theme === 'dark' ? '#FFFFFF' : '#111827',
             borderBottom: '1px solid var(--border-color)',
             padding: '1rem 1.5rem',
             display: 'flex',
@@ -693,7 +775,13 @@ export const Navbar: React.FC<NavbarProps> = ({
       )}
 
       <style>{`
+      .desktop-nav {
+  display: none !important;
+}
         @media (max-width: 900px) {
+        .marketplace-category-bar {
+  display: none !important;
+}
           .desktop-nav { display: none !important; }
           .desktop-account-left { display: none !important; }
           .mobile-menu-btn { display: block !important; }
